@@ -6,6 +6,7 @@ branches:
   only:
     - master
 
+# Travis CI 서버의 Home
 cache:
   directories:
     - '$HOME/.m2/repository'
@@ -13,6 +14,45 @@ cache:
 
 script: "./mvnw clean package"
 
-before_install:
+before_install:	# CI 실행 완료시 메일로 알람
   - chmod +x mvnw
 
+# CI 실행 완료시 메일로 알람
+notifications:
+  email:
+    recipients:
+      - ad01.yapp@gmail.com
+      - siotman.yapp@gmail.com
+      - hyeonsu.yapp@gmail.com
+
+#before_deploy:
+#  - zip -r build-dir *
+#  - mkdir -p deploy
+#  - mv app-zip.zip deploy/app-zip.zip
+
+#deploy:
+#  - provider: s3
+#    access_key_id: $AWS_ACCESS_KEY      # Travis repo settings에 설정된 값
+#    secret_access_key: $AWS_SECRET_KEY  # Travis repo settings에 설정된 값
+#    bucket: _
+#    region: ap-northeast-2
+#    skip_cleanup: true
+#    acl: public_read
+#    local_dir: deploy
+#    wait-until-deployed: true
+#    on:
+#      repo: YAPP-16th/Team_Android_1_Backend
+#      branch: master
+#  - provider: codedeploy
+#    access_key_id: $AWS_ACCESS_KEY      # Travis repo settings에 설정된 값
+#    secret_access_key: $AWS_SECRET_KEY  # Travis repo settings에 설정된 값
+#    bucket: _
+#    key: _.zip
+#    bundle_type: zip
+#    application: _
+#    deployment_group: _
+#    region: ap-northeast-2
+#    wait-until-deployed: true
+#    on:
+#      repo: YAPP-16th/Team_Android_1_Backend
+#      branch: master

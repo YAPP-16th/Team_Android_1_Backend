@@ -1,0 +1,10 @@
+spring:
+  jpa:
+    open-in-view: false
+
+  datasource:
+    platform: mariadb
+    url: jdbc:mariadb:failover://localhost:3306/erooja_test?autoReconnect=true
+    username: root
+    password:
+    driverClassName: org.mariadb.jdbc.Driver
