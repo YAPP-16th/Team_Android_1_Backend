@@ -22,7 +22,7 @@ public class KakaoUserInfoRESTService {
     @Value("${third-party.kakao.admin-key}")
     private String ADMIN_KEY;
 
-    @Value("third-party.kakao.rest-api-key")
+    @Value("${third-party.kakao.rest-api-key}")
     private String REST_API_KEY;
 
     private static final String BASE_HOST = "https://kapi.kakao.com";
