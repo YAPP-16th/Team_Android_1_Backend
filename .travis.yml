@@ -25,34 +25,34 @@ notifications:
       - siotman.yapp@gmail.com
       - hyeonsu.yapp@gmail.com
 
-#before_deploy:
-#  - zip -r build-dir *
-#  - mkdir -p deploy
-#  - mv app-zip.zip deploy/app-zip.zip
+before_deploy:
+  - zip -r erooja-server *
+  - mkdir -p deploy
+  - mv erooja-server.zip deploy/erooja-server.zip
 
-#deploy:
-#  - provider: s3
-#    access_key_id: $AWS_ACCESS_KEY      # Travis repo settings에 설정된 값
-#    secret_access_key: $AWS_SECRET_KEY  # Travis repo settings에 설정된 값
-#    bucket: _
-#    region: ap-northeast-2
-#    skip_cleanup: true
-#    acl: public_read
-#    local_dir: deploy
-#    wait-until-deployed: true
-#    on:
-#      repo: YAPP-16th/Team_Android_1_Backend
-#      branch: master
-#  - provider: codedeploy
-#    access_key_id: $AWS_ACCESS_KEY      # Travis repo settings에 설정된 값
-#    secret_access_key: $AWS_SECRET_KEY  # Travis repo settings에 설정된 값
-#    bucket: _
-#    key: _.zip
-#    bundle_type: zip
-#    application: _
-#    deployment_group: _
-#    region: ap-northeast-2
-#    wait-until-deployed: true
-#    on:
-#      repo: YAPP-16th/Team_Android_1_Backend
-#      branch: master
+deploy:
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY      # Travis repo settings에 설정된 값
+    secret_access_key: $AWS_SECRET_KEY  # Travis repo settings에 설정된 값
+    bucket: erooja-build
+    region: ap-northeast-2
+    skip_cleanup: true
+    acl: public_read
+    local_dir: deploy
+    wait-until-deployed: true
+    on:
+      repo: YAPP-16th/Team_Android_1_Backend
+      branch: master
+  - provider: codedeploy
+    access_key_id: $AWS_ACCESS_KEY      # Travis repo settings에 설정된 값
+    secret_access_key: $AWS_SECRET_KEY  # Travis repo settings에 설정된 값
+    bucket: erooja-build
+    key: erooja-server.zip
+    bundle_type: zip
+    application: erooja-server
+    deployment_group: erooja
+    region: ap-northeast-2
+    wait-until-deployed: true
+    on:
+      repo: YAPP-16th/Team_Android_1_Backend
+      branch: master
