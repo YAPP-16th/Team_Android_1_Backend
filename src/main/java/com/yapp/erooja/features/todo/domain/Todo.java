@@ -15,14 +15,19 @@ public class Todo {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     private String content;
+
     @NonNull
     private Boolean isEnd;
+
     @NonNull
     private int priority;
+
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createDt;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "goal_join_id")
     GoalJoin goalJoin;

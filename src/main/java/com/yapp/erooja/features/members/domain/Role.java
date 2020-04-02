@@ -1,5 +1,5 @@
 package com.yapp.erooja.features.members.domain;
 
 public enum Role {
-    USER, ADMIN
+    ROLE_USER, ROLE_ADMIN
 }

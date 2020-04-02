@@ -17,22 +17,31 @@ public class Goal {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     private String title;
+
     @Lob
     private String description;
-    @NonNull
+
+    @Column(nullable = false)
     private int joinCount=0;
-    @NonNull
+
+    @Column(nullable = false)
     private Boolean isEnd=false;
-    @NonNull
+
+    @Column(nullable = false)
     private Boolean isDateFixed;
+
     private LocalDateTime startDt;
     private LocalDateTime endDt;
+
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createDt;
+
     @UpdateTimestamp
     private LocalDateTime changeDt;
+
     @OneToMany(mappedBy="goal", cascade=CascadeType.ALL, orphanRemoval = true)
     private List<JobGoal> jobGoals;
 }

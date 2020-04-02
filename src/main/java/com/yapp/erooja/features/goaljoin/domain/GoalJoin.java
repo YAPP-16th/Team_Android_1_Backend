@@ -19,23 +19,31 @@ public class GoalJoin {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     @Enumerated(EnumType.STRING)
-    private Role role;
-    @NonNull
+    private GoalRole role;
+
+    @Column(updatable = false)
     private Boolean isEnd=false;
-    @NonNull
+
+    @Column(updatable = false)
     private int copyCount=0;
+
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createDt;
+
     private LocalDateTime startDt;
     private LocalDateTime endDt;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "goal_id")
     private Goal goal;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "members_id")
     private Members member;
+
     @OneToMany(mappedBy="goalJoin", cascade=CascadeType.ALL, orphanRemoval = true)
     private List<Todo> todoList;
 }
