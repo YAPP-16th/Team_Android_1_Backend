@@ -2,6 +2,7 @@ package com.yapp.erooja.features.goaljoin.domain;
 
 import com.yapp.erooja.features.goal.domain.Goal;
 import com.yapp.erooja.features.members.domain.Members;
+import com.yapp.erooja.features.members.domain.Role;
 import com.yapp.erooja.features.todo.domain.Todo;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -18,18 +19,17 @@ public class GoalJoin {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String title;
-    @Lob
-    private String description;
-    @NonNull
-    private int copyCount=0;
+    @Enumerated(EnumType.STRING)
+    private Role role;
     @NonNull
     private Boolean isEnd=false;
-    private LocalDateTime startDt;
-    private LocalDateTime endDt;
+    @NonNull
+    private int copyCount=0;
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createDt;
+    private LocalDateTime startDt;
+    private LocalDateTime endDt;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "goal_id")
     private Goal goal;
