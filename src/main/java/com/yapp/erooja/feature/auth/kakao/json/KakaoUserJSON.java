@@ -1,17 +1,19 @@
 package com.yapp.erooja.feature.auth.kakao.json;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Map;
+
 @Getter
 @NoArgsConstructor
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class KakaoUserJSON {
-    private String id;
-    private String properties;
+    private Long id;
 
-    @JsonIgnore
-    @JsonProperty(value = "kakao_account")
+    private Map<String, String> properties;
+
     private KakaoAccountJSON account;
 }

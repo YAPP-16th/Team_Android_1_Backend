@@ -1,22 +1,21 @@
 package com.yapp.erooja.feature.auth.kakao.json;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+@Getter
+@NoArgsConstructor
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class KakaoIdsJSON {
-    List<String> elements;
+    List<Long> elements;
 
-    @JsonIgnore
-    @JsonProperty(value = "total_count")
     Integer totalCount;
 
-    @JsonIgnore
-    @JsonProperty(value = "before_url")
-    Integer beforUrl;
+    Integer beforeUrl;
 
-    @JsonIgnore
-    @JsonProperty(value = "after_url")
     Integer afterUrl;
 }
