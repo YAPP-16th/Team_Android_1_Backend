@@ -1,6 +1,13 @@
 spring:
   jpa:
+    database-platform: org.hibernate.dialect.MariaDBDialect
     open-in-view: false
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+      show-sql: true
 
   datasource:
     platform: mariadb
