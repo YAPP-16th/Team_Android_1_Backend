@@ -12,14 +12,17 @@ public class MemberAuth {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @NonNull
-    @Column(unique = true)
+
+    @Column(updatable = false, unique = true)
     private String uid;
+
     private String passwd;
-    private String third_party_provider;
-    private String third_party_user_info;
-    @NonNull
-    private Boolean is_third_party;
+    private String thirdPartyProvider;
+    private String thirdpartyUserInfo;
+
+    @Column(updatable = false)
+    private Boolean isThirdParty;
+    
     @OneToOne(cascade=CascadeType.ALL)
     private Members member;
 }
