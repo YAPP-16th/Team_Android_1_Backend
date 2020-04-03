@@ -18,10 +18,10 @@ public class Todo {
 
     private String content;
 
-    @NonNull
+    @Column(nullable = false)
     private Boolean isEnd;
 
-    @NonNull
+    @Column(nullable = false)
     private int priority;
 
     @CreationTimestamp

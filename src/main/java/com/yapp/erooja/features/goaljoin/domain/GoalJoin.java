@@ -23,10 +23,10 @@ public class GoalJoin {
     @Enumerated(EnumType.STRING)
     private GoalRole role;
 
-    @Column(updatable = false)
+    @Column(nullable = false)
     private Boolean isEnd=false;
 
-    @Column(updatable = false)
+    @Column(nullable = false)
     private int copyCount=0;
 
     @CreationTimestamp
