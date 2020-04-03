@@ -13,16 +13,16 @@ public class MemberAuth {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(updatable = false, unique = true)
+    @Column(nullable = false, unique = true)
     private String uid;
 
     private String passwd;
     private String thirdPartyProvider;
-    private String thirdpartyUserInfo;
+    private String thirdPartyUserInfo;
 
-    @Column(updatable = false)
+    @Column(nullable = false)
     private Boolean isThirdParty;
-    
+
     @OneToOne(cascade=CascadeType.ALL)
     private Members member;
 }
