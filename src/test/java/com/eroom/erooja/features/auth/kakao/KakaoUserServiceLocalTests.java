@@ -12,19 +12,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 @SpringBootTest
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-@ActiveProfiles({"test"})
-public class KakaoUserServiceTests {
-    private static final Logger logger = LoggerFactory.getLogger(KakaoUserServiceTests.class);
+public class KakaoUserServiceLocalTests {
+    private static final Logger logger = LoggerFactory.getLogger(KakaoUserServiceLocalTests.class);
 
     private static final Integer USER_POOL_SIZE = 5;
     private Set<KakaoUserJSON> userPool;
