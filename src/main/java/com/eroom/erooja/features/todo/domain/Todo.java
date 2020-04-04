@@ -1,0 +1,34 @@
+package com.eroom.erooja.features.todo.domain;
+
+import com.eroom.erooja.features.goaljoin.domain.GoalJoin;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
+
+@EqualsAndHashCode(of = {"id"})
+@NoArgsConstructor @AllArgsConstructor
+@Getter @Setter
+@Entity
+public class Todo {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    private String content;
+
+    @Column(nullable = false)
+    private Boolean isEnd;
+
+    @Column(nullable = false)
+    private int priority;
+
+    @CreationTimestamp
+    @Column(updatable = false)
+    private LocalDateTime createDt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "goal_join_id")
+    GoalJoin goalJoin;
+}
