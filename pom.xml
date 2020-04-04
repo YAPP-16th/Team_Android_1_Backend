@@ -8,7 +8,7 @@
         <version>2.2.5.RELEASE</version>
         <relativePath/>
     </parent>
-    <groupId>com.yapp</groupId>
+    <groupId>com.eroom</groupId>
     <artifactId>erooja</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>erooja</name>

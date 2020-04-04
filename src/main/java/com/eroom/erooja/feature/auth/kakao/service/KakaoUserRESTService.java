@@ -1,7 +1,7 @@
-package com.yapp.erooja.feature.auth.kakao.service;
+package com.eroom.erooja.feature.auth.kakao.service;
 
-import com.yapp.erooja.feature.auth.kakao.json.KakaoIdsJSON;
-import com.yapp.erooja.feature.auth.kakao.json.KakaoUserJSON;
+import com.eroom.erooja.feature.auth.kakao.json.KakaoIdsJSON;
+import com.eroom.erooja.feature.auth.kakao.json.KakaoUserJSON;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -9,7 +9,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import static com.yapp.erooja.feature.auth.kakao.service.ServiceConstants.*;
+import static com.eroom.erooja.feature.auth.kakao.service.ServiceConstants.*;
 
 @Service
 public class KakaoUserRESTService {

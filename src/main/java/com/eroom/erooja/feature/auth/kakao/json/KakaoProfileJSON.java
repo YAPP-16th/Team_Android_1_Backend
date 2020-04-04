@@ -1,4 +1,4 @@
-package com.yapp.erooja.feature.auth.kakao.json;
+package com.eroom.erooja.feature.auth.kakao.json;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
