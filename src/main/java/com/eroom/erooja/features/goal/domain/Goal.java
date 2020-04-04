@@ -1,6 +1,6 @@
-package com.yapp.erooja.features.goal.domain;
+package com.eroom.erooja.features.goal.domain;
 
-import com.yapp.erooja.features.job.domain.JobGoal;
+import com.eroom.erooja.features.job.domain.JobGoal;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;

@@ -1,6 +1,6 @@
-package com.yapp.erooja.features.job.domain;
+package com.eroom.erooja.features.job.domain;
 
-import com.yapp.erooja.features.goal.domain.Goal;
+import com.eroom.erooja.features.goal.domain.Goal;
 import lombok.*;
 
 import javax.persistence.*;

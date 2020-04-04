@@ -1,9 +1,8 @@
-package com.yapp.erooja.features.goaljoin.domain;
+package com.eroom.erooja.features.goaljoin.domain;
 
-import com.yapp.erooja.features.goal.domain.Goal;
-import com.yapp.erooja.features.members.domain.Members;
-import com.yapp.erooja.features.members.domain.Role;
-import com.yapp.erooja.features.todo.domain.Todo;
+import com.eroom.erooja.features.goal.domain.Goal;
+import com.eroom.erooja.features.members.domain.Members;
+import com.eroom.erooja.features.todo.domain.Todo;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 

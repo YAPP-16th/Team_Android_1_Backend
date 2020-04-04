@@ -1,4 +1,4 @@
-package com.yapp.erooja.features.job.domain;
+package com.eroom.erooja.features.job.domain;
 
 import lombok.*;
 
