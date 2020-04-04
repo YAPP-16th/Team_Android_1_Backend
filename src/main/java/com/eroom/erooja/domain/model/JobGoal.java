@@ -1,4 +1,4 @@
-package com.eroom.erooja.features.job.domain;
+package com.eroom.erooja.domain.model;
 
 import lombok.*;
 
@@ -8,15 +8,16 @@ import javax.persistence.*;
 @NoArgsConstructor @AllArgsConstructor
 @Getter @Setter
 @Entity
-public class JobGroup {
+public class JobGoal {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String name;
-    private int level;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "job_group_id")
+    private JobGroup jobGroup;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "super_job_id")
-    private JobGroup superJobGroup;
+    @JoinColumn(name = "goal_id")
+    private Goal goal;
 }

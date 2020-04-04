@@ -1,6 +1,5 @@
-package com.eroom.erooja.features.job.domain;
+package com.eroom.erooja.domain.model;
 
-import com.eroom.erooja.features.members.domain.Members;
 import lombok.*;
 
 import javax.persistence.*;

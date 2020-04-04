@@ -1,4 +1,4 @@
-package com.eroom.erooja.features.members.domain;
+package com.eroom.erooja.domain.model;
 
 import lombok.*;
 

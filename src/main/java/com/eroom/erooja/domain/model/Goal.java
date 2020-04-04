@@ -1,6 +1,5 @@
-package com.eroom.erooja.features.goal.domain;
+package com.eroom.erooja.domain.model;
 
-import com.eroom.erooja.features.job.domain.JobGoal;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
