@@ -1,15 +1,13 @@
-package com.yapp.erooja.feature.auth.kakao.service;
+package com.yapp.erooja.features.auth.kakao.service;
 
-import com.yapp.erooja.feature.auth.kakao.json.KakaoIdsJSON;
-import com.yapp.erooja.feature.auth.kakao.json.KakaoUserJSON;
+import com.yapp.erooja.features.auth.kakao.json.KakaoIdsJSON;
+import com.yapp.erooja.features.auth.kakao.json.KakaoUserJSON;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-
-import static com.yapp.erooja.feature.auth.kakao.service.ServiceConstants.*;
 
 @Service
 public class KakaoUserRESTService {
@@ -23,14 +21,14 @@ public class KakaoUserRESTService {
 
     public KakaoUserJSON findUserById(Long targetId) {
         ResponseEntity<KakaoUserJSON> response = this.restTemplate.postForEntity(
-                BASE_HOST_KAPI + END_POINT_USER_ME, buildHttpEntity(targetId), KakaoUserJSON.class);
+                ServiceConstants.BASE_HOST_KAPI + ServiceConstants.END_POINT_USER_ME, buildHttpEntity(targetId), KakaoUserJSON.class);
 
         return response.getBody();
     }
 
     public Long logoutById(Long targetId) {
         ResponseEntity<Long> response = this.restTemplate.postForEntity(
-                BASE_HOST_KAPI + END_POINT_USER_LOGOUT, buildHttpEntity(targetId), Long.class);
+                ServiceConstants.BASE_HOST_KAPI + ServiceConstants.END_POINT_USER_LOGOUT, buildHttpEntity(targetId), Long.class);
 
         return response.getBody();
     }
@@ -53,7 +51,7 @@ public class KakaoUserRESTService {
         HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<>(formData, buildHeader());
 
         ResponseEntity<KakaoIdsJSON> response = this.restTemplate.postForEntity(
-                BASE_HOST_KAPI + END_POINT_USER_IDS, httpEntity, KakaoIdsJSON.class);
+                ServiceConstants.BASE_HOST_KAPI + ServiceConstants.END_POINT_USER_IDS, httpEntity, KakaoIdsJSON.class);
 
         return response.getBody();
     }
@@ -62,7 +60,7 @@ public class KakaoUserRESTService {
         HttpEntity httpEntity = new HttpEntity(buildHeader(accessToken));
 
         ResponseEntity<KakaoUserJSON> response = this.restTemplate.postForEntity(
-                BASE_HOST_KAPI + END_POINT_USER_ME, httpEntity, KakaoUserJSON.class);
+                ServiceConstants.BASE_HOST_KAPI + ServiceConstants.END_POINT_USER_ME, httpEntity, KakaoUserJSON.class);
 
         return response.getBody();
     }

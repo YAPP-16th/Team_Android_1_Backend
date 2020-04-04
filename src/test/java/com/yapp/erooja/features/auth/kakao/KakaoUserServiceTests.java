@@ -1,7 +1,7 @@
-package com.yapp.erooja.feature.auth.kakao;
+package com.yapp.erooja.features.auth.kakao;
 
-import com.yapp.erooja.feature.auth.kakao.json.KakaoUserJSON;
-import com.yapp.erooja.feature.auth.kakao.service.KakaoUserRESTService;
+import com.yapp.erooja.features.auth.kakao.json.KakaoUserJSON;
+import com.yapp.erooja.features.auth.kakao.service.KakaoUserRESTService;
 import lombok.RequiredArgsConstructor;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
