@@ -1,0 +1,10 @@
+server:
+  port: 20000
+
+spring:
+  datasource:
+    platform: mysql
+    url: jdbc:mysql://erooja-db-dev.ciqrw9dzdsex.ap-northeast-2.rds.amazonaws.com/erooja_production?autoReconnect=true
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driverClassName: com.mysql.cj.jdbc.Driver
