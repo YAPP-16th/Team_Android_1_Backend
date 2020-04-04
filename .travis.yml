@@ -4,6 +4,7 @@ jdk:
 
 branches:
   only:
+    - develop
     - master
 
 # Travis CI 서버의 Home
