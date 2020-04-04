@@ -1,4 +1,4 @@
-package com.eroom.erooja.feature.auth.kakao.json;
+package com.eroom.erooja.features.auth.kakao.json;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;

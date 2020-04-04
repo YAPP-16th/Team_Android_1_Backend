@@ -1,19 +1,21 @@
-package com.eroom.erooja.feature.auth.kakao.json;
+package com.eroom.erooja.features.auth.kakao.json;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.Map;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
-public class KakaoUserJSON {
-    private Long id;
+public class KakaoIdsJSON {
+    List<Long> elements;
 
-    private Map<String, String> properties;
+    Integer totalCount;
 
-    private KakaoAccountJSON account;
+    Integer beforeUrl;
+
+    Integer afterUrl;
 }
