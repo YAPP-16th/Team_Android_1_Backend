@@ -1,4 +1,4 @@
-package com.yapp.erooja;
+package com.eroom.erooja;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
