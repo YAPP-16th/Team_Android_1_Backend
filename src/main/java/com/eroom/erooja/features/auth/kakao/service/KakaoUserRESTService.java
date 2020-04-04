@@ -1,5 +1,8 @@
 package com.eroom.erooja.features.auth.kakao.service;
 
+import com.eroom.erooja.common.constants.ErrorEnum;
+import com.eroom.erooja.features.auth.kakao.exception.KakaoNotRegisteredUserException;
+import com.eroom.erooja.features.auth.kakao.exception.KakaoRESTException;
 import com.eroom.erooja.features.auth.kakao.json.KakaoIdsJSON;
 import com.eroom.erooja.features.auth.kakao.json.KakaoUserJSON;
 import org.springframework.beans.factory.annotation.Value;
@@ -7,6 +10,7 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Service
@@ -19,18 +23,33 @@ public class KakaoUserRESTService {
     @Value("${KAKAO_REST_API_KEY}")
     private String REST_API_KEY;
 
-    public KakaoUserJSON findUserById(Long targetId) {
-        ResponseEntity<KakaoUserJSON> response = this.restTemplate.postForEntity(
-                ServiceConstants.BASE_HOST_KAPI + ServiceConstants.END_POINT_USER_ME, buildHttpEntity(targetId), KakaoUserJSON.class);
-
-        return response.getBody();
+    public KakaoUserJSON findUserById(Long targetId) throws KakaoRESTException {
+        try {
+            ResponseEntity<KakaoUserJSON> response = this.restTemplate.postForEntity(
+                    ServiceConstants.BASE_HOST_KAPI + ServiceConstants.END_POINT_USER_ME, buildHttpEntity(targetId), KakaoUserJSON.class);
+            return response.getBody();
+        } catch (HttpClientErrorException errorException) {
+            throw buildException(errorException);
+        }
     }
 
-    public Long logoutById(Long targetId) {
-        ResponseEntity<Long> response = this.restTemplate.postForEntity(
-                ServiceConstants.BASE_HOST_KAPI + ServiceConstants.END_POINT_USER_LOGOUT, buildHttpEntity(targetId), Long.class);
+    public Long logoutById(Long targetId) throws KakaoRESTException {
+        try {
+            ResponseEntity<Long> response = this.restTemplate.postForEntity(
+                    ServiceConstants.BASE_HOST_KAPI + ServiceConstants.END_POINT_USER_LOGOUT, buildHttpEntity(targetId), Long.class);
+            return response.getBody();
+        } catch (HttpClientErrorException errorException) {
+            throw buildException(errorException);
+        }
+    }
 
-        return response.getBody();
+    private KakaoRESTException buildException(HttpClientErrorException clientException) {
+        String message = clientException.getMessage();
+        if (message == null) message = "";
+
+        if (message.contains("NotRegisteredUserException")) return new KakaoNotRegisteredUserException();
+
+        return new KakaoRESTException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorEnum.AUTH_KAKAO_UNKNOWN_ERROR);
     }
 
     private HttpEntity<MultiValueMap<String, String>> buildHttpEntity(Long targetId) {
@@ -41,7 +60,7 @@ public class KakaoUserRESTService {
         return new HttpEntity<>(formData, buildHeader());
     }
 
-    public KakaoIdsJSON findUserIds(Integer limit, Integer fromId, Boolean isAsc) {
+    public KakaoIdsJSON findUserIds(Integer limit, Integer fromId, Boolean isAsc) throws HttpClientErrorException {
 
         MultiValueMap<String, Object> formData = new LinkedMultiValueMap<>();
         formData.add("limit", limit);
@@ -56,7 +75,7 @@ public class KakaoUserRESTService {
         return response.getBody();
     }
 
-    public KakaoUserJSON findUserByToken(String accessToken) {
+    public KakaoUserJSON findUserByToken(String accessToken) throws HttpClientErrorException {
         HttpEntity httpEntity = new HttpEntity(buildHeader(accessToken));
 
         ResponseEntity<KakaoUserJSON> response = this.restTemplate.postForEntity(

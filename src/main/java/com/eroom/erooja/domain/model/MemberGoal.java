@@ -1,6 +1,7 @@
 package com.eroom.erooja.domain.model;
 
-import com.eroom.erooja.domain.eums.GoalRole;
+import com.eroom.erooja.domain.common.AuditProperties;
+import com.eroom.erooja.domain.enums.GoalRole;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -14,7 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-public class MemberGoal {
+public class MemberGoal extends AuditProperties {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -28,11 +29,8 @@ public class MemberGoal {
     @Column(nullable = false)
     private int copyCount = 0;
 
-    @CreationTimestamp
-    @Column(updatable = false)
-    private LocalDateTime createDt;
-
     private LocalDateTime startDt;
+
     private LocalDateTime endDt;
 
     @ManyToOne(fetch = FetchType.LAZY)
