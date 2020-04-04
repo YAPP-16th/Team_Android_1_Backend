@@ -1,5 +1,6 @@
 package com.eroom.erooja.domain.model;
 
+import com.eroom.erooja.domain.eums.GoalRole;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -8,10 +9,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @EqualsAndHashCode(of = {"id"})
-@NoArgsConstructor @AllArgsConstructor
-@Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Entity
-public class GoalJoin {
+public class MemberGoal {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -20,10 +23,10 @@ public class GoalJoin {
     private GoalRole role;
 
     @Column(nullable = false)
-    private Boolean isEnd=false;
+    private Boolean isEnd = false;
 
     @Column(nullable = false)
-    private int copyCount=0;
+    private int copyCount = 0;
 
     @CreationTimestamp
     @Column(updatable = false)
@@ -40,6 +43,6 @@ public class GoalJoin {
     @JoinColumn(name = "members_id")
     private Members member;
 
-    @OneToMany(mappedBy="goalJoin", cascade=CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "memberGoal", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Todo> todoList;
 }

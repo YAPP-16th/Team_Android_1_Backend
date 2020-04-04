@@ -4,18 +4,21 @@ import lombok.*;
 
 import javax.persistence.*;
 
+
+@Getter
+@Setter
 @EqualsAndHashCode(of = {"id"})
-@NoArgsConstructor @AllArgsConstructor
-@Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-public class JobGoal {
+public class GoalJobInterest {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "job_group_id")
-    private JobGroup jobGroup;
+    private JobInterest jobInterest;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "goal_id")

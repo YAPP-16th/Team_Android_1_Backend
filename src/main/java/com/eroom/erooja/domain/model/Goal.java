@@ -9,8 +9,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @EqualsAndHashCode(of = {"id"})
-@NoArgsConstructor @AllArgsConstructor
-@Getter @Setter
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Goal {
     @Id
@@ -23,10 +25,10 @@ public class Goal {
     private String description;
 
     @Column(nullable = false)
-    private int joinCount=0;
+    private int joinCount = 0;
 
     @Column(nullable = false)
-    private Boolean isEnd=false;
+    private Boolean isEnd = false;
 
     @Column(nullable = false)
     private Boolean isDateFixed;
@@ -41,6 +43,6 @@ public class Goal {
     @UpdateTimestamp
     private LocalDateTime changeDt;
 
-    @OneToMany(mappedBy="goal", cascade=CascadeType.ALL, orphanRemoval = true)
-    private List<JobGoal> jobGoals;
+    @OneToMany(mappedBy = "goal", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<GoalJobInterest> goalJobInterests;
 }

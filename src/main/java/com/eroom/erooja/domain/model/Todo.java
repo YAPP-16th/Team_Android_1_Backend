@@ -29,5 +29,5 @@ public class Todo {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "goal_join_id")
-    GoalJoin goalJoin;
+    MemberGoal memberGoal;
 }

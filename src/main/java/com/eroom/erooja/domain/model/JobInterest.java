@@ -8,16 +8,15 @@ import javax.persistence.*;
 @NoArgsConstructor @AllArgsConstructor
 @Getter @Setter
 @Entity
-public class JobMember {
+public class JobInterest {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "job_group_id")
-    private JobGroup jobGroup;
+    private String name;
+    private int level;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "mebers_id")
-    private Members member;
+    @JoinColumn(name = "super_job_id")
+    private JobInterest superJobInterest;
 }

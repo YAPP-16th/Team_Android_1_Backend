@@ -1,28 +1,30 @@
 package com.eroom.erooja.domain.model;
 
+import com.eroom.erooja.domain.common.AuditProperties;
+import com.eroom.erooja.features.auth.kakao.json.KakaoUserJSON;
 import lombok.*;
 
 import javax.persistence.*;
 
-@EqualsAndHashCode(of = {"id"})
-@NoArgsConstructor @AllArgsConstructor
-@Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @Entity
-public class MemberAuth {
+public class MemberAuth extends AuditProperties {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
     @Column(nullable = false, unique = true)
-    private String uid;
+    private String username;
 
-    private String passwd;
+    private String password;
+
     private String thirdPartyProvider;
+
     private String thirdPartyUserInfo;
 
     @Column(nullable = false)
     private Boolean isThirdParty;
 
-    @OneToOne(cascade=CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     private Members member;
 }
