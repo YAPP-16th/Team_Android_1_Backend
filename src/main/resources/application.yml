@@ -1,3 +1,6 @@
+server:
+  port: 20000
+
 spring:
   jpa:
     database-platform: org.hibernate.dialect.MariaDBDialect
@@ -14,3 +17,6 @@ spring:
     username: root
     password:
     driverClassName: org.mariadb.jdbc.Driver
+
+jwt:
+  secret: jwtLocalSecret

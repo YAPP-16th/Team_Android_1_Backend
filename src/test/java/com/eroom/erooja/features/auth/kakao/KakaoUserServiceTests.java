@@ -1,5 +1,6 @@
 package com.eroom.erooja.features.auth.kakao;
 
+import com.eroom.erooja.features.auth.kakao.exception.KakaoRESTException;
 import com.eroom.erooja.features.auth.kakao.json.KakaoUserJSON;
 import com.eroom.erooja.features.auth.kakao.service.KakaoUserRESTService;
 import lombok.RequiredArgsConstructor;
@@ -32,26 +33,28 @@ public class KakaoUserServiceTests {
     private final KakaoUserRESTService userInfoRESTService;
 
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws KakaoRESTException {
         if (this.userPool == null) {
-            this.userPool = userInfoRESTService
+            Set<KakaoUserJSON> set = new HashSet<>();
+            for (Long aLong : userInfoRESTService
                     .findUserIds(USER_POOL_SIZE, 0, true)
-                    .getElements()
-                    .stream()
-                    .map(userInfoRESTService::findUserById)
-                    .collect(Collectors.toSet());
+                    .getElements()) {
+                KakaoUserJSON userById = userInfoRESTService.findUserById(aLong);
+                set.add(userById);
+            }
+            this.userPool = set;
         }
 
         int idx = new Random().nextInt(this.userPool.size());
         Iterator<KakaoUserJSON> iterator = this.userPool.iterator();
-        while(idx-- > 0) {
+        do {
             randomUser = iterator.next();
-        }
+        } while (--idx > 0);
     }
 
     @Test
     @DisplayName("유저 아이디로부터 필수 정보를 가져올 수 있다.")
-    public void essentialPropertiesShouldBeRetrievedByKakaoId() {
+    public void essentialPropertiesShouldBeRetrievedByKakaoId() throws KakaoRESTException {
         Long targetId = randomUser.getId();
         String[] EssentialPropertiesName = new String[] {"nickname", "profile_image", "thumbnail_image"};
 
