@@ -14,8 +14,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class JwtTokenProvider {
-
-    private static final long tokenTTL = 100000;
+    private static final long tokenTTL = 30 * 60 * 1000;
+    private static final long refreshTokenTTL = 24 * 60 * 60 * 1000;
 
     @Value("${jwt.secret}")
     private String secret;
@@ -51,7 +51,22 @@ public class JwtTokenProvider {
     private String doGenerateToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
                 .setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + tokenTTL * 1000))
+                .setExpiration(new Date(System.currentTimeMillis() + tokenTTL))
+                .signWith(SignatureAlgorithm.HS512, secret).compact();
+    }
+
+    public String generateRefreshToken(MemberAuth memberAuth) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("provider", memberAuth.getAuthProvider());
+        claims.put("isRefreshToken", true);
+        
+        return doGenerateRefreshToken(claims, memberAuth.getUsername());
+    }
+
+    private String doGenerateRefreshToken(Map<String, Object> claims, String subject) {
+        return Jwts.builder()
+                .setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + refreshTokenTTL))
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
     }
 

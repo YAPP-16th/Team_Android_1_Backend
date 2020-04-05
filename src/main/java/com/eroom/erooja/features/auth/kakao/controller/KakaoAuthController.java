@@ -28,7 +28,7 @@ public class KakaoAuthController {
 
     @PostMapping
     public ResponseEntity<JwtResponse> authenticate(@RequestParam KakaoAuthMethod by,
-                                          @RequestBody KakaoAuthDTO kakaoAuthDTO) throws Exception {
+                                                    @RequestBody KakaoAuthDTO kakaoAuthDTO) throws Exception {
         KakaoUserJSON kakaoUser;
 
         if (by.equals(KakaoAuthMethod.ACCESS_TOKEN)) kakaoUser = kakaoUserRESTService.findUserByToken(kakaoAuthDTO.getAccessToken());
@@ -43,6 +43,10 @@ public class KakaoAuthController {
             memberAuth = memberAuthService.create(kakaoUser);
         }
 
-        return ResponseEntity.ok(JwtResponse.builder().token(jwtTokenProvider.generateToken(memberAuth)).build());
+        return ResponseEntity.ok(JwtResponse.builder()
+                    .token(jwtTokenProvider.generateToken(memberAuth))
+                    .refreshToken(jwtTokenProvider.generateRefreshToken(memberAuth))
+                    .isAdditionalInfoNeeded(memberAuth.isAdditionalInfoNeeded())
+                .build());
     }
 }
