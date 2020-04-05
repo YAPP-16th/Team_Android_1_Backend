@@ -24,6 +24,8 @@ public class MemberAuth extends AuditProperties implements UserDetails {
 
     private String thirdPartyUserInfo;
 
+    private boolean isAdditionalInfoNeeded = true;
+
     private boolean isThirdParty = true;
 
     private boolean isEnabled = true;

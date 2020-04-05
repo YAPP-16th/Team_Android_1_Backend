@@ -27,16 +27,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
             .authorizeRequests()
                 /* GUEST, PUBLIC */
-                .antMatchers("/api/v1/auth/*")
+                .antMatchers("/api/v1/auth/**")
                     .permitAll()
                 /* GENERAL MEMBERS */
-                .antMatchers("/api/v1/*")
+                .antMatchers("/api/v1/**")
                     .hasAuthority(MemberRole.ROLE_USER.getAuthority())
                 /* DEVELOPER */
-                .antMatchers("/api/*")
+                .antMatchers("/api/**")
                     .hasAuthority(MemberRole.ROLE_DEVELOPER.getAuthority())
                 /* ADMIN */
-                .antMatchers("/admin/*")
+                .antMatchers("/admin/**")
                     .hasAuthority(MemberRole.ROLE_ADMIN.getAuthority())
                 .anyRequest()
                     .authenticated()

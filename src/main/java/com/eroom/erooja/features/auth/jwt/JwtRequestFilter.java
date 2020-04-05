@@ -46,7 +46,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             } catch (ExpiredJwtException e) {
                 response.sendError(HttpServletResponse.SC_GONE, "만료된 토큰, 또는 요청입니다.");
             }
-        } else {
+        } else if (!request.getRequestURI().contains("/api/v1/auth")) {
             logger.warn(
                     "Authorization 헤더가 없거나, 토큰 형식 포맷 " +
                     "- Authorization : {}[token] 을 지키지 않은 요청 - request {}", AUTHORIZATION_HEADER_PREFIX, request);

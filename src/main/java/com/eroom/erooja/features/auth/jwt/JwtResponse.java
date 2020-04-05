@@ -11,4 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class JwtResponse {
     private String token;
+    private String refreshToken;
+    private Boolean isAdditionalInfoNeeded;
 }
