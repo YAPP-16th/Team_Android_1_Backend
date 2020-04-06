@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor
 public class MemberAuthService implements UserDetailsService {
     private final ObjectMapper objectMapper = new ObjectMapper();
 

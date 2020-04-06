@@ -1,7 +1,6 @@
 package com.eroom.erooja.features.auth.config;
 
 import com.eroom.erooja.domain.enums.MemberRole;
-import com.eroom.erooja.features.auth.service.MemberAuthService;
 import com.eroom.erooja.features.auth.jwt.JwtAuthenticationEntryPoint;
 import com.eroom.erooja.features.auth.jwt.JwtRequestFilter;
 import lombok.RequiredArgsConstructor;
@@ -14,11 +13,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.filter.CorsFilter;
 
 @Configuration
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    private final MemberAuthService memberAuthService;
     private final JwtRequestFilter jwtRequestFilter;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 

@@ -36,7 +36,7 @@ public class JwtTokenProvider {
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
     }
 
-    private Boolean isTokenExpired(String token) {
+    public Boolean isTokenExpired(String token) {
         final Date expiration = getExpirationDateFromToken(token);
         return expiration.before(new Date());
     }
@@ -73,5 +73,17 @@ public class JwtTokenProvider {
     public Boolean validateToken(String token, MemberAuth memberAuth) {
         final String username = getUsernameFromToken(token);
         return (username.equals(memberAuth.getUsername()) && !isTokenExpired(token));
+    }
+
+    public boolean isUnMatchUidWithToken(String uid, String header) {
+        return !uid.equals(getTokenFromHeader(header));
+    }
+
+    public String getUidFromHeader(String header) {
+        return getUsernameFromToken(getTokenFromHeader(header));
+    }
+
+    public String getTokenFromHeader(String header) {
+        return header.replace("Bearer ", "");
     }
 }

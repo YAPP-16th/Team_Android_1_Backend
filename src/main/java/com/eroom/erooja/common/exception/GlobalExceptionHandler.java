@@ -6,29 +6,37 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @RestControllerAdvice
-public class GlobalExceptionHandler {
-    Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+    private Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
+    @ExceptionHandler({ EroojaException.class })
+    public void handleEroojaException(HttpServletRequest request, HttpServletResponse response, EroojaException ex) throws IOException {
+        ErrorEnum.ErrorResponse errorResponse = ex.getErrorEnum().getErrorResponse();
+        response.sendError(ex.getStatus().value(), errorResponse.getMessage());
+    }
+
+    /* 외부 라이브러리 예외 처리 정의 */
     @ExceptionHandler({ JwtException.class })
-    public ResponseEntity<ErrorEnum.ErrorResponse> handleJwtException(JwtException ex) {
+    public void handleJwtException(HttpServletRequest request, HttpServletResponse response, JwtException ex) throws IOException {
         if (ex instanceof MalformedJwtException) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorEnum.JWT_MALFORMED_TOKEN.getErrorResponse());
+            handleEroojaException(request, response, new EroojaException(ErrorEnum.JWT_MALFORMED_TOKEN));
         } else if (ex instanceof UnsupportedJwtException) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorEnum.JWT_UNSUPPORTED.getErrorResponse());
+            handleEroojaException(request, response, new EroojaException(ErrorEnum.JWT_UNSUPPORTED));
         } else {
             logger.error("JWT Error invoked - message : {}, cause : {}", ex.getMessage(), ex.getCause());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ErrorEnum.JWT_UNKNOWN_ERROR.getErrorResponse());
+            handleEroojaException(request, response, new EroojaException(ErrorEnum.JWT_UNKNOWN_ERROR));
         }
     }
+    /* 외부 라이브러리 예외 처리 정의 끝 */
 
-    @ExceptionHandler({ BaseException.class })
-    public ResponseEntity<ErrorEnum.ErrorResponse> handleNotRegisteredUserException(BaseException ex) {
-        return ResponseEntity.status(ex.getStatus()).body(ex.getErrorEnum().getErrorResponse());
-    }
+
 }

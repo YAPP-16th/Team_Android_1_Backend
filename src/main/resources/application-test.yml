@@ -1,7 +1,8 @@
 spring:
   jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
 
   datasource:
     platform: org.hibernate.dialect.H2Dialect
@@ -9,3 +10,6 @@ spring:
     username: sa
     password:
     driverClassName: org.h2.Driver
+
+KAKAO_ADMIN_KEY: MOCK
+KAKAO_REST_API_KEY: MOCK

@@ -5,6 +5,6 @@ import org.springframework.http.HttpStatus;
 
 public class KakaoNotRegisteredUserException extends KakaoRESTException {
     public KakaoNotRegisteredUserException() {
-        super(HttpStatus.NOT_FOUND, ErrorEnum.AUTH_KAKAO_NOT_REGISTERED_USER);
+        super(ErrorEnum.AUTH_KAKAO_NOT_REGISTERED_USER);
     }
 }

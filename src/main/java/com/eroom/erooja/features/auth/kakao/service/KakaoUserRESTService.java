@@ -48,8 +48,8 @@ public class KakaoUserRESTService {
         if (message == null) message = "";
 
         if (message.contains("NotRegisteredUserException")) return new KakaoNotRegisteredUserException();
-
-        return new KakaoRESTException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorEnum.AUTH_KAKAO_UNKNOWN_ERROR);
+        
+        return new KakaoRESTException(ErrorEnum.AUTH_KAKAO_UNKNOWN_ERROR);
     }
 
     private HttpEntity<MultiValueMap<String, String>> buildHttpEntity(Long targetId) {

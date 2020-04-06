@@ -6,6 +6,7 @@ import com.eroom.erooja.features.auth.kakao.service.KakaoUserRESTService;
 import lombok.RequiredArgsConstructor;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -18,8 +19,9 @@ import java.util.*;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+@Disabled
 @SpringBootTest
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor
 public class KakaoUserServiceLocalTests {
     private static final Logger logger = LoggerFactory.getLogger(KakaoUserServiceLocalTests.class);
 

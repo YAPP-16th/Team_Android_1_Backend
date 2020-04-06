@@ -5,13 +5,13 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
-public class BaseException extends Exception {
+public class EroojaException extends RuntimeException {
     protected HttpStatus status;
     protected ErrorEnum errorEnum;
 
-    public BaseException(HttpStatus status, ErrorEnum errorEnum) {
+    public EroojaException(ErrorEnum errorEnum) {
         super(errorEnum.toString());
-        this.status = status;
+        this.status = errorEnum.getErrorResponse().getHttpStatus();
         this.errorEnum = errorEnum;
     }
 }

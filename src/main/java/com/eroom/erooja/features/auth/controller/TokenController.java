@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/auth/token")
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor
 public class TokenController {
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberAuthService memberAuthService;
