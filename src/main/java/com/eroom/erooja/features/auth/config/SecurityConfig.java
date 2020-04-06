@@ -20,7 +20,6 @@ import org.springframework.web.filter.CorsFilter;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtRequestFilter jwtRequestFilter;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-    private final ServletExceptionHandlerFilter servletExceptionHandlerFilter;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -48,7 +47,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-//        http.addFilterBefore(servletExceptionHandlerFilter, CorsFilter.class);
     }
 
     @Bean

@@ -9,6 +9,7 @@ import com.eroom.erooja.features.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,5 +46,15 @@ public class MembersController {
 
         Members updated = memberService.updateNotNullPropsOf(Members.of(uid, memberDTO));
         return ResponseEntity.ok(MemberDTO.of(updated));
+    }
+
+    @GetMapping("/nickname/duplicity")
+    public ResponseEntity checkNicknameDuplicity(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String header,
+                                                 @RequestBody MemberDTO memberDTO) throws EroojaException {
+        if (memberService.isNicknameExist(memberDTO.getNickname())) {
+            return ResponseEntity.ok(true);
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(false);
+        }
     }
 }
