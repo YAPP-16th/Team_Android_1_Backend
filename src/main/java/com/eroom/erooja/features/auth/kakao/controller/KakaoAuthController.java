@@ -13,7 +13,6 @@ import com.eroom.erooja.features.auth.kakao.service.KakaoUserRESTService;
 import com.eroom.erooja.features.auth.service.MemberAuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +32,7 @@ public class KakaoAuthController {
 
         if (by.equals(KakaoAuthMethod.ACCESS_TOKEN)) kakaoUser = kakaoUserRESTService.findUserByToken(kakaoAuthDTO.getAccessToken());
         else if (by.equals(KakaoAuthMethod.ID)) kakaoUser = kakaoUserRESTService.findUserById(kakaoAuthDTO.getKakaoId());
-        else throw new KakaoRESTException(HttpStatus.BAD_REQUEST, ErrorEnum.AUTH_KAKAO_NOT_SUPPORTED_METHOD);
+        else throw new KakaoRESTException(ErrorEnum.AUTH_KAKAO_NOT_SUPPORTED_METHOD);
 
         MemberAuth memberAuth;
         try {
