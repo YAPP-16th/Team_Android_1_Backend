@@ -1,7 +1,5 @@
 package com.eroom.erooja.common.constants;
 
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.UnsupportedJwtException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -15,6 +13,10 @@ public enum ErrorEnum {
     JWT_UNSUPPORTED(HttpStatus.BAD_REQUEST, "JWT_002", "미지원 JWT 토큰 방식입니다."),
     JWT_EXPIRED(HttpStatus.BAD_REQUEST, "JWT_003", "만료된 토큰입니다."),
     /* JWT 오류 메세지 정의 끝 */
+
+    /* 인증 오류 메세지 정의 */
+    AUTH_ACCESS_DENIED(HttpStatus.UNAUTHORIZED, "ATH_001", "접근 권한이 없습니다."),
+    /* 인증 오류 메세지 정의 끝 */
 
     /* 카카오톡 인증 오류 메세지 정의 */
     AUTH_KAKAO_UNKNOWN_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "KKO_000", "알 수 없는 카카오 통신 모듈 오류입니다."),

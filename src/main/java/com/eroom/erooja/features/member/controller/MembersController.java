@@ -1,7 +1,7 @@
 package com.eroom.erooja.features.member.controller;
 
 import com.eroom.erooja.common.constants.ErrorEnum;
-import com.eroom.erooja.common.exception.BaseException;
+import com.eroom.erooja.common.exception.EroojaException;
 import com.eroom.erooja.domain.model.Members;
 import com.eroom.erooja.features.auth.jwt.JwtTokenProvider;
 import com.eroom.erooja.features.member.dto.MemberDTO;
@@ -36,11 +36,11 @@ public class MembersController {
 
     @PutMapping("/nickname")
     public ResponseEntity updateNicknameByUid(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String header,
-                                              @RequestBody MemberDTO memberDTO) throws BaseException {
+                                              @RequestBody MemberDTO memberDTO) throws EroojaException {
         String uid = jwtTokenProvider.getUidFromHeader(header);
 
         if (memberService.isNicknameExist(memberDTO.getNickname())) {
-            throw new BaseException(ErrorEnum.MEMBER_DUPLICATED_PROPS);
+            throw new EroojaException(ErrorEnum.MEMBER_DUPLICATED_PROPS);
         }
 
         Members updated = memberService.updateNotNullPropsOf(Members.of(uid, memberDTO));
