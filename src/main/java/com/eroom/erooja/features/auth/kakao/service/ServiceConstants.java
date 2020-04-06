@@ -1,4 +1,4 @@
-package com.eroom.erooja.features.service;
+package com.eroom.erooja.features.auth.kakao.service;
 
 final class ServiceConstants {
     /* KAKAO REST API 문자열 상수 정의 */

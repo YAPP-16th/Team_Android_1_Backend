@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 public class KakaoRESTException extends BaseException {
-    public KakaoRESTException(HttpStatus status, ErrorEnum errorEnum) {
-        super(status, errorEnum);
+    public KakaoRESTException(ErrorEnum errorEnum) {
+        super(errorEnum);
     }
 }
