@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/auth/kakao")
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor
 public class KakaoAuthController {
     private final JwtTokenProvider jwtTokenProvider;
     private final KakaoUserRESTService kakaoUserRESTService;

@@ -51,14 +51,14 @@ public class MembersCrudApiTest {
                 .nickname("수정된 닉네임")
                 .build();
 
-        given(jwtTokenProvider.getUsernameFromToken("[TOKEN]"))
+        given(jwtTokenProvider.getUidFromHeader("Bearer [TOKEN]"))
                 .willReturn(mockId);
 
         given(memberService.updateNotNullPropsOf(Members.of(memberDTO)))
-                .willReturn(Members.of(memberDTO));
+                .willReturn(Members.of(mockId, memberDTO));
 
         mockMvc.perform(
-                post("/api/v1/member/" + mockId)
+                post("/api/v1/member")
                     .header(HttpHeaders.AUTHORIZATION, "Bearer [TOKEN]")
                     .accept(MediaType.APPLICATION_JSON + ";charset=UTF-8")
                     .contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")

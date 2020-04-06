@@ -21,7 +21,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 @Disabled
 @SpringBootTest
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor
 public class KakaoUserServiceLocalTests {
     private static final Logger logger = LoggerFactory.getLogger(KakaoUserServiceLocalTests.class);
 

@@ -1,13 +1,11 @@
 package com.eroom.erooja.features.member.dto;
 
 import com.eroom.erooja.domain.model.Members;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @NoArgsConstructor
 @Getter
+@ToString
 public class MemberDTO {
     @Setter
     private String uid;
