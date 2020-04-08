@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 
+@Builder
 @EqualsAndHashCode(of = {"id"})
 @NoArgsConstructor @AllArgsConstructor
 @Getter @Setter

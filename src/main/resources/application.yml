@@ -18,5 +18,10 @@ spring:
     password:
     driverClassName: org.mariadb.jdbc.Driver
 
+  data:
+    rest:
+      basePath=/api
+
 jwt:
   secret: jwtLocalSecret
+
