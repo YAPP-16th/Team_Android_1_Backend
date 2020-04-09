@@ -3,18 +3,11 @@ package com.eroom.erooja.features.member;
 import com.eroom.erooja.common.constants.ErrorEnum;
 import com.eroom.erooja.domain.model.MemberAuth;
 import com.eroom.erooja.domain.model.Members;
-import com.eroom.erooja.domain.repos.MemberAuthRepository;
-import com.eroom.erooja.domain.repos.MemberRepository;
 import com.eroom.erooja.features.auth.jwt.JwtTokenProvider;
 import com.eroom.erooja.features.auth.kakao.json.KakaoUserJSON;
 import com.eroom.erooja.features.auth.service.MemberAuthService;
-import com.eroom.erooja.features.member.dto.JobInterestDTO;
-import com.eroom.erooja.features.member.service.MemberService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.MalformedJwtException;
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,23 +16,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -88,7 +76,7 @@ public class JobInterestApiTest {
 
     @Test
     @Transactional
-    @DisplayName("잘못된 JWT 토큰이 인증 헤더에 포함되면 JOB_INTEREST_NOT_EXISTS 에러 메세지를 반환한다")
+    @DisplayName("존재하지 않는 직군 아이디를 유저에 추가하는 요청을 받으면 JOB_INTEREST_NOT_EXISTS 에러 메세지를 반환한다")
     public void whenUserRequestsToAddNonExistsJobInterestThenShouldReturnErrorMessage() throws Exception {
         MemberAuth memberAuth = memberAuthService.create(KakaoUserJSON.builder().id(MOCKED_KAKAO_ID).build());
         Members member = memberAuth.getMember();

@@ -27,6 +27,7 @@ import java.util.Set;
 public class MemberJobInterestController {
     private final MemberJobInterestService memberJobInterestService;
     private final JwtTokenProvider jwtTokenProvider;
+
     @GetMapping
     public ResponseEntity getJobInterests(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String header) {
         String uid = jwtTokenProvider.getUidFromHeader(header);
@@ -47,6 +48,7 @@ public class MemberJobInterestController {
         if (bindingResult.hasErrors()) {
             throw new EroojaException(ErrorEnum.MEMBER_JOB_INTEREST_INVALID_BODY);
         }
+
         if (memberJobInterestService.existsByUidAndJobInterestId(uid, jobInterestDTO.getJobInterestId())) {
             throw new EroojaException(ErrorEnum.MEMBER_JOB_INTEREST_ALREADY_EXISTS);
         }

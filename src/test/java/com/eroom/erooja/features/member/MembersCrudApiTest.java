@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
@@ -28,13 +29,14 @@ import static org.hamcrest.Matchers.is;
 
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
-@ActiveProfiles({"test"})
+@Profile({"test"}) @ActiveProfiles({"test"})
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class MembersCrudApiTest {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private final MockMvc mockMvc;
     private final ObjectMapper objectMapper = new ObjectMapper();
+
+    private final MockMvc mockMvc;
 
     @MockBean
     private MemberService memberService;
@@ -58,11 +60,11 @@ public class MembersCrudApiTest {
                 .willReturn(Members.of(mockId, memberDTO));
 
         mockMvc.perform(
-                post("/api/v1/member")
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer [TOKEN]")
-                    .accept(MediaType.APPLICATION_JSON + ";charset=UTF-8")
-                    .contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
-                    .content(objectMapper.writeValueAsBytes(memberDTO)))
+                    post("/api/v1/member")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer [TOKEN]")
+                        .accept(MediaType.APPLICATION_JSON + ";charset=UTF-8")
+                        .contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
+                        .content(objectMapper.writeValueAsBytes(memberDTO)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("uid", is(mockId)))
