@@ -84,4 +84,52 @@ public class GoalControllerTest {
                 .andExpect(jsonPath("is_date_fixed").value(false))
                 .andExpect(jsonPath("is_end").value(false));
     }
+
+    @Test
+    @DisplayName("목표 생성 (실패 - 제목빈칸)")
+    public void createGoal_fail_if_blank_title() throws Exception {
+        //given
+        LocalDateTime startDt = LocalDateTime.now();
+        LocalDateTime endDt = startDt.plusHours(2);
+
+        CreateGoalRequest createGoalRequest = CreateGoalRequest.builder()
+                .startDt(startDt)
+                .endDt(endDt)
+                .title("")
+                .description("description")
+                .isDateFixed(false).build();
+
+        //when, then
+        this.mockMvc.perform(post("/api/v1/goal")
+                .content(objectMapper.writeValueAsString(createGoalRequest))
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .characterEncoding("utf-8"))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("목표 생성 (실패 - endDate 과거선택)")
+    public void createGoal_fail_if_wrong_endDate() throws Exception {
+        //given
+        LocalDateTime startDt = LocalDateTime.now();
+        LocalDateTime endDt = startDt.minusHours(2); //wrong date
+
+        CreateGoalRequest createGoalRequest = CreateGoalRequest.builder()
+                .startDt(startDt)
+                .endDt(endDt)
+                .title("title")
+                .description("description")
+                .isDateFixed(false).build();
+
+        //when, then
+        this.mockMvc.perform(post("/api/v1/goal")
+                .content(objectMapper.writeValueAsString(createGoalRequest))
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .characterEncoding("utf-8"))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
 }

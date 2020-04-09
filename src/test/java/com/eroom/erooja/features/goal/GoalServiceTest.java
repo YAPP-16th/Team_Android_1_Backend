@@ -54,6 +54,8 @@ public class GoalServiceTest {
                 ()->assertThat(newGoal.getId()).isNotNull(),
                 ()->assertThat(newGoal.getStartDt()).isInstanceOfAny(LocalDateTime.class),
                 ()->assertThat(newGoal.getEndDt()).isInstanceOfAny(LocalDateTime.class),
+                ()->assertThat(newGoal.getCreateDt()).isInstanceOfAny(LocalDateTime.class),
+                ()->assertThat(newGoal.getUpdateDt()).isInstanceOfAny(LocalDateTime.class),
                 ()->assertThat(newGoal.getTitle()).isEqualTo("title"),
                 ()->assertThat(newGoal.getDescription()).isEqualTo("description"),
                 ()->assertThat(newGoal.getIsDateFixed()).isEqualTo(false),

@@ -68,5 +68,10 @@ public enum ErrorEnum {
             this.errCode = errCode;
             this.message = message;
         }
+
+        public ErrorResponse(String errCode, String message) {
+            this.errCode = errCode;
+            this.message = message;
+        }
     }
 }
