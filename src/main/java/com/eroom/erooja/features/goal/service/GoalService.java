@@ -25,6 +25,6 @@ public class GoalService {
     }
 
     public Goal findGoalById(Long goalId){
-        return null;
+        return goalRepository.findById(goalId).get();
     }
 }

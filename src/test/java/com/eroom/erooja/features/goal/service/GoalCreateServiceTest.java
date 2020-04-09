@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @ExtendWith(MockitoExtension.class)
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @SpringBootTest
-public class CreateGoalServiceTest {
+public class GoalCreateServiceTest {
     private final GoalService goalService;
     private final GoalRepository goalRepository;
 
