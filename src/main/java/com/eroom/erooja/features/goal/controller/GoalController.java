@@ -1,5 +1,6 @@
 package com.eroom.erooja.features.goal.controller;
 
+import com.eroom.erooja.common.exception.GoalNotFoundException;
 import com.eroom.erooja.domain.model.Goal;
 import com.eroom.erooja.features.goal.dto.CreateGoalRequestDTO;
 import com.eroom.erooja.features.goal.service.GoalService;
@@ -23,7 +24,14 @@ public class GoalController {
 
     @GetMapping("/{goalId}")
     ResponseEntity getGoalDetail(@PathVariable("goalId") Long goalId) {
-        Goal findGoal = goalService.findGoalById(goalId);
+        Goal findGoal;
+
+        try {
+            findGoal = goalService.findGoalById(goalId);
+        } catch (GoalNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+
         return new ResponseEntity(findGoal, HttpStatus.OK);
     }
 
@@ -39,7 +47,7 @@ public class GoalController {
 
     @PostMapping
     ResponseEntity createGoal(@RequestBody @Valid CreateGoalRequestDTO createGoalRequest, Errors errors) {
-        if(errors.hasErrors()){
+        if (errors.hasErrors()) {
             return new ResponseEntity(errors.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST);
         }
 
@@ -47,7 +55,7 @@ public class GoalController {
         return new ResponseEntity(newGoal, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{goalId}")
+    @DeleteMapping("/{goalId}")
     ResponseEntity updateGoal() {
         return new ResponseEntity(null, HttpStatus.OK);
     }

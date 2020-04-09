@@ -1,5 +1,6 @@
 package com.eroom.erooja.features.goal.service;
 
+import com.eroom.erooja.common.exception.GoalNotFoundException;
 import com.eroom.erooja.domain.model.Goal;
 import com.eroom.erooja.domain.repos.GoalRepository;
 import com.eroom.erooja.features.goal.dto.CreateGoalRequestDTO;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
@@ -65,5 +67,13 @@ public class GoalDetailServiceTest {
                 ()->assertThat(findGoal.getIsDateFixed()).isEqualTo(false),
                 ()->assertThat(findGoal.getIsEnd()).isEqualTo(false)
         );
+    }
+
+    @Test
+    @DisplayName("목표 상세조회 (실패 - 잘못된 id조회)")
+    public void findGoalById_fail_if_wrongId() throws Exception {
+        assertThrows(
+                GoalNotFoundException.class,
+                () -> goalService.findGoalById(9999L));
     }
 }
