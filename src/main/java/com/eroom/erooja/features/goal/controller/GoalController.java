@@ -23,15 +23,15 @@ public class GoalController {
         return new ResponseEntity(null, HttpStatus.OK);
     }
 
-    /*@GetMapping
-    ResponseEntity getGoalList(@PathVariable String interest){
+    @GetMapping("/interest/{interestId}")
+    ResponseEntity getGoalList(@PathVariable("interestId}") String interest){
         return new ResponseEntity(null, HttpStatus.OK);
     }
 
     @GetMapping
     ResponseEntity searchGoal(@PathVariable String filter, @PathVariable String keyword){
         return new ResponseEntity(null, HttpStatus.OK);
-    }*/
+    }
 
     @PostMapping
     ResponseEntity createGoal(@RequestBody CreateGoalRequest createGoalRequest){
