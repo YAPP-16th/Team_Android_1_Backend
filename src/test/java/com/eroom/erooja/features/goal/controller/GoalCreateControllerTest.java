@@ -1,7 +1,7 @@
-package com.eroom.erooja.features.goal;
+package com.eroom.erooja.features.goal.controller;
 
 import com.eroom.erooja.domain.model.Goal;
-import com.eroom.erooja.features.goal.dto.CreateGoalRequest;
+import com.eroom.erooja.features.goal.dto.CreateGoalRequestDTO;
 import com.eroom.erooja.features.goal.service.GoalService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -33,15 +33,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @AutoConfigureMockMvc(addFilters = false)
 @SpringBootTest
-public class GoalControllerTest {
+public class GoalCreateControllerTest {
     @MockBean
     private GoalService goalService;
     private final MockMvc mockMvc;
     private final ObjectMapper objectMapper;
-
-    @BeforeEach
-    public void setUp() {
-    }
 
     @Test
     @DisplayName("목표 생성 (성공)")
@@ -50,7 +46,7 @@ public class GoalControllerTest {
         LocalDateTime startDt = LocalDateTime.now();
         LocalDateTime endDt = startDt.plusHours(2);
 
-        CreateGoalRequest createGoalRequest = CreateGoalRequest.builder()
+        CreateGoalRequestDTO createGoalRequest = CreateGoalRequestDTO.builder()
                 .startDt(startDt)
                 .endDt(endDt)
                 .title("title")
@@ -63,11 +59,12 @@ public class GoalControllerTest {
                 .endDt(endDt)
                 .title("title")
                 .description("description")
+                .joinCount(0)
                 .isDateFixed(false)
                 .isEnd(false).build();
 
         //when, then
-        given(goalService.createGoal(any(CreateGoalRequest.class))).willReturn(newGoal);
+        given(goalService.createGoal(any(CreateGoalRequestDTO.class))).willReturn(newGoal);
 
         this.mockMvc.perform(post("/api/v1/goal")
                 .content(objectMapper.writeValueAsString(createGoalRequest))
@@ -81,6 +78,7 @@ public class GoalControllerTest {
                 .andExpect(jsonPath("end_dt").exists())
                 .andExpect(jsonPath("title").value("title"))
                 .andExpect(jsonPath("description").value("description"))
+                .andExpect(jsonPath("join_count").value(0))
                 .andExpect(jsonPath("is_date_fixed").value(false))
                 .andExpect(jsonPath("is_end").value(false));
     }
@@ -92,7 +90,7 @@ public class GoalControllerTest {
         LocalDateTime startDt = LocalDateTime.now();
         LocalDateTime endDt = startDt.plusHours(2);
 
-        CreateGoalRequest createGoalRequest = CreateGoalRequest.builder()
+        CreateGoalRequestDTO createGoalRequest = CreateGoalRequestDTO.builder()
                 .startDt(startDt)
                 .endDt(endDt)
                 .title("")
@@ -116,7 +114,7 @@ public class GoalControllerTest {
         LocalDateTime startDt = LocalDateTime.now();
         LocalDateTime endDt = startDt.minusHours(2); //wrong date
 
-        CreateGoalRequest createGoalRequest = CreateGoalRequest.builder()
+        CreateGoalRequestDTO createGoalRequest = CreateGoalRequestDTO.builder()
                 .startDt(startDt)
                 .endDt(endDt)
                 .title("title")
