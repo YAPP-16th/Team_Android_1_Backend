@@ -20,7 +20,8 @@ public class Members extends AuditProperties {
 
     private String imagePath;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @Setter
+    @OneToOne @MapsId
     private MemberAuth memberAuth;
 
     @Builder
