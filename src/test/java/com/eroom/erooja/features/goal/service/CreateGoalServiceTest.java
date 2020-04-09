@@ -1,9 +1,8 @@
-package com.eroom.erooja.features.goal;
+package com.eroom.erooja.features.goal.service;
 
 import com.eroom.erooja.domain.model.Goal;
 import com.eroom.erooja.domain.repos.GoalRepository;
-import com.eroom.erooja.features.goal.dto.CreateGoalRequest;
-import com.eroom.erooja.features.goal.service.GoalService;
+import com.eroom.erooja.features.goal.dto.CreateGoalRequestDTO;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @ExtendWith(MockitoExtension.class)
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @SpringBootTest
-public class GoalServiceTest {
+public class CreateGoalServiceTest {
     private final GoalService goalService;
     private final GoalRepository goalRepository;
 
@@ -39,7 +38,7 @@ public class GoalServiceTest {
         LocalDateTime startDt = LocalDateTime.now();
         LocalDateTime endDt = startDt.plusHours(2);
 
-        CreateGoalRequest createGoalRequest = CreateGoalRequest.builder()
+        CreateGoalRequestDTO createGoalRequest = CreateGoalRequestDTO.builder()
                 .startDt(startDt)
                 .endDt(endDt)
                 .title("title")

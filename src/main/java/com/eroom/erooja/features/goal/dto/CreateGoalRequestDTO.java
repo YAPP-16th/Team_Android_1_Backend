@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Getter
 @Setter
-public class CreateGoalRequest {
+public class CreateGoalRequestDTO {
     @NotEmpty(message = "제목이 있어야 합니다.")
     private String title;
 
