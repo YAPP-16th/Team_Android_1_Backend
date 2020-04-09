@@ -32,9 +32,26 @@ public enum ErrorEnum {
     MEMBER_JOB_INTEREST_ALREADY_EXISTS(HttpStatus.CONFLICT, "MJI_002", "이미 존재하는 직군 혹은 직무입니다."),
     /* 멤버 CRUD 오류 메세지 정의 끝*/
 
+    /* 직군 CRUD 오류 메세지 정의 */
+    JOB_INTEREST_NOT_EXISTS(HttpStatus.NOT_FOUND, "JIT_001", "존재하지 않는 직군 혹은 직무입니다."),
+    /* 직군 CRUD 오류 메세지 정의 끝 */
+
+
     ETC(HttpStatus.INTERNAL_SERVER_ERROR, "ETC_000", "알 수 없는 오류입니다.");
 
     private ErrorResponse errorResponse;
+
+    public String getMessage() {
+        return this.errorResponse.getMessage();
+    }
+
+    public String getErrCode() {
+        return this.errorResponse.getErrCode();
+    }
+
+    public HttpStatus getHttpStatus() {
+        return this.errorResponse.getHttpStatus();
+    }
 
     ErrorEnum(HttpStatus httpStatus, String errCode, String message) {
         this.errorResponse = new ErrorResponse(httpStatus, errCode, message);

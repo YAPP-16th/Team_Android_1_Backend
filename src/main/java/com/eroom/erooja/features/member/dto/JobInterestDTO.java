@@ -1,7 +1,6 @@
 package com.eroom.erooja.features.member.dto;
 
 import com.eroom.erooja.domain.model.JobInterest;
-import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.hateoas.RepresentationModel;
