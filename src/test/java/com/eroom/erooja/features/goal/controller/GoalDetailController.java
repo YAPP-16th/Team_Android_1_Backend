@@ -1,5 +1,6 @@
 package com.eroom.erooja.features.goal.controller;
 
+import com.eroom.erooja.common.exception.GoalNotFoundException;
 import com.eroom.erooja.domain.model.Goal;
 import com.eroom.erooja.domain.repos.GoalRepository;
 import com.eroom.erooja.features.goal.service.GoalService;
@@ -76,5 +77,18 @@ public class GoalDetailController {
                 .andExpect(jsonPath("join_count").value(0))
                 .andExpect(jsonPath("is_date_fixed").value(false))
                 .andExpect(jsonPath("is_end").value(false));
+    }
+
+    @Test
+    @DisplayName("목표 상세조회 (실패 - 잘못된id 조회)")
+    public void getGoalDetail_fail_if_wrongId() throws Exception {
+        Long goalId = 9999L;
+        given(goalService.findGoalById(goalId)).willThrow(GoalNotFoundException.class);
+
+        this.mockMvc.perform(get("/api/v1/goal/"+goalId)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .characterEncoding("utf-8"))
+                .andDo(print())
+                .andExpect(status().isNotFound());
     }
 }
