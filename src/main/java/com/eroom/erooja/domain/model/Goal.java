@@ -1,5 +1,8 @@
 package com.eroom.erooja.domain.model;
 
+import com.eroom.erooja.domain.common.AuditProperties;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -8,13 +11,15 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 @EqualsAndHashCode(of = {"id"})
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Goal {
+public class Goal extends AuditProperties {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -35,13 +40,6 @@ public class Goal {
 
     private LocalDateTime startDt;
     private LocalDateTime endDt;
-
-    @CreationTimestamp
-    @Column(updatable = false)
-    private LocalDateTime createDt;
-
-    @UpdateTimestamp
-    private LocalDateTime changeDt;
 
     @OneToMany(mappedBy = "goal", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GoalJobInterest> goalJobInterests;
