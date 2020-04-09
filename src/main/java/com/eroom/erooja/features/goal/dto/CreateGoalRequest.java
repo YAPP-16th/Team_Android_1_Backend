@@ -21,14 +21,14 @@ public class CreateGoalRequest {
     @NotEmpty(message = "본문이 있어야 합니다.")
     private String description;
 
-    @NotEmpty(message = "기간 고정을 선택해야 합니다.")
+    @NotNull(message = "기간 고정을 선택해야 합니다.")
     private Boolean isDateFixed;
 
     @PastOrPresent(message = "현재 혹은 과거날짜를 선택해야합니다.")
-    @NotEmpty(message = "시작 날짜를 선택해야 합니다.")
+    @NotNull(message = "시작 날짜를 선택해야 합니다.")
     private LocalDateTime startDt;
 
     @FutureOrPresent(message = "반드시 미래 날짜여야합니다.")
-    @NotEmpty(message = "종료 날짜를 선택해야 합니다.")
+    @NotNull(message = "종료 날짜를 선택해야 합니다.")
     private LocalDateTime endDt;
 }
