@@ -7,6 +7,8 @@ import com.eroom.erooja.features.goal.service.GoalService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -29,15 +31,16 @@ public class GoalController {
         try {
             findGoal = goalService.findGoalById(goalId);
         } catch (GoalNotFoundException e) {
-            return ResponseEntity.notFound().build();
+            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
         }
 
         return new ResponseEntity(findGoal, HttpStatus.OK);
     }
 
-    @GetMapping("/interest/{interestId}")
-    ResponseEntity getGoalList(@PathVariable("interestId}") String interest) {
-        return new ResponseEntity(null, HttpStatus.OK);
+    @GetMapping(value = "/interest/{interestId}")
+    ResponseEntity getGoalList(@PathVariable("interestId") Long interestId, Pageable pageable) {
+        Page<Goal> goalList = goalService.findGoalListByInterestId(interestId, pageable);
+        return new ResponseEntity(goalList, HttpStatus.OK);
     }
 
     @GetMapping

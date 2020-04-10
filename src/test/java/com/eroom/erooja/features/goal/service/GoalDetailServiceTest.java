@@ -3,7 +3,6 @@ package com.eroom.erooja.features.goal.service;
 import com.eroom.erooja.common.exception.GoalNotFoundException;
 import com.eroom.erooja.domain.model.Goal;
 import com.eroom.erooja.domain.repos.GoalRepository;
-import com.eroom.erooja.features.goal.dto.CreateGoalRequestDTO;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -12,13 +11,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.BDDMockito.given;
 
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
@@ -26,7 +28,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest
 public class GoalDetailServiceTest {
     private final GoalService goalService;
-    private final GoalRepository goalRepository;
+    @MockBean
+    private GoalRepository goalRepository;
 
     @BeforeEach
     public void setUp() {
@@ -50,7 +53,7 @@ public class GoalDetailServiceTest {
                 .joinCount(0)
                 .isEnd(false).build();
 
-        goalRepository.save(newGoal);
+        given(goalRepository.findById(goalId)).willReturn(Optional.of(newGoal));
 
         //when
         Goal findGoal = goalService.findGoalById(goalId);
@@ -60,8 +63,6 @@ public class GoalDetailServiceTest {
                 ()->assertThat(findGoal.getId()).isNotNull(),
                 ()->assertThat(findGoal.getStartDt()).isInstanceOfAny(LocalDateTime.class),
                 ()->assertThat(findGoal.getEndDt()).isInstanceOfAny(LocalDateTime.class),
-                ()->assertThat(findGoal.getCreateDt()).isInstanceOfAny(LocalDateTime.class),
-                ()->assertThat(findGoal.getUpdateDt()).isInstanceOfAny(LocalDateTime.class),
                 ()->assertThat(findGoal.getTitle()).isEqualTo("title"),
                 ()->assertThat(findGoal.getDescription()).isEqualTo("description"),
                 ()->assertThat(findGoal.getIsDateFixed()).isEqualTo(false),

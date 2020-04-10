@@ -11,12 +11,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
@@ -24,7 +27,8 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @SpringBootTest
 public class GoalCreateServiceTest {
     private final GoalService goalService;
-    private final GoalRepository goalRepository;
+    @MockBean
+    private GoalRepository goalRepository;
 
     @BeforeEach
     public void setUp() {
@@ -45,20 +49,29 @@ public class GoalCreateServiceTest {
                 .description("description")
                 .isDateFixed(false).build();
 
+        given(goalRepository.save(any(Goal.class)))
+                .willReturn(Goal.builder()
+                        .id(0L)
+                        .startDt(startDt)
+                        .endDt(startDt.plusHours(2))
+                        .title("title")
+                        .description("description")
+                        .isDateFixed(false)
+                        .joinCount(0)
+                        .isEnd(false).build());
+
         //when
         Goal newGoal = goalService.createGoal(createGoalRequest);
 
         //then
         assertAll(
-                ()->assertThat(newGoal.getId()).isNotNull(),
-                ()->assertThat(newGoal.getStartDt()).isInstanceOfAny(LocalDateTime.class),
-                ()->assertThat(newGoal.getEndDt()).isInstanceOfAny(LocalDateTime.class),
-                ()->assertThat(newGoal.getCreateDt()).isInstanceOfAny(LocalDateTime.class),
-                ()->assertThat(newGoal.getUpdateDt()).isInstanceOfAny(LocalDateTime.class),
-                ()->assertThat(newGoal.getTitle()).isEqualTo("title"),
-                ()->assertThat(newGoal.getDescription()).isEqualTo("description"),
-                ()->assertThat(newGoal.getIsDateFixed()).isEqualTo(false),
-                ()->assertThat(newGoal.getIsEnd()).isEqualTo(false)
+                () -> assertThat(newGoal.getId()).isNotNull(),
+                () -> assertThat(newGoal.getStartDt()).isInstanceOfAny(LocalDateTime.class),
+                () -> assertThat(newGoal.getEndDt()).isInstanceOfAny(LocalDateTime.class),
+                () -> assertThat(newGoal.getTitle()).isEqualTo("title"),
+                () -> assertThat(newGoal.getDescription()).isEqualTo("description"),
+                () -> assertThat(newGoal.getIsDateFixed()).isEqualTo(false),
+                () -> assertThat(newGoal.getIsEnd()).isEqualTo(false)
         );
     }
 }

@@ -2,11 +2,8 @@ package com.eroom.erooja.features.goal.controller;
 
 import com.eroom.erooja.common.exception.GoalNotFoundException;
 import com.eroom.erooja.domain.model.Goal;
-import com.eroom.erooja.domain.repos.GoalRepository;
 import com.eroom.erooja.features.goal.service.GoalService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,17 +30,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @AutoConfigureMockMvc(addFilters = false)
 @SpringBootTest
-public class GoalDetailController {
+public class GoalDetailControllerTest {
     @MockBean
     private GoalService goalService;
-    private final GoalRepository goalRepository;
     private final MockMvc mockMvc;
-    private final ObjectMapper objectMapper;
-
-    @BeforeEach
-    public void setUp() {
-        goalRepository.deleteAll();
-    }
 
     @Test
     @DisplayName("목표 상세조회 (성공)")

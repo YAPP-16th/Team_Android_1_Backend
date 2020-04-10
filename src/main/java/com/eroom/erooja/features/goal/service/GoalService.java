@@ -4,11 +4,10 @@ import com.eroom.erooja.common.exception.GoalNotFoundException;
 import com.eroom.erooja.domain.model.Goal;
 import com.eroom.erooja.domain.repos.GoalRepository;
 import com.eroom.erooja.features.goal.dto.CreateGoalRequestDTO;
-import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -30,5 +29,9 @@ public class GoalService {
         return goalRepository
                 .findById(goalId)
                 .orElseThrow(() -> new GoalNotFoundException("해당 목표가 존재하지 않습니다."));
+    }
+
+    public Page<Goal> findGoalListByInterestId(Long interestId, Pageable pageable){
+        return null;
     }
 }
