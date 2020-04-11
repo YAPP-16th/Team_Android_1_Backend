@@ -40,7 +40,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class MemberJobInterestApiTest {
     private static final Logger logger = LoggerFactory.getLogger(MemberJobInterestApiTest.class);
 
-    private final String BASE_END_POINT = "/api/v1/member/jobInterest";
+    private final String BASE_END_POINT = "/api/v1/member";
 
     private final Long MOCKED_KAKAO_ID = -100000L;
 
@@ -75,7 +75,7 @@ public class MemberJobInterestApiTest {
         String WRONG_TOKEN = "WRONG_TOKEN";
 
         mockMvc.perform(
-                get(BASE_END_POINT)
+                get(BASE_END_POINT + "/jobInterests")
                         .header(HttpHeaders.AUTHORIZATION, WRONG_TOKEN)
                         .accept(MediaType.APPLICATION_JSON + ";charset=UTF-8")
                         .contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8"))
@@ -90,7 +90,7 @@ public class MemberJobInterestApiTest {
         String jobInterestDto = "{" + "\"id\": \"-1\"" + "}";
 
         mockMvc.perform(
-                    put(BASE_END_POINT)
+                    put(BASE_END_POINT + "/jobInterest")
                         .header(HttpHeaders.AUTHORIZATION, MOCKED_TOKEN)
                         .accept(MediaType.APPLICATION_JSON + ";charset=UTF-8")
                         .contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
@@ -109,7 +109,7 @@ public class MemberJobInterestApiTest {
         memberJobInterestService.addJobInterestForUid(MOCKED_UID, 3L);
 
         mockMvc.perform(
-                put(BASE_END_POINT)
+                put(BASE_END_POINT + "/jobInterest")
                         .header(HttpHeaders.AUTHORIZATION, MOCKED_TOKEN)
                         .accept(MediaType.APPLICATION_JSON + ";charset=UTF-8")
                         .contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
