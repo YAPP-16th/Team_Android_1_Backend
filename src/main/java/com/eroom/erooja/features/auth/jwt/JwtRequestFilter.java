@@ -1,15 +1,10 @@
 package com.eroom.erooja.features.auth.jwt;
 
-import com.eroom.erooja.common.constants.ErrorEnum;
-import com.eroom.erooja.common.exception.EroojaException;
 import com.eroom.erooja.domain.model.MemberAuth;
 import com.eroom.erooja.features.auth.service.MemberAuthService;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.MalformedJwtException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,8 +17,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-
-import static com.eroom.erooja.common.constants.ErrorEnum.AUTH_ACCESS_DENIED;
 
 @Component
 @RequiredArgsConstructor
@@ -38,7 +31,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-        if (SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (authHeader != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             String token = jwtTokenProvider.getTokenFromHeader(authHeader);
             String uid = jwtTokenProvider.getUidFromHeader(authHeader);
             MemberAuth memberAuth = (MemberAuth) memberAuthService.loadUserByUsername(uid);
