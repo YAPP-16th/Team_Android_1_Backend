@@ -8,7 +8,6 @@ import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 
 
-@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

@@ -60,13 +60,13 @@ public class GoalDetailControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id").value(goalId))
-                .andExpect(jsonPath("start_dt").exists())
-                .andExpect(jsonPath("end_dt").exists())
+                .andExpect(jsonPath("startDt").exists())
+                .andExpect(jsonPath("endDt").exists())
                 .andExpect(jsonPath("title").value("title"))
                 .andExpect(jsonPath("description").value("description"))
-                .andExpect(jsonPath("join_count").value(0))
-                .andExpect(jsonPath("is_date_fixed").value(false))
-                .andExpect(jsonPath("is_end").value(false));
+                .andExpect(jsonPath("joinCount").value(0))
+                .andExpect(jsonPath("isDateFixed").value(false))
+                .andExpect(jsonPath("isEnd").value(false));
     }
 
     @Test

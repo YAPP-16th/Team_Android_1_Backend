@@ -73,12 +73,12 @@ public class GoalCreateControllerTest {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("id").value(0L))
-                .andExpect(jsonPath("start_dt").exists())
-                .andExpect(jsonPath("end_dt").exists())
+                .andExpect(jsonPath("startDt").exists())
+                .andExpect(jsonPath("endDt").exists())
                 .andExpect(jsonPath("title").value("title"))
                 .andExpect(jsonPath("description").value("description"))
-                .andExpect(jsonPath("is_date_fixed").value(false))
-                .andExpect(jsonPath("is_end").value(false));
+                .andExpect(jsonPath("isDateFixed").value(false))
+                .andExpect(jsonPath("isEnd").value(false));
     }
 
     @Test
