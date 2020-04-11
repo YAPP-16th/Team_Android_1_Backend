@@ -46,7 +46,7 @@ public class GoalRepositoryTest {
                 .title("title")
                 .description("description")
                 .isDateFixed(false)
-                .joinCount(0)
+                .joinCount(1)
                 .isEnd(false).build());
 
         Goal saveGoal2 = goalRepository.save(Goal.builder()
@@ -55,7 +55,7 @@ public class GoalRepositoryTest {
                 .title("title")
                 .description("description")
                 .isDateFixed(false)
-                .joinCount(0)
+                .joinCount(1)
                 .isEnd(false).build());
 
         JobInterest saveDevelopInterest = jobInterestRepository.save(

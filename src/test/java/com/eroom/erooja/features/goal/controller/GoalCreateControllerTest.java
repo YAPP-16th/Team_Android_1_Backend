@@ -58,6 +58,7 @@ public class GoalCreateControllerTest {
                 .startDt(startDt)
                 .endDt(endDt)
                 .title("title")
+                .joinCount(1)
                 .description("description")
                 .isDateFixed(false)
                 .isEnd(false).build();
@@ -75,8 +76,9 @@ public class GoalCreateControllerTest {
                 .andExpect(jsonPath("id").value(0L))
                 .andExpect(jsonPath("startDt").exists())
                 .andExpect(jsonPath("endDt").exists())
-                .andExpect(jsonPath("title").value("title"))
-                .andExpect(jsonPath("description").value("description"))
+                .andExpect(jsonPath("joinCount").isNumber())
+                .andExpect(jsonPath("title").isString())
+                .andExpect(jsonPath("description").isString())
                 .andExpect(jsonPath("isDateFixed").value(false))
                 .andExpect(jsonPath("isEnd").value(false));
     }

@@ -45,7 +45,7 @@ public class GoalDetailServiceTest {
                 .title("title")
                 .description("description")
                 .isDateFixed(false)
-                .joinCount(0)
+                .joinCount(1)
                 .isEnd(false).build();
 
         given(goalRepository.findById(goalId)).willReturn(Optional.of(newGoal));

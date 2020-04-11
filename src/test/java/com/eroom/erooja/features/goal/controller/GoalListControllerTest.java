@@ -62,7 +62,7 @@ public class GoalListControllerTest {
                 .title("title")
                 .description("description")
                 .isDateFixed(false)
-                .joinCount(0)
+                .joinCount(1)
                 .isEnd(false).build();
 
         Goal findGoal2= Goal.builder()
@@ -72,7 +72,7 @@ public class GoalListControllerTest {
                 .title("title")
                 .description("description")
                 .isDateFixed(false)
-                .joinCount(0)
+                .joinCount(1)
                 .isEnd(false).build();
 
         List<Goal> goalList = new ArrayList();

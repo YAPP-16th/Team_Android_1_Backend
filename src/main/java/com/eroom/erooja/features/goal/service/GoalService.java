@@ -22,7 +22,7 @@ public class GoalService {
                 .startDt(createGoalDTO.getStartDt())
                 .endDt(createGoalDTO.getEndDt())
                 .isEnd(false)
-                .joinCount(0).build());
+                .joinCount(1).build());
     }
 
     public Goal findGoalById(Long goalId) throws GoalNotFoundException{

@@ -30,7 +30,7 @@ public class Goal extends AuditProperties {
     private String description;
 
     @Column(nullable = false)
-    private int joinCount = 0;
+    private int joinCount = 1;
 
     @Column(nullable = false)
     private Boolean isEnd = false;

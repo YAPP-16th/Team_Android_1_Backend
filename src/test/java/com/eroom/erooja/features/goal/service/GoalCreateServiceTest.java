@@ -57,7 +57,7 @@ public class GoalCreateServiceTest {
                         .title("title")
                         .description("description")
                         .isDateFixed(false)
-                        .joinCount(0)
+                        .joinCount(1)
                         .isEnd(false).build());
 
         //when
