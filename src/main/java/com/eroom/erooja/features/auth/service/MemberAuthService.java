@@ -68,6 +68,7 @@ public class MemberAuthService implements UserDetailsService {
         member.setMemberAuth(build);
 
         MemberAuth savedMemberAuth = memberAuthRepository.save(build);
+        memberRepository.save(member);
 
         return savedMemberAuth;
     }

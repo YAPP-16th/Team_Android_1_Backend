@@ -1,6 +1,7 @@
 package com.eroom.erooja.common.exception;
 
 import com.eroom.erooja.common.constants.ErrorEnum;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
@@ -27,7 +28,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     /* 외부 라이브러리 예외 처리 정의 */
     @ExceptionHandler({ JwtException.class })
     public void handleJwtException(HttpServletRequest request, HttpServletResponse response, JwtException ex) throws IOException {
-        if (ex instanceof MalformedJwtException) {
+        if ((ex instanceof ExpiredJwtException)) {
+            handleEroojaException(request, response, new EroojaException(ErrorEnum.JWT_EXPIRED));
+        } else if (ex instanceof MalformedJwtException) {
             handleEroojaException(request, response, new EroojaException(ErrorEnum.JWT_MALFORMED_TOKEN));
         } else if (ex instanceof UnsupportedJwtException) {
             handleEroojaException(request, response, new EroojaException(ErrorEnum.JWT_UNSUPPORTED));
@@ -37,6 +40,4 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         }
     }
     /* 외부 라이브러리 예외 처리 정의 끝 */
-
-
 }
