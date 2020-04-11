@@ -8,6 +8,7 @@ import com.eroom.erooja.domain.model.MemberJobInterest;
 import com.eroom.erooja.domain.model.Members;
 import com.eroom.erooja.domain.repos.JobInterestRepository;
 import com.eroom.erooja.domain.repos.MemberJobInterestRepository;
+import com.eroom.erooja.features.interest.service.JobInterestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class MemberJobInterestService {
     private final JobInterestRepository jobInterestRepository;
+    private final JobInterestService jobInterestService;
     private final MemberJobInterestRepository memberJobInterestRepository;
 
     public List<JobInterest> getJobGroupList(String uid) {
@@ -29,13 +31,10 @@ public class MemberJobInterestService {
     }
 
     public List<JobInterest> getJobInterestsByUidAndJobGroup(String uid, Long jobGroupId) {
-        List<MemberJobInterest> interests
-                = memberJobInterestRepository.getAllByMember_UidAndJobInterest_JobInterestType(uid, JobInterestType.JOB_INTEREST);
+        List<MemberJobInterest> memberJobInterests
+                = memberJobInterestRepository.getAllByMember_UidAndJobInterest_JobGroup_Id(uid, jobGroupId);
 
-        return interests.stream()
-                .map(MemberJobInterest::getJobInterest)
-                .filter(interest -> interest.getJobGroup().getId().equals(jobGroupId))
-                .collect(Collectors.toList());
+        return memberJobInterests.stream().map(MemberJobInterest::getJobInterest).collect(Collectors.toList());
     }
 
     public Boolean existsByUidAndJobInterestId(String uid, Long jobInterestId) {
@@ -51,12 +50,12 @@ public class MemberJobInterestService {
     }
 
     public MemberJobInterest addJobInterestForUid(String uid, Long jobInterestId) {
-        JobInterest interest = jobInterestRepository.findJobInterestById(jobInterestId);
+        JobInterest interest = jobInterestService.findById(jobInterestId);
         Members member = Members.builder().uid(uid).build();
 
         if (interest.getJobInterestType().equals(JobInterestType.JOB_INTEREST) &&
                 !existsByUidAndJobInterestId(uid, interest.getJobGroup().getId())) {
-            JobInterest jobGroup = jobInterestRepository.findJobInterestById(interest.getJobGroup().getId());
+            JobInterest jobGroup = jobInterestService.findById(interest.getJobGroup().getId());
 
             memberJobInterestRepository.save(
                     MemberJobInterest.builder()
@@ -70,5 +69,26 @@ public class MemberJobInterestService {
                         .jobInterest(interest)
                         .member(member)
                     .build());
+    }
+
+    public Integer addJobInterestListForUid(String uid, List<Long> ids) {
+        Members member = Members.builder().uid(uid).build();
+
+        int savedCount = 0;
+        for(Long id : ids) {
+            if (!jobInterestRepository.existsById(id)) continue;
+
+            JobInterest jobInterest = JobInterest.builder().id(id).build();
+
+            memberJobInterestRepository.save(
+                    MemberJobInterest.builder()
+                            .jobInterest(jobInterest)
+                            .member(member)
+                        .build());
+
+            savedCount += 1;
+        }
+
+        return savedCount;
     }
 }

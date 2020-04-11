@@ -14,7 +14,7 @@ public class MemberJobInterest {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "job_interest_id")
     private JobInterest jobInterest;
 
