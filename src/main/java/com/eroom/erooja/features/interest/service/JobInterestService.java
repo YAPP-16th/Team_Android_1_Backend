@@ -2,6 +2,7 @@ package com.eroom.erooja.features.interest.service;
 
 import com.eroom.erooja.common.constants.ErrorEnum;
 import com.eroom.erooja.common.exception.EroojaException;
+import com.eroom.erooja.domain.enums.JobInterestType;
 import com.eroom.erooja.domain.model.JobInterest;
 import com.eroom.erooja.domain.repos.JobInterestRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ public class JobInterestService {
     }
 
     public List<JobInterest> findJobGroups() {
-        return jobInterestRepository.findJobInterestsByLevel(JobInterest.ROOT_LEVEL);
+        return jobInterestRepository.findJobInterestsByJobInterestType(JobInterestType.JOB_GROUP);
     }
 
     public List<JobInterest> findByJobGroup_id(Long id) {
@@ -38,7 +39,7 @@ public class JobInterestService {
         return jobInterestRepository.save(
                 JobInterest.builder()
                         .name(name)
-                        .level(JobInterest.ROOT_LEVEL)
+                        .jobInterestType(JobInterestType.JOB_GROUP)
                         .jobGroup(null)
                     .build()
         );
@@ -50,7 +51,7 @@ public class JobInterestService {
         return jobInterestRepository.save(
                 JobInterest.builder()
                             .name(interestName)
-                            .level(JobInterest.MAX_LEVEL)
+                            .jobInterestType(JobInterestType.JOB_INTEREST)
                             .jobGroup(jobGroup)
                         .build()
         );

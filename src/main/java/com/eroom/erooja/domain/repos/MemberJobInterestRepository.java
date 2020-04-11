@@ -1,5 +1,6 @@
 package com.eroom.erooja.domain.repos;
 
+import com.eroom.erooja.domain.enums.JobInterestType;
 import com.eroom.erooja.domain.model.JobInterest;
 import com.eroom.erooja.domain.model.MemberJobInterest;
 import com.eroom.erooja.domain.model.Members;
@@ -10,7 +11,7 @@ import java.util.List;
 
 @Repository
 public interface MemberJobInterestRepository extends JpaRepository<MemberJobInterest, Long> {
-    List<MemberJobInterest> getAllByMember_UidAndJobInterest_Level(String uid, int level);
+    List<MemberJobInterest> getAllByMember_UidAndJobInterest_JobInterestType(String uid, JobInterestType jobInterestType);
 
     Boolean existsByMember_UidAndJobInterest_Id(String uid, Long id);
 

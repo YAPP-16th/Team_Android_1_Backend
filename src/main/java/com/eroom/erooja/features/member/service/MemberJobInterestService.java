@@ -2,6 +2,7 @@ package com.eroom.erooja.features.member.service;
 
 import com.eroom.erooja.common.constants.ErrorEnum;
 import com.eroom.erooja.common.exception.EroojaException;
+import com.eroom.erooja.domain.enums.JobInterestType;
 import com.eroom.erooja.domain.model.JobInterest;
 import com.eroom.erooja.domain.model.MemberJobInterest;
 import com.eroom.erooja.domain.model.Members;
@@ -22,14 +23,14 @@ public class MemberJobInterestService {
 
     public List<JobInterest> getJobGroupList(String uid) {
         List<MemberJobInterest> interests
-                = memberJobInterestRepository.getAllByMember_UidAndJobInterest_Level(uid, JobInterest.ROOT_LEVEL);
+                = memberJobInterestRepository.getAllByMember_UidAndJobInterest_JobInterestType(uid, JobInterestType.JOB_GROUP);
 
         return interests.stream().map(MemberJobInterest::getJobInterest).collect(Collectors.toList());
     }
 
     public List<JobInterest> getJobInterestsByUidAndJobGroup(String uid, Long jobGroupId) {
         List<MemberJobInterest> interests
-                = memberJobInterestRepository.getAllByMember_UidAndJobInterest_Level(uid, JobInterest.MAX_LEVEL);
+                = memberJobInterestRepository.getAllByMember_UidAndJobInterest_JobInterestType(uid, JobInterestType.JOB_INTEREST);
 
         return interests.stream()
                 .map(MemberJobInterest::getJobInterest)

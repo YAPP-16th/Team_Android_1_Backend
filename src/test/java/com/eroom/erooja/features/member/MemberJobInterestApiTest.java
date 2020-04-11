@@ -81,7 +81,4 @@ public class MemberJobInterestApiTest {
                 .andExpect(status().isNotFound())
                 .andExpect(status().reason(ErrorEnum.JOB_INTEREST_NOT_EXISTS.getMessage()));
     }
-
-
-
 }
