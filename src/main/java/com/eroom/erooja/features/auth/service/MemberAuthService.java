@@ -49,23 +49,25 @@ public class MemberAuthService implements UserDetailsService {
         properties.putIfAbsent("nickname", "닉네임");
         properties.putIfAbsent("imagePath", null);
 
+        Members member = Members.builder()
+                .uid(uid)
+                .nickname(properties.get("nickname"))
+                .imagePath(properties.get("imagePath"))
+                .build();
+
         MemberAuth build = MemberAuth.builder()
                 .uid(uid)
+                .member(member)
                 .authProvider(AuthProvider.KAKAO)
                 .isThirdParty(true)
                 .authorities(Collections.singleton(MemberRole.ROLE_USER))
                 .password("")
                 .thirdPartyUserInfo(objectMapper.writeValueAsString(kakaoUserJSON))
             .build();
-        MemberAuth savedMemberAuth = memberAuthRepository.save(build);
 
-        Members member = Members.builder()
-                .uid(uid)
-                .memberAuth(savedMemberAuth)
-                .nickname(properties.get("nickname"))
-                .imagePath(properties.get("imagePath"))
-                .build();
-        memberRepository.save(member);
+        member.setMemberAuth(build);
+
+        MemberAuth savedMemberAuth = memberAuthRepository.save(build);
 
         return savedMemberAuth;
     }

@@ -1,12 +1,14 @@
 package com.eroom.erooja.domain.model;
 
+import com.eroom.erooja.domain.enums.JobInterestType;
 import lombok.*;
 
 import javax.persistence.*;
 
+@Builder
 @EqualsAndHashCode(of = {"id"})
 @NoArgsConstructor @AllArgsConstructor
-@Getter @Setter
+@Getter
 @Entity
 public class JobInterest {
     @Id
@@ -14,9 +16,11 @@ public class JobInterest {
     private Long id;
 
     private String name;
-    private int level;
+
+    @Enumerated(EnumType.STRING)
+    private JobInterestType jobInterestType;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "super_job_id")
-    private JobInterest superJobInterest;
+    @JoinColumn(name = "job_group_id")
+    private JobInterest jobGroup;
 }

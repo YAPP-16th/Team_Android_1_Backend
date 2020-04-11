@@ -40,6 +40,7 @@ public class MemberAuth extends AuditProperties implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Set<MemberRole> authorities;
 
+    @Setter
     @OneToOne(mappedBy = "memberAuth", cascade = CascadeType.ALL)
     private Members member;
 
