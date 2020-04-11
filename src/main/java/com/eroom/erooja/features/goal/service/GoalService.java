@@ -32,6 +32,7 @@ public class GoalService {
     }
 
     public Page<Goal> findGoalListByInterestId(Long interestId, Pageable pageable){
-        return null;
+        return goalRepository
+                .findGoalByInterestId(interestId, pageable);
     }
 }
