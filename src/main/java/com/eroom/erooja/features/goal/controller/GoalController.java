@@ -4,6 +4,7 @@ import com.eroom.erooja.common.exception.GoalNotFoundException;
 import com.eroom.erooja.domain.model.Goal;
 import com.eroom.erooja.features.goal.dto.CreateGoalRequestDTO;
 import com.eroom.erooja.features.goal.service.GoalService;
+import com.eroom.erooja.features.goaljobinterest.service.GoalJobInterestService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,7 @@ import javax.validation.Valid;
 @RestController
 public class GoalController {
     private final GoalService goalService;
+    private final GoalJobInterestService goalJobInterestService;
     private static final Logger logger = LoggerFactory.getLogger(GoalController.class);
 
     @GetMapping("/{goalId}")
@@ -31,6 +33,7 @@ public class GoalController {
         try {
             findGoal = goalService.findGoalById(goalId);
         } catch (GoalNotFoundException e) {
+            logger.error("error : {}", e.getMessage());
             return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
         }
 
@@ -51,10 +54,13 @@ public class GoalController {
     @PostMapping(produces = "application/json; charset=utf-8")
     ResponseEntity createGoal(@RequestBody @Valid CreateGoalRequestDTO createGoalRequest, Errors errors) {
         if (errors.hasErrors()) {
+            logger.error("error : {}", errors.getFieldError().getDefaultMessage());
             return new ResponseEntity(errors.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST);
         }
 
         Goal newGoal = goalService.createGoal(createGoalRequest);
+        goalJobInterestService.addJobInterestListForGoal(newGoal.getId(), createGoalRequest.getInterestIdList());
+
         return new ResponseEntity(newGoal, HttpStatus.CREATED);
     }
 

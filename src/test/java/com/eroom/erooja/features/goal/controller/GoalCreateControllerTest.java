@@ -3,6 +3,7 @@ package com.eroom.erooja.features.goal.controller;
 import com.eroom.erooja.domain.model.Goal;
 import com.eroom.erooja.features.goal.dto.CreateGoalRequestDTO;
 import com.eroom.erooja.features.goal.service.GoalService;
+import com.eroom.erooja.features.goaljobinterest.service.GoalJobInterestService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
@@ -18,8 +19,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -34,6 +36,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class GoalCreateControllerTest {
     @MockBean
     private GoalService goalService;
+    @MockBean
+    private GoalJobInterestService goalJobInterestService;
     private final MockMvc mockMvc;
     private final ObjectMapper objectMapper;
 
@@ -64,6 +68,7 @@ public class GoalCreateControllerTest {
 
         //when, then
         given(goalService.createGoal(any(CreateGoalRequestDTO.class))).willReturn(newGoal);
+        given(goalJobInterestService.addJobInterestListForGoal(eq(newGoal.getId()), anyList())).willReturn(new ArrayList());
 
         this.mockMvc.perform(post("/api/v1/goal")
                 .content(objectMapper.writeValueAsString(createGoalRequest))

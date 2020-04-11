@@ -1,12 +1,11 @@
 package com.eroom.erooja.features.goal.dto;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Builder
@@ -27,4 +26,7 @@ public class CreateGoalRequestDTO {
     @Future(message = "반드시 미래 날짜여야합니다.")
     @NotNull(message = "종료 날짜를 선택해야 합니다.")
     private LocalDateTime endDt;
+
+    @Size(min = 1, message = "관련직무를 1개 이상 선택해주세요")
+    private List<Long> interestIdList;
 }
