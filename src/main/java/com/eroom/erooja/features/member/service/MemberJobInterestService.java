@@ -51,10 +51,24 @@ public class MemberJobInterestService {
     }
 
     public MemberJobInterest addJobInterestForUid(String uid, Long jobInterestId) {
-       return memberJobInterestRepository.save(MemberJobInterest.builder()
-                .jobInterest(JobInterest.builder().id(jobInterestId).build())
-                .member(Members.builder().uid(uid).build())
-            .build()
-        );
+        JobInterest interest = jobInterestRepository.findJobInterestById(jobInterestId);
+        Members member = Members.builder().uid(uid).build();
+
+        if (interest.getJobInterestType().equals(JobInterestType.JOB_INTEREST) &&
+                !existsByUidAndJobInterestId(uid, interest.getJobGroup().getId())) {
+            JobInterest jobGroup = jobInterestRepository.findJobInterestById(interest.getJobGroup().getId());
+
+            memberJobInterestRepository.save(
+                    MemberJobInterest.builder()
+                            .jobInterest(jobGroup)
+                            .member(member)
+                        .build());
+        }
+
+        return memberJobInterestRepository.save(
+                MemberJobInterest.builder()
+                        .jobInterest(interest)
+                        .member(member)
+                    .build());
     }
 }

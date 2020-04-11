@@ -56,4 +56,55 @@ public class JobInterestService {
                         .build()
         );
     }
+
+    public void setUpDefaultJobInterests() {
+        long primeJobInterestId = 1L;
+        String[] jobInterests_develop = {
+                "서버", "프론트엔드", "안드로이드", "iOS", "Data Engineer", "Data Scientist",
+                "DevOps", "머신 러닝", "게임, 애니메이션"
+        };
+
+        String[] jobInterests_design = {
+                "UX 디자인", "UI, GUI 디자인", "영상, 모션 디자인", "모바일 디자인", "편집 디자인",
+                "그래픽 디자인", "웹 디자인", "BX 디자인", "제품 디자인"
+        };
+
+        JobInterest jobGroup_develop = JobInterest.builder()
+                .id(primeJobInterestId++)
+                .name("개발")
+                .jobGroup(null)
+                .jobInterestType(JobInterestType.JOB_GROUP)
+                .build();
+
+        JobInterest jobGroup_design = JobInterest.builder()
+                .id(primeJobInterestId++)
+                .name("디자인")
+                .jobGroup(null)
+                .jobInterestType(JobInterestType.JOB_GROUP)
+                .build();
+
+        jobInterestRepository.save(jobGroup_develop);
+        jobInterestRepository.save(jobGroup_design);
+
+        for(String name : jobInterests_develop) {
+            JobInterest interest = JobInterest.builder()
+                    .id(primeJobInterestId++)
+                    .name(name)
+                    .jobGroup(jobGroup_develop)
+                    .jobInterestType(JobInterestType.JOB_INTEREST)
+                    .build();
+
+            jobInterestRepository.save(interest);
+        }
+
+        for(String name : jobInterests_design) {
+            JobInterest interest = JobInterest.builder()
+                    .id(primeJobInterestId++)
+                    .name(name)
+                    .jobGroup(jobGroup_design)
+                    .jobInterestType(JobInterestType.JOB_INTEREST)
+                    .build();
+            jobInterestRepository.save(interest);
+        }
+    }
 }
