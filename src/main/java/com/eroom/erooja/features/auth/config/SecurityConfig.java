@@ -3,7 +3,8 @@ package com.eroom.erooja.features.auth.config;
 import com.eroom.erooja.domain.enums.MemberRole;
 import com.eroom.erooja.features.auth.jwt.JwtAuthenticationEntryPoint;
 import com.eroom.erooja.features.auth.jwt.JwtRequestFilter;
-import lombok.RequiredArgsConstructor;
+import com.eroom.erooja.features.auth.jwt.JwtTokenProvider;
+import com.eroom.erooja.features.auth.service.MemberAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,10 +15,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.filter.CorsFilter;
 
 @Configuration
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtRequestFilter jwtRequestFilter;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
@@ -57,5 +57,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Autowired
+    public SecurityConfig(MemberAuthService memberAuthService,
+                          JwtTokenProvider jwtTokenProvider,
+                          JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint) {
+        this.jwtRequestFilter = new JwtRequestFilter(memberAuthService, jwtTokenProvider);
+        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
     }
 }

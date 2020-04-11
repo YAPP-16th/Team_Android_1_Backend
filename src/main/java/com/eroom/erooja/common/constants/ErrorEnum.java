@@ -27,6 +27,7 @@ public enum ErrorEnum {
     /* 멤버 CRUD 오류 메세지 정의 */
     MEMBER_UNKNOWN_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "MBS_000", "알 수 없는 사용자 관리 서비스 오류입니다."),
     MEMBER_DUPLICATED_PROPS(HttpStatus.CONFLICT, "MBS_001", "중복된 속성입니다."),
+    MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "MBS_002", "해당 UID 의 유저를 찾을 수 없습니다."),
 
     MEMBER_JOB_INTEREST_INVALID_BODY(HttpStatus.BAD_REQUEST, "MJI_001", "올바르지 않은 리퀘스트 바디입니다."),
     MEMBER_JOB_INTEREST_ALREADY_EXISTS(HttpStatus.CONFLICT, "MJI_002", "이미 존재하는 직군 혹은 직무입니다."),

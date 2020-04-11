@@ -1,5 +1,7 @@
 package com.eroom.erooja.features.member.service;
 
+import com.eroom.erooja.common.constants.ErrorEnum;
+import com.eroom.erooja.common.exception.EroojaException;
 import com.eroom.erooja.domain.model.Members;
 import com.eroom.erooja.domain.repos.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +15,13 @@ import java.util.Optional;
 public class MemberService {
     private final MemberRepository memberRepository;
 
-    public Optional<Members> findById(String uid) {
-        return memberRepository.findById(uid);
+    public Members findById(String uid) {
+        Optional<Members> member = memberRepository.findById(uid);
+        if (member.isPresent()) {
+            return member.get();
+        } else {
+            throw new EroojaException(ErrorEnum.MEMBER_NOT_FOUND);
+        }
     }
 
     public Members updateNotNullPropsOf(Members member) {
