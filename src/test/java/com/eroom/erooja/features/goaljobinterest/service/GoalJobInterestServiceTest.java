@@ -4,12 +4,8 @@ import com.eroom.erooja.domain.enums.JobInterestType;
 import com.eroom.erooja.domain.model.Goal;
 import com.eroom.erooja.domain.model.GoalJobInterest;
 import com.eroom.erooja.domain.model.JobInterest;
-import com.eroom.erooja.domain.model.MemberJobInterest;
-import com.eroom.erooja.features.goal.repository.GoalRepository;
-import com.eroom.erooja.features.goal.service.GoalService;
 import com.eroom.erooja.features.goaljobinterest.repository.GoalJobInterestRepository;
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,6 +17,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -108,6 +106,27 @@ public class GoalJobInterestServiceTest {
                 () -> assertThat(goalJobInterest.getId()).isNotNull(),
                 () -> assertThat(goalJobInterest.getGoal().getId()).isEqualTo(0L),
                 () -> assertThat(goalJobInterest.getJobInterest().getId()).isEqualTo(1L)
+        );
+    }
+
+    @Test
+    @DisplayName("목표 관심직무리스트 등록 (성공)")
+    public void addJobInterestList_for_goal_success() throws Exception {
+        given(goalJobInterestRepository
+                .save(any(GoalJobInterest.class)))
+                .willReturn(goalJobInterest);
+
+        List<Long> interestIdList = new ArrayList();
+        interestIdList.add(goalJobInterest.getId());
+        interestIdList.add(goalJobInterest2.getId());
+
+        //when
+        List<GoalJobInterest> goalJobInterest = goalJobInterestService.addJobInterestListForGoal(0L, interestIdList);
+
+        //then
+        assertAll(
+                () -> assertThat(goalJobInterest.size()).isEqualTo(2),
+                () -> assertThat(goalJobInterest.get(0).getId()).isNotNull()
         );
     }
 }
