@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import java.util.List;
 
 @Builder
 @EqualsAndHashCode(of = {"id"})
@@ -13,7 +14,7 @@ import javax.validation.constraints.Min;
 @Entity
 public class JobInterest {
     public static final int ROOT_LEVEL = 0;
-    public static final int MAX_LEVEL = 2;
+    public static final int MAX_LEVEL = 1;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,7 +25,8 @@ public class JobInterest {
     @Min(value = ROOT_LEVEL) @Max(value = MAX_LEVEL)
     private int level;
 
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "super_job_id")
-    private JobInterest superJobInterest;
+    @JoinColumn(name = "job_group_id")
+    private JobInterest jobGroup;
 }

@@ -15,7 +15,7 @@ public class MemberJobInterest {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "job_group_id")
+    @JoinColumn(name = "job_interest_id")
     private JobInterest jobInterest;
 
     @ManyToOne(fetch = FetchType.LAZY)
