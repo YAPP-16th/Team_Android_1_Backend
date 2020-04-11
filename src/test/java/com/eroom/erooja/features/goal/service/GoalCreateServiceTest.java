@@ -1,7 +1,7 @@
 package com.eroom.erooja.features.goal.service;
 
 import com.eroom.erooja.domain.model.Goal;
-import com.eroom.erooja.domain.repos.GoalRepository;
+import com.eroom.erooja.features.goal.repository.GoalRepository;
 import com.eroom.erooja.features.goal.dto.CreateGoalRequestDTO;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;

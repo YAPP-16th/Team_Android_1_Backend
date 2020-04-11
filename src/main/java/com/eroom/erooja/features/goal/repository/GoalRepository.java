@@ -1,4 +1,4 @@
-package com.eroom.erooja.domain.repos;
+package com.eroom.erooja.features.goal.repository;
 
 import com.eroom.erooja.domain.model.Goal;
 import org.springframework.data.domain.Page;

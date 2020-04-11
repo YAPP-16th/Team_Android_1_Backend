@@ -4,8 +4,6 @@ import com.eroom.erooja.domain.enums.JobInterestType;
 import com.eroom.erooja.domain.model.Goal;
 import com.eroom.erooja.domain.model.GoalJobInterest;
 import com.eroom.erooja.domain.model.JobInterest;
-import com.eroom.erooja.domain.repos.GoalJobInterestRepository;
-import com.eroom.erooja.domain.repos.GoalRepository;
 import com.eroom.erooja.domain.repos.JobInterestRepository;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
