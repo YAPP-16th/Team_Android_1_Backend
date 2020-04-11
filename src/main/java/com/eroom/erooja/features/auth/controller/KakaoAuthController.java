@@ -1,4 +1,4 @@
-package com.eroom.erooja.features.auth.kakao.controller;
+package com.eroom.erooja.features.auth.controller;
 
 import com.eroom.erooja.common.constants.ErrorEnum;
 import com.eroom.erooja.domain.enums.AuthProvider;
