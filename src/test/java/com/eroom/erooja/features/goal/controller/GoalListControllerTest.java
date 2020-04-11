@@ -1,27 +1,19 @@
 package com.eroom.erooja.features.goal.controller;
 
 import com.eroom.erooja.domain.model.Goal;
-import com.eroom.erooja.domain.model.GoalJobInterest;
-import com.eroom.erooja.domain.model.JobInterest;
-import com.eroom.erooja.domain.repos.GoalJobInterestRepository;
-import com.eroom.erooja.domain.repos.GoalRepository;
-import com.eroom.erooja.domain.repos.JobInterestRepository;
 import com.eroom.erooja.features.goal.service.GoalService;
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.batch.BatchProperties;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -30,12 +22,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ActiveProfiles("test")
@@ -59,6 +48,8 @@ public class GoalListControllerTest {
                 .id(2L)
                 .startDt(startDt)
                 .endDt(startDt.plusHours(2))
+                .updateDt(startDt)
+                .createDt(startDt)
                 .title("title")
                 .description("description")
                 .isDateFixed(false)
@@ -69,6 +60,8 @@ public class GoalListControllerTest {
                 .id(3L)
                 .startDt(startDt)
                 .endDt(startDt.plusHours(2))
+                .updateDt(startDt)
+                .createDt(startDt)
                 .title("title")
                 .description("description")
                 .isDateFixed(false)

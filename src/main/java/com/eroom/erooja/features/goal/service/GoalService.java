@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @RequiredArgsConstructor
 @Service
 public class GoalService {
@@ -19,7 +21,7 @@ public class GoalService {
                 .isDateFixed(createGoalDTO.getIsDateFixed())
                 .title(createGoalDTO.getTitle())
                 .description(createGoalDTO.getDescription())
-                .startDt(createGoalDTO.getStartDt())
+                .startDt(LocalDateTime.now())
                 .endDt(createGoalDTO.getEndDt())
                 .isEnd(false)
                 .joinCount(1).build());

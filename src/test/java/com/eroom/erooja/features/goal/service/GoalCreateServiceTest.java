@@ -43,7 +43,6 @@ public class GoalCreateServiceTest {
         LocalDateTime endDt = startDt.plusHours(2);
 
         CreateGoalRequestDTO createGoalRequest = CreateGoalRequestDTO.builder()
-                .startDt(startDt)
                 .endDt(endDt)
                 .title("title")
                 .description("description")
@@ -54,6 +53,8 @@ public class GoalCreateServiceTest {
                         .id(0L)
                         .startDt(startDt)
                         .endDt(startDt.plusHours(2))
+                        .updateDt(startDt)
+                        .createDt(startDt)
                         .title("title")
                         .description("description")
                         .isDateFixed(false)

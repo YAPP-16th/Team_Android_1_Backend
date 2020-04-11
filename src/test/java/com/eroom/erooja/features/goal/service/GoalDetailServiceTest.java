@@ -42,6 +42,8 @@ public class GoalDetailServiceTest {
                 .id(goalId)
                 .startDt(startDt)
                 .endDt(startDt.plusHours(2))
+                .updateDt(startDt)
+                .createDt(startDt)
                 .title("title")
                 .description("description")
                 .isDateFixed(false)

@@ -48,7 +48,7 @@ public class GoalController {
         return new ResponseEntity(null, HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping(produces = "application/json; charset=utf-8")
     ResponseEntity createGoal(@RequestBody @Valid CreateGoalRequestDTO createGoalRequest, Errors errors) {
         if (errors.hasErrors()) {
             return new ResponseEntity(errors.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST);

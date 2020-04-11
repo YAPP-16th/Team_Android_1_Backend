@@ -5,7 +5,6 @@ import com.eroom.erooja.features.goal.dto.CreateGoalRequestDTO;
 import com.eroom.erooja.features.goal.service.GoalService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,7 +26,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -47,7 +45,6 @@ public class GoalCreateControllerTest {
         LocalDateTime endDt = startDt.plusHours(2);
 
         CreateGoalRequestDTO createGoalRequest = CreateGoalRequestDTO.builder()
-                .startDt(startDt)
                 .endDt(endDt)
                 .title("title")
                 .description("description")
@@ -61,7 +58,9 @@ public class GoalCreateControllerTest {
                 .joinCount(1)
                 .description("description")
                 .isDateFixed(false)
-                .isEnd(false).build();
+                .isEnd(false)
+                .updateDt(startDt)
+                .createDt(startDt).build();
 
         //when, then
         given(goalService.createGoal(any(CreateGoalRequestDTO.class))).willReturn(newGoal);
@@ -76,6 +75,8 @@ public class GoalCreateControllerTest {
                 .andExpect(jsonPath("id").value(0L))
                 .andExpect(jsonPath("startDt").exists())
                 .andExpect(jsonPath("endDt").exists())
+                .andExpect(jsonPath("updateDt").exists())
+                .andExpect(jsonPath("createDt").exists())
                 .andExpect(jsonPath("joinCount").isNumber())
                 .andExpect(jsonPath("title").isString())
                 .andExpect(jsonPath("description").isString())
@@ -84,16 +85,15 @@ public class GoalCreateControllerTest {
     }
 
     @Test
-    @DisplayName("목표 생성 (실패 - 제목빈칸)")
-    public void createGoal_fail_if_blank_title() throws Exception {
+    @DisplayName("목표 생성 (실패 - 제목 5글자 이하)")
+    public void createGoal_fail_if_titleShort() throws Exception {
         //given
         LocalDateTime startDt = LocalDateTime.now();
         LocalDateTime endDt = startDt.plusHours(2);
 
         CreateGoalRequestDTO createGoalRequest = CreateGoalRequestDTO.builder()
-                .startDt(startDt)
                 .endDt(endDt)
-                .title("")
+                .title("123")
                 .description("description")
                 .isDateFixed(false).build();
 
@@ -115,7 +115,6 @@ public class GoalCreateControllerTest {
         LocalDateTime endDt = startDt.minusHours(2); //wrong date
 
         CreateGoalRequestDTO createGoalRequest = CreateGoalRequestDTO.builder()
-                .startDt(startDt)
                 .endDt(endDt)
                 .title("title")
                 .description("description")

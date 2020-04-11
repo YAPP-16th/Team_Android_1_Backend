@@ -50,7 +50,9 @@ public class GoalDetailControllerTest {
                 .description("description")
                 .isDateFixed(false)
                 .joinCount(1)
-                .isEnd(false).build();
+                .isEnd(false)
+                .updateDt(startDt)
+                .createDt(startDt).build();
 
         given(goalService.findGoalById(goalId)).willReturn(newGoal);
 
@@ -62,6 +64,8 @@ public class GoalDetailControllerTest {
                 .andExpect(jsonPath("id").value(goalId))
                 .andExpect(jsonPath("startDt").exists())
                 .andExpect(jsonPath("endDt").exists())
+                .andExpect(jsonPath("updateDt").exists())
+                .andExpect(jsonPath("createDt").exists())
                 .andExpect(jsonPath("title").value("title"))
                 .andExpect(jsonPath("description").value("description"))
                 .andExpect(jsonPath("joinCount").value(1))
