@@ -11,17 +11,18 @@ import javax.persistence.*;
 @Getter
 @ToString
 @NoArgsConstructor
-@EqualsAndHashCode(of = {"uid", "nickname", "imagePath"}, callSuper = false)
+@EqualsAndHashCode(of = {"uid", "nickname"}, callSuper = false)
 public class Members extends AuditProperties {
     @Id
     private String uid;
 
+    @Column(unique = true)
     private String nickname;
 
     private String imagePath;
 
     @Setter
-    @OneToOne @MapsId
+    @OneToOne(fetch = FetchType.LAZY) @MapsId
     private MemberAuth memberAuth;
 
     @Builder

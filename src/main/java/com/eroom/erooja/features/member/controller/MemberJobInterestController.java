@@ -5,9 +5,9 @@ import com.eroom.erooja.common.exception.EroojaException;
 import com.eroom.erooja.domain.model.JobInterest;
 import com.eroom.erooja.domain.model.MemberJobInterest;
 import com.eroom.erooja.features.auth.jwt.JwtTokenProvider;
+import com.eroom.erooja.features.interest.dto.JobInterestDTO;
 import com.eroom.erooja.features.member.dto.HasJobInterestDTO;
-import com.eroom.erooja.features.member.dto.JobInterestDTO;
-import com.eroom.erooja.features.member.dto.JobInterestSetListDTO;
+import com.eroom.erooja.features.interest.dto.JobGroupAndInterestsDTO;
 import com.eroom.erooja.features.member.dto.MemberJobInterestDTO;
 import com.eroom.erooja.features.member.service.MemberJobInterestService;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +18,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/member/jobInterest")
@@ -32,11 +33,17 @@ public class MemberJobInterestController {
     public ResponseEntity getJobInterests(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String header) {
         String uid = jwtTokenProvider.getUidFromHeader(header);
 
-        List<Set<JobInterest>> jobInterests = memberJobInterestService.getJobInterestSetListByLevelAndUid(uid);
+        List<JobInterest> jobGroupList = memberJobInterestService.getJobGroupList(uid);
 
-        JobInterestSetListDTO jobInterestSetListDTO = new JobInterestSetListDTO(jobInterests);
+        List<JobGroupAndInterestsDTO> jobGroupAndInterestsDTO = new ArrayList<>();
+        for (JobInterest jobGroup : jobGroupList) {
+            List<JobInterest> jobInterestList
+                    = memberJobInterestService.getJobInterestsByUidAndJobGroup(uid, jobGroup.getId());
 
-        return ResponseEntity.ok(jobInterestSetListDTO);
+            jobGroupAndInterestsDTO.add(new JobGroupAndInterestsDTO(jobGroup, jobInterestList));
+        }
+
+        return ResponseEntity.ok(jobGroupAndInterestsDTO);
     }
 
     @PutMapping
@@ -49,11 +56,13 @@ public class MemberJobInterestController {
             throw new EroojaException(ErrorEnum.MEMBER_JOB_INTEREST_INVALID_BODY);
         }
 
-        if (memberJobInterestService.existsByUidAndJobInterestId(uid, jobInterestDTO.getJobInterestId())) {
+        if (memberJobInterestService.existsByUidAndJobInterestId(uid, jobInterestDTO.getId())) {
             throw new EroojaException(ErrorEnum.MEMBER_JOB_INTEREST_ALREADY_EXISTS);
         }
 
-        MemberJobInterest memberJobInterest = memberJobInterestService.addJobInterestForUid(uid, jobInterestDTO.getJobInterestId());
+        MemberJobInterest memberJobInterest
+                = memberJobInterestService.addJobInterestForUid(uid, jobInterestDTO.getId());
+
         return ResponseEntity.ok(MemberJobInterestDTO.of(memberJobInterest));
     }
 

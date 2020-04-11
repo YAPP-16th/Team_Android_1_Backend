@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -19,22 +20,21 @@ public class MemberJobInterestService {
     private final JobInterestRepository jobInterestRepository;
     private final MemberJobInterestRepository memberJobInterestRepository;
 
-    public List<Set<JobInterest>> getJobInterestSetListByLevelAndUid(String uid) {
-        List<MemberJobInterest> memberJobInterests = memberJobInterestRepository.getAllByMember(Members.builder().uid(uid).build());
+    public List<JobInterest> getJobGroupList(String uid) {
+        List<MemberJobInterest> interests
+                = memberJobInterestRepository.getAllByMember_UidAndJobInterest_Level(uid, JobInterest.ROOT_LEVEL);
 
-        List<Set<JobInterest>> jobInterestSetListByLevel = new ArrayList<>();
-        for (int i = JobInterest.ROOT_LEVEL; i < JobInterest.MAX_LEVEL; i++) {
-            jobInterestSetListByLevel.add(new HashSet<>());
-        }
+        return interests.stream().map(MemberJobInterest::getJobInterest).collect(Collectors.toList());
+    }
 
-        for (MemberJobInterest memberJobInterest : memberJobInterests) {
-            JobInterest jobInterest = memberJobInterest.getJobInterest();
-            jobInterestSetListByLevel
-                    .get(jobInterest.getLevel())
-                    .add(jobInterest);
-        }
+    public List<JobInterest> getJobInterestsByUidAndJobGroup(String uid, Long jobGroupId) {
+        List<MemberJobInterest> interests
+                = memberJobInterestRepository.getAllByMember_UidAndJobInterest_Level(uid, JobInterest.MAX_LEVEL);
 
-        return jobInterestSetListByLevel;
+        return interests.stream()
+                .map(MemberJobInterest::getJobInterest)
+                .filter(interest -> interest.getJobGroup().getId().equals(jobGroupId))
+                .collect(Collectors.toList());
     }
 
     public Boolean existsByUidAndJobInterestId(String uid, Long jobInterestId) {
