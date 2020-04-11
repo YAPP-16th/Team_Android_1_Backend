@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface GoalRepository extends JpaRepository<Goal, Long> {
-    @Query("select g from Goal g JOIN GoalJobInterest i " +
-            "where g.id = i.goal.id " +
-            "and i.jobInterest.id = :interestId")
+    @Query("SELECT g FROM Goal g JOIN GoalJobInterest i " +
+            "ON g.id = i.goal.id " +
+            "AND i.jobInterest.id = :interestId")
     Page<Goal> findGoalByInterestId(Long interestId, Pageable pageable);
 }

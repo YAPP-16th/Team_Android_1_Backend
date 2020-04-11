@@ -4,6 +4,7 @@ import com.eroom.erooja.domain.common.AuditProperties;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.*;
+import org.apache.tomcat.jni.Local;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -43,4 +44,10 @@ public class Goal extends AuditProperties {
 
     @OneToMany(mappedBy = "goal", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GoalJobInterest> goalJobInterests;
+
+    @Builder
+    public Goal(Long id, String title, String description, int joinCount, Boolean isEnd, Boolean isDateFixed,
+                LocalDateTime startDt, LocalDateTime endDt, LocalDateTime createDt, LocalDateTime updateDt) {
+        super(createDt, updateDt);
+    }
 }
