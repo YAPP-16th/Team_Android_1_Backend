@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @EqualsAndHashCode(of = {"id"})
 @Getter
@@ -33,7 +34,6 @@ public class Goal extends AuditProperties {
 
     private LocalDateTime startDt = LocalDateTime.now();
     private LocalDateTime endDt;
-
 
     @Builder
     public Goal(Long id, String title, String description, int joinCount,

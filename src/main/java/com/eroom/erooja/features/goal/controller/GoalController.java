@@ -64,8 +64,4 @@ public class GoalController {
         return new ResponseEntity(newGoal, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/{goalId}")
-    ResponseEntity updateGoal() {
-        return new ResponseEntity(null, HttpStatus.OK);
-    }
 }
