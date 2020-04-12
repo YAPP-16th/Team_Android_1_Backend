@@ -27,6 +27,7 @@ public class CreateGoalRequestDTO {
     @NotNull(message = "종료 날짜를 선택해야 합니다.")
     private LocalDateTime endDt;
 
+    @NotNull(message = "관련직무를 1개 이상 선택해주세요")
     @Size(min = 1, message = "관련직무를 1개 이상 선택해주세요")
     private List<Long> interestIdList;
 }

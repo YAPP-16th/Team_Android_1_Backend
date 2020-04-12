@@ -28,7 +28,6 @@ import static org.mockito.BDDMockito.given;
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-@SpringBootTest
 public class GoalJobInterestServiceTest {
     private final GoalJobInterestService goalJobInterestService;
     @MockBean

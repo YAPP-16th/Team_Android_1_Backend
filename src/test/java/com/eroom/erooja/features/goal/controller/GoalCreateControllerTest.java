@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
@@ -52,7 +53,8 @@ public class GoalCreateControllerTest {
                 .endDt(endDt)
                 .title("title")
                 .description("description")
-                .isDateFixed(false).build();
+                .isDateFixed(false)
+                .interestIdList(Arrays.asList(0L)).build();
 
         Goal newGoal = Goal.builder()
                 .id(0L)
@@ -126,6 +128,30 @@ public class GoalCreateControllerTest {
                 .isDateFixed(false).build();
 
         //when, then
+        this.mockMvc.perform(post("/api/v1/goal")
+                .content(objectMapper.writeValueAsString(createGoalRequest))
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .characterEncoding("utf-8"))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("목표 생성 (실패 - 관심직무 미전송)")
+    public void createGoal_fail_if_notSending_interest() throws Exception {
+        //given
+        LocalDateTime startDt = LocalDateTime.now();
+        LocalDateTime endDt = startDt.plusHours(2);
+
+        CreateGoalRequestDTO createGoalRequest = CreateGoalRequestDTO.builder()
+                .endDt(endDt)
+                .title("title")
+                .description("description")
+                .isDateFixed(false)
+                .interestIdList(Arrays.asList()).build();
+
+
         this.mockMvc.perform(post("/api/v1/goal")
                 .content(objectMapper.writeValueAsString(createGoalRequest))
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
