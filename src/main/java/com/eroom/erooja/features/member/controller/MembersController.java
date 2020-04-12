@@ -13,6 +13,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+
 @RestController
 @RequestMapping("/api/v1/member")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -45,16 +50,16 @@ public class MembersController {
         }
 
         Members updated = memberService.updateNotNullPropsOf(Members.of(uid, memberDTO));
+
         return ResponseEntity.ok(MemberDTO.of(updated));
     }
 
-    @GetMapping("/nickname/duplicity")
-    public ResponseEntity checkNicknameDuplicity(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String header,
-                                                 @RequestBody MemberDTO memberDTO) throws EroojaException {
-        if (memberService.isNicknameExist(memberDTO.getNickname())) {
-            return ResponseEntity.ok(true);
+    @PostMapping("/nickname/duplicity")
+    public ResponseEntity checkNicknameDuplicity(@RequestBody MemberDTO memberDTO) throws EroojaException {
+        if (memberService.isNicknameExist(memberDTO.getNickname().trim())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(true);
         } else {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(false);
+            return ResponseEntity.ok(false);
         }
     }
 }
