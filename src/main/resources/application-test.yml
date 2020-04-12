@@ -1,8 +1,13 @@
+logging:
+  level:
+    root: warn
+    com.eroom: info
+
 spring:
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
 
   datasource:
     platform: org.hibernate.dialect.H2Dialect

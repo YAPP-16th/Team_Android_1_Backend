@@ -1,6 +1,16 @@
 server:
   port: 20000
 
+  tomcat:
+    accesslog:
+      directory: /home/ec2-user/erooja/travis/log
+      enabled: true
+      suffix: .log
+      prefix: access_log
+      file-date-format: .yyyy-MM-dd
+      pattern: common
+      encoding: utf-8
+
 spring:
   datasource:
     platform: mysql

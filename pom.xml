@@ -79,6 +79,14 @@
         </dependency>
         <!-- 데이터베이스 JDBC 의존성 끝 -->
 
+        <!-- 유틸리티 의존성 끝 -->
+        <dependency>
+            <groupId>com.github.maricn</groupId>
+            <artifactId>logback-slack-appender</artifactId>
+            <version>1.4.0</version>
+        </dependency>
+        <!-- 유틸리티 의존성 끝 -->
+
         <!-- 테스트 의존성 -->
         <dependency>
             <groupId>org.projectlombok</groupId>
