@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,11 +54,10 @@ public class MemberJobInterestApiTest {
     @SpyBean
     private JwtTokenProvider jwtTokenProvider;
 
+    @SpyBean
+    private MemberJobInterestService memberJobInterestService;
+
     private final MemberAuthService memberAuthService;
-
-    private final MemberJobInterestService memberJobInterestService;
-
-    private final JobInterestService jobInterestService;
 
     @BeforeAll
     public void setUpEntities() throws JsonProcessingException {
@@ -101,12 +101,12 @@ public class MemberJobInterestApiTest {
     }
 
     @Test
-    @DisplayName("추가하려는 직무의 직군이 없을 경우 직무와 함께 추가한다.")
+    @DisplayName("추가하려는 직무/직군이 존재하면 이미 존재한다는 메세지를 반환한다.")
     public void whenJobGroupNotExistsWhileAddJobInterestThenAddTheJobGroup() throws Exception {
-        jobInterestService.setUpDefaultJobInterests();
 
         String developGroup = buildIdOnlyJsonString(1L);
-        memberJobInterestService.addJobInterestForUid(MOCKED_UID, 3L);
+        Mockito.doReturn(true)
+                .when(memberJobInterestService).existsByUidAndJobInterestId(MOCKED_UID, 1L);
 
         mockMvc.perform(
                 put(BASE_END_POINT + "/jobInterest")
