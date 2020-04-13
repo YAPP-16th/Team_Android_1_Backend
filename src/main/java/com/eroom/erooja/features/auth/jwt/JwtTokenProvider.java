@@ -1,5 +1,6 @@
 package com.eroom.erooja.features.auth.jwt;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtTokenProvider {
     private static final long tokenTTL = 30 * 60 * 1000;
-    private static final long refreshTokenTTL = 24 * 60 * 60 * 1000;
+//    private static final long refreshTokenTTL = 24 * 60 * 60 * 1000;
 
     @Value("${jwt.secret}")
     private String secret;
@@ -64,9 +65,12 @@ public class JwtTokenProvider {
     }
 
     private String doGenerateRefreshToken(Map<String, Object> claims, String subject) {
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.YEAR, 2000);
+
         return Jwts.builder()
                 .setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + refreshTokenTTL))
+                .setExpiration(c.getTime())
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
     }
 

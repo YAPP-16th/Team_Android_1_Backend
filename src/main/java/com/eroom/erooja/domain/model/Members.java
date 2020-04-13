@@ -3,6 +3,7 @@ package com.eroom.erooja.domain.model;
 import com.eroom.erooja.domain.common.AuditProperties;
 import com.eroom.erooja.features.member.dto.MemberDTO;
 import lombok.*;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 
@@ -12,7 +13,8 @@ import javax.persistence.*;
 @ToString
 @NoArgsConstructor
 @EqualsAndHashCode(of = {"uid", "nickname"}, callSuper = false)
-public class Members extends AuditProperties {
+public class
+Members extends AuditProperties {
     @Id
     private String uid;
 
@@ -47,5 +49,9 @@ public class Members extends AuditProperties {
                 .nickname(memberDTO.getNickname())
                 .imagePath(memberDTO.getImagePath())
                 .build();
+    }
+
+    public boolean isAdditionalInfoNeeded() {
+        return StringUtils.isEmpty(this.nickname);
     }
 }

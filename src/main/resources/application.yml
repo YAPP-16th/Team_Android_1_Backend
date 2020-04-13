@@ -1,6 +1,12 @@
 server:
   port: 20000
 
+  tomcat:
+    accesslog:
+      enabled: true
+      pattern: common
+      encoding: utf-8
+
 spring:
   jpa:
     database-platform: org.hibernate.dialect.MariaDBDialect
