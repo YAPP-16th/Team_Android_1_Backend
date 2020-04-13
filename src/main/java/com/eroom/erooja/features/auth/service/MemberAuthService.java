@@ -7,7 +7,6 @@ import com.eroom.erooja.domain.model.MemberAuth;
 import com.eroom.erooja.domain.model.Members;
 import com.eroom.erooja.domain.repos.MemberAuthRepository;
 import com.eroom.erooja.domain.repos.MemberRepository;
-import com.eroom.erooja.features.auth.kakao.json.KakaoProfileJSON;
 import com.eroom.erooja.features.auth.kakao.json.KakaoUserJSON;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
