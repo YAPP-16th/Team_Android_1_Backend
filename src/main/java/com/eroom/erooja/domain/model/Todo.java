@@ -28,6 +28,9 @@ public class Todo {
     private LocalDateTime createDt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "goal_join_id")
+    @JoinColumns({
+            @JoinColumn(name="uid"),
+            @JoinColumn(name="goal_id")
+    })
     MemberGoal memberGoal;
 }
