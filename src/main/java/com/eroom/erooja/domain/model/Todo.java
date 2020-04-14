@@ -1,5 +1,6 @@
 package com.eroom.erooja.domain.model;
 
+import com.eroom.erooja.domain.common.AuditProperties;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -10,7 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor @AllArgsConstructor
 @Getter @Setter
 @Entity
-public class Todo {
+public class Todo extends AuditProperties {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -22,10 +23,6 @@ public class Todo {
 
     @Column(nullable = false)
     private int priority;
-
-    @CreationTimestamp
-    @Column(updatable = false)
-    private LocalDateTime createDt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns({
