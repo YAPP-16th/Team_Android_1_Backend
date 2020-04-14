@@ -8,7 +8,6 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Builder
 @EqualsAndHashCode(of = {"id"})
 @NoArgsConstructor
 @AllArgsConstructor
@@ -47,4 +46,22 @@ public class MemberGoal extends AuditProperties {
 
     @OneToMany(mappedBy = "memberGoal", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Todo> todoList;
+
+    @Builder
+    public MemberGoal(LocalDateTime createDt, LocalDateTime updateDt, String uid,
+                      Long goalId, GoalRole role, Boolean isEnd, int copyCount,
+                      LocalDateTime startDt, LocalDateTime endDt) {
+        super(createDt, updateDt);
+        this.uid = uid;
+        this.goalId=goalId;
+        this.role=role;
+        this.isEnd=isEnd;
+        this.copyCount=copyCount;
+        this.startDt=startDt;
+        this.endDt=endDt;
+    }
+
+    public int increaseCopyCount(){
+        return copyCount++;
+    }
 }
