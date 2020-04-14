@@ -23,6 +23,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -89,10 +91,9 @@ public class MemberGoalJoinControllerTest {
         given(jwtTokenProvider.getUidFromHeader("Bearer [TOKEN]"))
                 .willReturn(mockUid);
 
-        given(memberGoalService.joinGoal(mockUid,
-                goalJoinRequest.getGoalId(),
-                goalJoinRequest.getEndDt(),
-                GoalRole.PARTICIPANT)).willReturn(newMemberGoal);
+        given(memberGoalService.joinExistGoal(eq(mockUid),
+                any(ExistGoalJoinRequestDTO.class),
+                eq(GoalRole.PARTICIPANT))).willReturn(newMemberGoal);
 
         this.mockMvc.perform(post("/api/v1/membergoal")
                 .content(objectMapper.writeValueAsString(goalJoinRequest))

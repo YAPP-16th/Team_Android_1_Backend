@@ -37,4 +37,5 @@ public class GoalService {
         return goalRepository
                 .findGoalByInterestId(interestId, pageable);
     }
+
 }

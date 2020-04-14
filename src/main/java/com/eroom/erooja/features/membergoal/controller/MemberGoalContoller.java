@@ -23,10 +23,9 @@ public class MemberGoalContoller {
     public ResponseEntity joinExistGoal(@RequestBody ExistGoalJoinRequestDTO goalJoinRequest,
                                         @RequestHeader(name = HttpHeaders.AUTHORIZATION) String header){
         String uid = jwtTokenProvider.getUidFromHeader(header);
-        MemberGoal memberGoal = memberGoalService.joinGoal(
+        MemberGoal memberGoal = memberGoalService.joinExistGoal(
                 uid,
-                goalJoinRequest.getGoalId(),
-                goalJoinRequest.getEndDt(),
+                goalJoinRequest,
                 GoalRole.PARTICIPANT);
 
         return new ResponseEntity(memberGoal, HttpStatus.CREATED);
