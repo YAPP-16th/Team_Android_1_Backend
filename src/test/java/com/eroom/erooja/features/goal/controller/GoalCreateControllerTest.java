@@ -1,9 +1,13 @@
 package com.eroom.erooja.features.goal.controller;
 
+import com.eroom.erooja.domain.enums.GoalRole;
 import com.eroom.erooja.domain.model.Goal;
+import com.eroom.erooja.domain.model.MemberGoal;
+import com.eroom.erooja.features.auth.jwt.JwtTokenProvider;
 import com.eroom.erooja.features.goal.dto.CreateGoalRequestDTO;
 import com.eroom.erooja.features.goal.service.GoalService;
 import com.eroom.erooja.features.goaljobinterest.service.GoalJobInterestService;
+import com.eroom.erooja.features.membergoal.service.MemberGoalService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
@@ -14,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -24,6 +29,7 @@ import java.util.Arrays;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -39,6 +45,10 @@ public class GoalCreateControllerTest {
     private GoalService goalService;
     @MockBean
     private GoalJobInterestService goalJobInterestService;
+    @MockBean
+    private JwtTokenProvider jwtTokenProvider;
+    @MockBean
+    private MemberGoalService memberGoalService;
     private final MockMvc mockMvc;
     private final ObjectMapper objectMapper;
 
@@ -48,6 +58,7 @@ public class GoalCreateControllerTest {
         //given
         LocalDateTime startDt = LocalDateTime.now();
         LocalDateTime endDt = startDt.plusHours(2);
+        String mockUid = "KAKAO@testId";
 
         CreateGoalRequestDTO createGoalRequest = CreateGoalRequestDTO.builder()
                 .endDt(endDt)
@@ -68,14 +79,31 @@ public class GoalCreateControllerTest {
                 .updateDt(startDt)
                 .createDt(startDt).build();
 
-        //when, then
-        given(goalService.createGoal(any(CreateGoalRequestDTO.class))).willReturn(newGoal);
-        given(goalJobInterestService.addJobInterestListForGoal(eq(newGoal.getId()), anyList())).willReturn(new ArrayList());
+        MemberGoal newMemberGoal = MemberGoal.builder()
+                .goalId(newGoal.getId())
+                .uid(mockUid)
+                .startDt(startDt)
+                .endDt(endDt)
+                .isEnd(false)
+                .role(GoalRole.OWNER)
+                .copyCount(0).build();
 
+
+        given(goalService.createGoal(any(CreateGoalRequestDTO.class)))
+                .willReturn(newGoal);
+        given(goalJobInterestService.addJobInterestListForGoal(eq(newGoal.getId()), anyList()))
+                .willReturn(new ArrayList());
+        given(jwtTokenProvider.getUidFromHeader("Bearer [TOKEN]"))
+                .willReturn(mockUid);
+        given(memberGoalService.joinGoal(mockUid, newGoal.getId(), newGoal.getEndDt(), GoalRole.OWNER))
+                .willReturn(newMemberGoal);
+
+        //when, then
         this.mockMvc.perform(post("/api/v1/goal")
                 .content(objectMapper.writeValueAsString(createGoalRequest))
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer [TOKEN]")
                 .characterEncoding("utf-8"))
                 .andDo(print())
                 .andExpect(status().isCreated())

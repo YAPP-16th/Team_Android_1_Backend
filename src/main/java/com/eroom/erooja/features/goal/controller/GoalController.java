@@ -75,7 +75,6 @@ public class GoalController {
 
         memberGoalService.joinGoal(uid,
                 newGoal.getId(),
-                newGoal.getStartDt(),
                 newGoal.getEndDt(),
                 GoalRole.OWNER);
 
