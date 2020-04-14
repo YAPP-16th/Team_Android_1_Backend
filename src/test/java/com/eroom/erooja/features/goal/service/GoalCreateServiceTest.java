@@ -1,6 +1,7 @@
 package com.eroom.erooja.features.goal.service;
 
 import com.eroom.erooja.domain.model.Goal;
+import com.eroom.erooja.features.auth.jwt.JwtTokenProvider;
 import com.eroom.erooja.features.goal.repository.GoalRepository;
 import com.eroom.erooja.features.goal.dto.CreateGoalRequestDTO;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,8 @@ public class GoalCreateServiceTest {
     private final GoalService goalService;
     @MockBean
     private GoalRepository goalRepository;
+    @MockBean
+    private JwtTokenProvider jwtTokenProvider;
 
     @BeforeEach
     public void setUp() {
@@ -60,6 +63,9 @@ public class GoalCreateServiceTest {
                         .isDateFixed(false)
                         .joinCount(1)
                         .isEnd(false).build());
+
+        given(jwtTokenProvider.getUidFromHeader("Bearer [TOKEN]"))
+                .willReturn("KAKAO@testId");
 
         //when
         Goal newGoal = goalService.createGoal(createGoalRequest);
