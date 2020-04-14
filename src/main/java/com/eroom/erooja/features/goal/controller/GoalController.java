@@ -2,9 +2,13 @@ package com.eroom.erooja.features.goal.controller;
 
 import com.eroom.erooja.features.goal.exception.GoalNotFoundException;
 import com.eroom.erooja.domain.enums.GoalRole;
-import com.eroom.erooja.domain.model.Goal;
 import com.eroom.erooja.features.auth.jwt.JwtTokenProvider;
+import com.eroom.erooja.common.constants.ErrorEnum;
+import com.eroom.erooja.common.exception.EroojaException;
+import com.eroom.erooja.domain.model.Goal;
+import com.eroom.erooja.domain.specification.GoalCriteria;
 import com.eroom.erooja.features.goal.dto.CreateGoalRequestDTO;
+import com.eroom.erooja.features.goal.dto.GoalSearchRequestDTO;
 import com.eroom.erooja.features.goal.service.GoalService;
 import com.eroom.erooja.features.goaljobinterest.service.GoalJobInterestService;
 import com.eroom.erooja.features.membergoal.service.MemberGoalService;
@@ -20,6 +24,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.UnsupportedEncodingException;
 
 
 @RequiredArgsConstructor
@@ -53,8 +58,14 @@ public class GoalController {
     }
 
     @GetMapping
-    ResponseEntity searchGoal(@PathVariable String filter, @PathVariable String keyword) {
-        return new ResponseEntity(null, HttpStatus.OK);
+    ResponseEntity searchGoal(GoalSearchRequestDTO goalSearchRequestDTO) {
+        try {
+            Page<Goal> page = goalService.search(GoalCriteria.of(goalSearchRequestDTO));
+            return ResponseEntity.ok(page);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            throw new EroojaException(ErrorEnum.ETC);
+        }
     }
 
     @PostMapping(produces = "application/json; charset=utf-8")

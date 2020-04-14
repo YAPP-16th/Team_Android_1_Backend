@@ -1,5 +1,6 @@
 package com.eroom.erooja.domain.model;
 
+import com.eroom.erooja.domain.field.GoalJobInterest_;
 import lombok.*;
 
 import javax.persistence.*;
@@ -17,11 +18,11 @@ public class GoalJobInterest {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "job_group_id")
+    @ManyToOne
+    @JoinColumn(name = GoalJobInterest_.jobInterest)
     private JobInterest jobInterest;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "goal_id")
+    @JoinColumn(name = GoalJobInterest_.goal)
     private Goal goal;
 }

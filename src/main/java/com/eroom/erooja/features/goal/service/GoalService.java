@@ -4,6 +4,8 @@ import com.eroom.erooja.common.constants.ErrorEnum;
 import com.eroom.erooja.features.goal.exception.GoalNotFoundException;
 import com.eroom.erooja.domain.model.Goal;
 import com.eroom.erooja.features.goal.repository.GoalRepository;
+import com.eroom.erooja.domain.specification.GoalCriteria;
+import com.eroom.erooja.domain.specification.GoalSpecifications;
 import com.eroom.erooja.features.goal.dto.CreateGoalRequestDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -39,4 +41,11 @@ public class GoalService {
                 .findGoalByInterestId(interestId, pageable);
     }
 
+    public Page<Goal> search(GoalCriteria goalCriteria) {
+        if (goalCriteria.getField() == null) {
+            return goalRepository.findAll(goalCriteria.getPageRequest());
+        } else {
+            return goalRepository.findAll(new GoalSpecifications(goalCriteria), goalCriteria.getPageRequest());
+        }
+    }
 }
