@@ -49,7 +49,9 @@ public class GoalSearchTest {
 
     @BeforeAll
     public void setUpEntities() {
-        jobInterestService.setUpDefaultJobInterests();
+        long cnt = jobInterestService.setUpDefaultJobInterests();
+        if (cnt < 3) return;
+
         LocalDateTime offset = LocalDateTime.now();
 
         Goal goal01_develop = goalRepository.save(

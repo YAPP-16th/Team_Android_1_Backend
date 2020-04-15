@@ -57,8 +57,8 @@ public class JobInterestService {
         );
     }
 
-    public void setUpDefaultJobInterests() {
-        long primeJobInterestId = 1L;
+    public Long setUpDefaultJobInterests() {
+        Long primeJobInterestId = 1L;
         String[] jobInterests_develop = {
                 "서버", "프론트엔드", "안드로이드", "iOS", "Data Engineer", "Data Scientist",
                 "DevOps", "머신 러닝", "게임, 애니메이션"
@@ -84,27 +84,26 @@ public class JobInterestService {
                 .build();
 
         if (!jobInterestRepository.existsById(jobGroup_develop.getId())) jobInterestRepository.save(jobGroup_develop);
-        if (jobInterestRepository.existsById(jobGroup_design.getId())) jobInterestRepository.save(jobGroup_design);
+        if (!jobInterestRepository.existsById(jobGroup_design.getId())) jobInterestRepository.save(jobGroup_design);
 
-        for(String name : jobInterests_develop) {
+        primeJobInterestId = saveAllJobInterests(primeJobInterestId, jobGroup_develop, jobInterests_develop);
+        primeJobInterestId = saveAllJobInterests(primeJobInterestId, jobGroup_design, jobInterests_design);
+
+        return primeJobInterestId;
+    }
+
+    private Long saveAllJobInterests(long primeJobInterestId, JobInterest jobGroup, String[] jobInterests) {
+        for(String name : jobInterests) {
             JobInterest interest = JobInterest.builder()
                     .id(primeJobInterestId++)
                     .name(name)
-                    .jobGroup(jobGroup_develop)
+                    .jobGroup(jobGroup)
                     .jobInterestType(JobInterestType.JOB_INTEREST)
                     .build();
 
             if (!jobInterestRepository.existsById(interest.getId())) jobInterestRepository.save(interest);
         }
 
-        for(String name : jobInterests_design) {
-            JobInterest interest = JobInterest.builder()
-                    .id(primeJobInterestId++)
-                    .name(name)
-                    .jobGroup(jobGroup_design)
-                    .jobInterestType(JobInterestType.JOB_INTEREST)
-                    .build();
-            if (!jobInterestRepository.existsById(interest.getId())) jobInterestRepository.save(interest);
-        }
+        return primeJobInterestId;
     }
 }
