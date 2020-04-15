@@ -25,8 +25,7 @@ public class MemberGoalContoller {
         String uid = jwtTokenProvider.getUidFromHeader(header);
         MemberGoal memberGoal = memberGoalService.joinExistGoal(
                 uid,
-                goalJoinRequest,
-                GoalRole.PARTICIPANT);
+                goalJoinRequest);
 
         return new ResponseEntity(memberGoal, HttpStatus.CREATED);
     }

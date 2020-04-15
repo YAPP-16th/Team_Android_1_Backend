@@ -19,16 +19,16 @@ public class MemberGoalService {
     private final MemberGoalRepository memberGoalRepository;
     private final GoalRepository goalRepository;
 
-    public MemberGoal joinExistGoal(String uid, ExistGoalJoinRequestDTO goalJoinRequest, GoalRole goalRole) {
+    public MemberGoal joinExistGoal(String uid, ExistGoalJoinRequestDTO goalJoinRequest) {
         Goal goal = goalRepository.findById(goalJoinRequest.getGoalId())
                 .orElseThrow(MemberGoalNotFoundException::new);
 
         increaseCopyCount(goalJoinRequest.getOwnerUid(), goalJoinRequest.getGoalId());
 
         if(goal.getIsDateFixed())
-            return joinGoal(uid, goalJoinRequest.getGoalId(), goal.getEndDt(), goalRole);
+            return joinGoal(uid, goalJoinRequest.getGoalId(), goal.getEndDt(), GoalRole.PARTICIPANT);
         else
-            return joinGoal(uid, goalJoinRequest.getGoalId(), goalJoinRequest.getEndDt(), goalRole);
+            return joinGoal(uid, goalJoinRequest.getGoalId(), goalJoinRequest.getEndDt(), GoalRole.PARTICIPANT);
     }
 
     public MemberGoal joinNewGoal(){

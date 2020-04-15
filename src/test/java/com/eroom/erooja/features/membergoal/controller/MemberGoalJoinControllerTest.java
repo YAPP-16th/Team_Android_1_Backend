@@ -92,8 +92,8 @@ public class MemberGoalJoinControllerTest {
                 .willReturn(mockUid);
 
         given(memberGoalService.joinExistGoal(eq(mockUid),
-                any(ExistGoalJoinRequestDTO.class),
-                eq(GoalRole.PARTICIPANT))).willReturn(newMemberGoal);
+                any(ExistGoalJoinRequestDTO.class)))
+                .willReturn(newMemberGoal);
 
         this.mockMvc.perform(post("/api/v1/membergoal")
                 .content(objectMapper.writeValueAsString(goalJoinRequest))
