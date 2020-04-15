@@ -83,8 +83,8 @@ public class JobInterestService {
                 .jobInterestType(JobInterestType.JOB_GROUP)
                 .build();
 
-        jobInterestRepository.save(jobGroup_develop);
-        jobInterestRepository.save(jobGroup_design);
+        if (!jobInterestRepository.existsById(jobGroup_develop.getId())) jobInterestRepository.save(jobGroup_develop);
+        if (jobInterestRepository.existsById(jobGroup_design.getId())) jobInterestRepository.save(jobGroup_design);
 
         for(String name : jobInterests_develop) {
             JobInterest interest = JobInterest.builder()
@@ -94,7 +94,7 @@ public class JobInterestService {
                     .jobInterestType(JobInterestType.JOB_INTEREST)
                     .build();
 
-            jobInterestRepository.save(interest);
+            if (!jobInterestRepository.existsById(interest.getId())) jobInterestRepository.save(interest);
         }
 
         for(String name : jobInterests_design) {
@@ -104,7 +104,7 @@ public class JobInterestService {
                     .jobGroup(jobGroup_design)
                     .jobInterestType(JobInterestType.JOB_INTEREST)
                     .build();
-            jobInterestRepository.save(interest);
+            if (!jobInterestRepository.existsById(interest.getId())) jobInterestRepository.save(interest);
         }
     }
 }
