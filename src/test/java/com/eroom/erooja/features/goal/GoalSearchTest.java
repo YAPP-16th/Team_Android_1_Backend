@@ -8,6 +8,7 @@ import com.eroom.erooja.features.goaljobinterest.repository.GoalJobInterestRepos
 import com.eroom.erooja.features.interest.service.JobInterestService;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,8 @@ import static org.hamcrest.Matchers.is;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class GoalSearchTest {
+    private final String BASE_HOST = "/api/v1/goal";
+
     private final JobInterestService jobInterestService;
     private final GoalRepository goalRepository;
     private final GoalJobInterestRepository goalJobInterestRepository;
@@ -134,9 +137,10 @@ public class GoalSearchTest {
     }
 
     @Test
+    @DisplayName("한글 키워드로 검색할 수 있다.")
     public void fullParameterSearch() throws Exception {
         this.mockMvc.perform(
-                get("/api/v1/goal")
+                get(BASE_HOST)
                         .param("goalFilterBy", "TITLE")
                         .param("keyword", URLEncoder.encode("에러", "utf-8"))
                         .param("fromDt", LocalDateTime.now().minusHours(5).toString())
@@ -150,5 +154,17 @@ public class GoalSearchTest {
                         .accept(MediaType.APPLICATION_JSON + ";charset=UTF-8"))
                 .andDo(print())
                 .andExpect(jsonPath("totalElements", is(2)));
+    }
+
+    @Test
+    @DisplayName("페이지를 제외한 모든 파라미터는 NULL 일 수 있다.")
+    public void nullableParamsSearch() throws Exception {
+        this.mockMvc.perform(
+                get(BASE_HOST)
+                        .param("page", "1")
+                        .contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
+                        .accept(MediaType.APPLICATION_JSON + ";charset=UTF-8"))
+                .andDo(print())
+                .andExpect(jsonPath("totalElements", is(4)));
     }
 }

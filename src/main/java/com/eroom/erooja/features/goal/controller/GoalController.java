@@ -58,13 +58,20 @@ public class GoalController {
     }
 
     @GetMapping
-    ResponseEntity searchGoal(GoalSearchRequestDTO goalSearchRequestDTO) {
+    ResponseEntity searchGoal(GoalSearchRequestDTO goalSearchRequestDTO,
+                              Errors errors) {
+        if (errors.hasErrors()) {
+            throw new EroojaException(ErrorEnum.GOAL_INVALID_ARGS);
+        }
+
         try {
-            Page<Goal> page = goalService.search(GoalCriteria.of(goalSearchRequestDTO));
-            return ResponseEntity.ok(page);
+            GoalCriteria criteria = GoalCriteria.of(goalSearchRequestDTO);
+            Page<Goal> goalPage = goalService.search(criteria);
+
+            return ResponseEntity.ok(goalPage);
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            throw new EroojaException(ErrorEnum.ETC);
+            logger.error("키워드, {} 를 디코드할 수 없습니다.", goalSearchRequestDTO.getKeyword());
+            throw new EroojaException(ErrorEnum.GOAL_INVALID_ARGS);
         }
     }
 

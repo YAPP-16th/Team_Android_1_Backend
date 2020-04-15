@@ -25,8 +25,8 @@ public class GoalCriteria {
         return GoalCriteria.builder()
                     .field(searchRequest.getGoalFilterBy() == null ? null : searchRequest.getGoalFilterBy().getField())
                     .keyword(searchRequest.getKeyword() == null ? null : URLDecoder.decode(searchRequest.getKeyword(), "UTF-8"))
-                    .fromDt(searchRequest.getStartDt())
-                    .toDt(searchRequest.getEndDt())
+                    .fromDt(searchRequest.getFromDt())
+                    .toDt(searchRequest.getToDt())
                     .jobInterestIdSet(searchRequest.getJobInterestIds())
                     .pageRequest(pageRequestOf(searchRequest))
                 .build();

@@ -20,11 +20,11 @@ public class GoalSpecifications implements Specification<Goal> {
         List<Specification<Goal>> andSpec = new ArrayList<>();
 
         if (goalCriteria.getFromDt() != null) {
-            andSpec.add(isEndDtNotLessThanOrEqual(goalCriteria.getFromDt()));
+            andSpec.add(isEndDtGreaterThen(goalCriteria.getFromDt()));
         }
 
         if (goalCriteria.getToDt() != null) {
-            andSpec.add(isStartDtNotGreaterThanOrEqual(goalCriteria.getToDt()));
+            andSpec.add(isStartDtLessThen(goalCriteria.getToDt()));
         }
 
         if (goalCriteria.getJobInterestIdSet() != null && goalCriteria.getJobInterestIdSet().size() > 0) {
@@ -56,12 +56,12 @@ public class GoalSpecifications implements Specification<Goal> {
 
     }
 
-    private Specification<Goal> isStartDtNotGreaterThanOrEqual(LocalDateTime toDt) {
-        return (root, query, cb) -> cb.not(cb.greaterThanOrEqualTo(root.get(Goal_.startDt), toDt));
+    private Specification<Goal> isStartDtLessThen(LocalDateTime toDt) {
+        return (root, query, cb) -> cb.lessThan(root.get(Goal_.startDt), toDt);
     }
 
-    private Specification<Goal> isEndDtNotLessThanOrEqual(LocalDateTime fromDt) {
-        return (root, query, cb) -> cb.not(cb.lessThanOrEqualTo(root.<LocalDateTime> get(Goal_.endDt), fromDt));
+    private Specification<Goal> isEndDtGreaterThen(LocalDateTime fromDt) {
+        return (root, query, cb) -> cb.greaterThan(root.get(Goal_.endDt), fromDt);
     }
 
     public GoalSpecifications(GoalCriteria goalCriteria) {

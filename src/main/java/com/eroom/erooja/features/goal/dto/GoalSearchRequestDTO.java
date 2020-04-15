@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.domain.Sort;
 
+import javax.validation.constraints.Min;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -17,9 +18,9 @@ public class GoalSearchRequestDTO {
 
     private String keyword;
 
-    private LocalDateTime startDt;
+    private LocalDateTime fromDt;
 
-    private LocalDateTime endDt;
+    private LocalDateTime toDt;
 
     private Set<Long> jobInterestIds;
 
@@ -27,15 +28,17 @@ public class GoalSearchRequestDTO {
 
     private Sort.Direction direction = Sort.Direction.ASC;
 
+    @Min(5)
     private int size = 10;
 
+    @Min(0)
     private int page;
 
-    public void setStartDt(String startDt) {
-        this.startDt = LocalDateTime.parse(startDt);
+    public void setFromDt(String fromDt) {
+        this.fromDt = LocalDateTime.parse(fromDt);
     }
 
-    public void setEndDt(String endDt) {
-        this.endDt = LocalDateTime.parse(endDt);
+    public void setToDt(String toDt) {
+        this.toDt = LocalDateTime.parse(toDt);
     }
 }
