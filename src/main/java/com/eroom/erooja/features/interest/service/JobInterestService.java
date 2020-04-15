@@ -6,6 +6,8 @@ import com.eroom.erooja.domain.enums.JobInterestType;
 import com.eroom.erooja.domain.model.JobInterest;
 import com.eroom.erooja.domain.repos.JobInterestRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class JobInterestService {
+    private final static Logger logger = LoggerFactory.getLogger(JobInterestService.class);
+
     private final JobInterestRepository jobInterestRepository;
 
     public JobInterest findById(Long id) {
@@ -57,7 +61,9 @@ public class JobInterestService {
         );
     }
 
-    public Long setUpDefaultJobInterests() {
+    public void setUpDefaultJobInterests() {
+        jobInterestRepository.deleteAll();
+
         Long primeJobInterestId = 1L;
         String[] jobInterests_develop = {
                 "서버", "프론트엔드", "안드로이드", "iOS", "Data Engineer", "Data Scientist",
@@ -83,13 +89,13 @@ public class JobInterestService {
                 .jobInterestType(JobInterestType.JOB_GROUP)
                 .build();
 
-        if (!jobInterestRepository.existsById(jobGroup_develop.getId())) jobInterestRepository.save(jobGroup_develop);
-        if (!jobInterestRepository.existsById(jobGroup_design.getId())) jobInterestRepository.save(jobGroup_design);
+        jobGroup_develop = jobInterestRepository.save(jobGroup_develop);
+        jobGroup_design = jobInterestRepository.save(jobGroup_design);
 
         primeJobInterestId = saveAllJobInterests(primeJobInterestId, jobGroup_develop, jobInterests_develop);
         primeJobInterestId = saveAllJobInterests(primeJobInterestId, jobGroup_design, jobInterests_design);
 
-        return primeJobInterestId;
+        logger.info("기본 직군/직무 셋업 완료 - cnt : {}", primeJobInterestId);
     }
 
     private Long saveAllJobInterests(long primeJobInterestId, JobInterest jobGroup, String[] jobInterests) {
@@ -101,7 +107,7 @@ public class JobInterestService {
                     .jobInterestType(JobInterestType.JOB_INTEREST)
                     .build();
 
-            if (!jobInterestRepository.existsById(interest.getId())) jobInterestRepository.save(interest);
+            jobInterestRepository.save(interest);
         }
 
         return primeJobInterestId;

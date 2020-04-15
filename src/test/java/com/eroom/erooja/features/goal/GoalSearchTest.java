@@ -1,16 +1,14 @@
 package com.eroom.erooja.features.goal;
 
+import com.eroom.erooja.domain.enums.JobInterestType;
 import com.eroom.erooja.domain.model.Goal;
 import com.eroom.erooja.domain.model.GoalJobInterest;
 import com.eroom.erooja.domain.model.JobInterest;
 import com.eroom.erooja.features.goal.repository.GoalRepository;
 import com.eroom.erooja.features.goaljobinterest.repository.GoalJobInterestRepository;
-import com.eroom.erooja.features.interest.service.JobInterestService;
+import com.eroom.erooja.domain.repos.JobInterestRepository;
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,7 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.net.URLEncoder;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -33,7 +33,7 @@ import static org.hamcrest.Matchers.is;
 
 
 @SpringBootTest
-@Transactional
+@Disabled @Transactional
 @AutoConfigureMockMvc(addFilters = false)
 @Profile({"test"}) @ActiveProfiles("test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -41,7 +41,7 @@ import static org.hamcrest.Matchers.is;
 public class GoalSearchTest {
     private final String BASE_HOST = "/api/v1/goal";
 
-    private final JobInterestService jobInterestService;
+    private final JobInterestRepository jobInterestRepository;
     private final GoalRepository goalRepository;
     private final GoalJobInterestRepository goalJobInterestRepository;
 
@@ -49,8 +49,36 @@ public class GoalSearchTest {
 
     @BeforeAll
     public void setUpEntities() {
-        long cnt = jobInterestService.setUpDefaultJobInterests();
-        if (cnt < 3) return;
+        JobInterest jobGroup_develop = JobInterest.builder()
+                    .id(1L)
+                    .name("개발")
+                    .jobGroup(null)
+                    .jobInterestType(JobInterestType.JOB_GROUP)
+                .build();
+
+        JobInterest jobGroup_design = JobInterest.builder()
+                    .id(2L)
+                    .name("디자인")
+                    .jobGroup(null)
+                    .jobInterestType(JobInterestType.JOB_GROUP)
+                .build();
+
+        jobGroup_develop = jobInterestRepository.save(jobGroup_develop);
+        jobGroup_design = jobInterestRepository.save(jobGroup_design);
+
+        Map<Long, JobInterest> interests = new HashMap<>();
+
+        for (Long id : new Long[] {3L, 4L, 5L, 6L, 14L, 15L, 16L}) {
+            boolean isDesign = id == 2L || id > 14L;
+            String name = isDesign ? "디자인_" : "개발_";
+            interests.put(id, jobInterestRepository.save(
+                            JobInterest.builder()
+                                    .id(id)
+                                    .name(name + id)
+                                    .jobGroup(isDesign ? jobGroup_design : jobGroup_develop)
+                                    .jobInterestType(JobInterestType.JOB_INTEREST)
+                                .build()));
+        }
 
         LocalDateTime offset = LocalDateTime.now();
 
@@ -78,15 +106,15 @@ public class GoalSearchTest {
 
         List<GoalJobInterest> goalJobInterests_develop = new ArrayList<>();
 
-        goalJobInterests_develop.add(buildNewGoalJobInterest(goal01_develop.getId(), 1L));
-        goalJobInterests_develop.add(buildNewGoalJobInterest(goal01_develop.getId(), 3L));
-        goalJobInterests_develop.add(buildNewGoalJobInterest(goal01_develop.getId(), 6L));
+        goalJobInterests_develop.add(buildNewGoalJobInterest(goal01_develop.getId(), jobGroup_develop));
+        goalJobInterests_develop.add(buildNewGoalJobInterest(goal01_develop.getId(), interests.get(3L)));
+        goalJobInterests_develop.add(buildNewGoalJobInterest(goal01_develop.getId(), interests.get(6L)));
         goal01_develop.setGoalJobInterests(goalJobInterests_develop);
 
-        goalJobInterests_develop.add(buildNewGoalJobInterest(goal02_develop.getId(), 1L));
-        goalJobInterests_develop.add(buildNewGoalJobInterest(goal02_develop.getId(), 3L));
-        goalJobInterests_develop.add(buildNewGoalJobInterest(goal02_develop.getId(), 4L));
-        goalJobInterests_develop.add(buildNewGoalJobInterest(goal02_develop.getId(), 5L));
+        goalJobInterests_develop.add(buildNewGoalJobInterest(goal02_develop.getId(), jobGroup_develop));
+        goalJobInterests_develop.add(buildNewGoalJobInterest(goal02_develop.getId(), interests.get(3L)));
+        goalJobInterests_develop.add(buildNewGoalJobInterest(goal02_develop.getId(), interests.get(4L)));
+        goalJobInterests_develop.add(buildNewGoalJobInterest(goal02_develop.getId(), interests.get(5L)));
         goal02_develop.setGoalJobInterests(goalJobInterests_develop);
 
         goalRepository.save(goal01_develop);
@@ -116,25 +144,25 @@ public class GoalSearchTest {
 
         List<GoalJobInterest> goalJobInterests_design = new ArrayList<>();
 
-        goalJobInterests_design.add(buildNewGoalJobInterest(goal_design01.getId(), 2L));
-        goalJobInterests_design.add(buildNewGoalJobInterest(goal_design01.getId(), 14L));
-        goalJobInterests_design.add(buildNewGoalJobInterest(goal_design01.getId(), 16L));
+        goalJobInterests_design.add(buildNewGoalJobInterest(goal_design01.getId(), jobGroup_design));
+        goalJobInterests_design.add(buildNewGoalJobInterest(goal_design01.getId(), interests.get(14L)));
+        goalJobInterests_design.add(buildNewGoalJobInterest(goal_design01.getId(), interests.get(16L)));
         goal_design01.setGoalJobInterests(goalJobInterests_design);
 
-        goalJobInterests_design.add(buildNewGoalJobInterest(goal_design02.getId(), 2L));
-        goalJobInterests_design.add(buildNewGoalJobInterest(goal_design02.getId(), 14L));
-        goalJobInterests_design.add(buildNewGoalJobInterest(goal_design02.getId(), 15L));
+        goalJobInterests_design.add(buildNewGoalJobInterest(goal_design02.getId(), jobGroup_design));
+        goalJobInterests_design.add(buildNewGoalJobInterest(goal_design02.getId(), interests.get(14L)));
+        goalJobInterests_design.add(buildNewGoalJobInterest(goal_design02.getId(), interests.get(15L)));
         goal_design02.setGoalJobInterests(goalJobInterests_design);
 
         goalRepository.save(goal_design01);
         goalRepository.save(goal_design02);
     }
 
-    private GoalJobInterest buildNewGoalJobInterest(Long goalId, Long jobInterestId) {
+    private GoalJobInterest buildNewGoalJobInterest(Long goalId, JobInterest jobInterest) {
         return goalJobInterestRepository.save(
                 GoalJobInterest.builder()
                     .goal(Goal.builder().id(goalId).build())
-                    .jobInterest(JobInterest.builder().id(jobInterestId).build())
+                    .jobInterest(jobInterest)
                 .build());
     }
 
@@ -147,7 +175,7 @@ public class GoalSearchTest {
                         .param("keyword", URLEncoder.encode("에러", "utf-8"))
                         .param("fromDt", LocalDateTime.now().minusHours(5).toString())
                         .param("toDt", LocalDateTime.now().plusHours(5).toString())
-                        .param("jobInterestIds", "1,6,5,2,15")
+                        .param("jobInterestIds", "1,6,5,2,3,15")
                         .param("goalSortBy", "JOINT_CNT")
                         .param("direction", "DESC")
                         .param("size", "5")
