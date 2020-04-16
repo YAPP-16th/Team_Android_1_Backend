@@ -38,6 +38,12 @@ public enum ErrorEnum {
     /* 직군 CRUD 오류 메세지 정의 끝 */
 
 
+    /* 목표 CRUD, JOIN 오류 메세지 정의 */
+    GOAL_UNKNOWN_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "GOL_000", "알 수 없는 목표 관련 오류입니다."),
+    GOAL_NOT_FOUND(HttpStatus.NOT_FOUND, "GOL_001", "해당 목표가 존재하지 않습니다."),
+    /* 목표 CRUD, JOIN 오류 메세지 정의  */
+
+
     ETC(HttpStatus.INTERNAL_SERVER_ERROR, "ETC_000", "알 수 없는 오류입니다.");
 
     private ErrorResponse errorResponse;

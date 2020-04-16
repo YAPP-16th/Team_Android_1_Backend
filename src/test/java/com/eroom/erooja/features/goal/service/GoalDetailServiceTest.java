@@ -1,6 +1,6 @@
 package com.eroom.erooja.features.goal.service;
 
-import com.eroom.erooja.common.exception.GoalNotFoundException;
+import com.eroom.erooja.features.goal.exception.GoalNotFoundException;
 import com.eroom.erooja.domain.model.Goal;
 import com.eroom.erooja.features.goal.repository.GoalRepository;
 import lombok.RequiredArgsConstructor;
