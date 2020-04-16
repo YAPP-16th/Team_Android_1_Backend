@@ -4,9 +4,8 @@ import com.eroom.erooja.domain.enums.JobInterestType;
 import com.eroom.erooja.domain.model.Goal;
 import com.eroom.erooja.domain.model.GoalJobInterest;
 import com.eroom.erooja.domain.model.JobInterest;
-import com.eroom.erooja.domain.repos.GoalJobInterestRepository;
-import com.eroom.erooja.domain.repos.GoalRepository;
 import com.eroom.erooja.domain.repos.JobInterestRepository;
+import com.eroom.erooja.features.goaljobinterest.repository.GoalJobInterestRepository;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -46,7 +45,7 @@ public class GoalRepositoryTest {
                 .title("title")
                 .description("description")
                 .isDateFixed(false)
-                .joinCount(0)
+                .joinCount(1)
                 .isEnd(false).build());
 
         Goal saveGoal2 = goalRepository.save(Goal.builder()
@@ -55,7 +54,7 @@ public class GoalRepositoryTest {
                 .title("title")
                 .description("description")
                 .isDateFixed(false)
-                .joinCount(0)
+                .joinCount(1)
                 .isEnd(false).build());
 
         JobInterest saveDevelopInterest = jobInterestRepository.save(

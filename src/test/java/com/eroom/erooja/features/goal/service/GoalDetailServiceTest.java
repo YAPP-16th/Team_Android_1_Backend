@@ -1,10 +1,9 @@
 package com.eroom.erooja.features.goal.service;
 
-import com.eroom.erooja.common.exception.GoalNotFoundException;
+import com.eroom.erooja.features.goal.exception.GoalNotFoundException;
 import com.eroom.erooja.domain.model.Goal;
-import com.eroom.erooja.domain.repos.GoalRepository;
+import com.eroom.erooja.features.goal.repository.GoalRepository;
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,10 +41,12 @@ public class GoalDetailServiceTest {
                 .id(goalId)
                 .startDt(startDt)
                 .endDt(startDt.plusHours(2))
+                .updateDt(startDt)
+                .createDt(startDt)
                 .title("title")
                 .description("description")
                 .isDateFixed(false)
-                .joinCount(0)
+                .joinCount(1)
                 .isEnd(false).build();
 
         given(goalRepository.findById(goalId)).willReturn(Optional.of(newGoal));

@@ -3,10 +3,10 @@ package com.eroom.erooja.domain.model;
 import com.eroom.erooja.domain.common.AuditProperties;
 import com.eroom.erooja.domain.enums.GoalRole;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @EqualsAndHashCode(of = {"id"})
@@ -14,11 +14,15 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
+@IdClass(MemberGoalPK.class)
 @Entity
 public class MemberGoal extends AuditProperties {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private String uid;
+
+    @Id
+    @Column(name = "goal_id")
+    private Long goalId;
 
     @Enumerated(EnumType.STRING)
     private GoalRole role;
@@ -34,13 +38,31 @@ public class MemberGoal extends AuditProperties {
     private LocalDateTime endDt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "goal_id")
+    @JoinColumn(name = "goal_id", updatable = false, insertable = false)
     private Goal goal;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "members_id")
+    @JoinColumn(name = "uid", updatable = false, insertable = false)
     private Members member;
 
     @OneToMany(mappedBy = "memberGoal", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Todo> todoList;
+    private List<Todo> todoList = new ArrayList();
+
+    @Builder
+    public MemberGoal(LocalDateTime createDt, LocalDateTime updateDt, String uid,
+                      Long goalId, GoalRole role, Boolean isEnd, int copyCount,
+                      LocalDateTime startDt, LocalDateTime endDt) {
+        super(createDt, updateDt);
+        this.uid = uid;
+        this.goalId=goalId;
+        this.role=role;
+        this.isEnd=isEnd;
+        this.copyCount=copyCount;
+        this.startDt=startDt;
+        this.endDt=endDt;
+    }
+
+    public int increaseCopyCount(){
+        return copyCount++;
+    }
 }

@@ -1,7 +1,8 @@
 package com.eroom.erooja.features.goal.service;
 
 import com.eroom.erooja.domain.model.Goal;
-import com.eroom.erooja.domain.repos.GoalRepository;
+import com.eroom.erooja.features.auth.jwt.JwtTokenProvider;
+import com.eroom.erooja.features.goal.repository.GoalRepository;
 import com.eroom.erooja.features.goal.dto.CreateGoalRequestDTO;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,7 +44,6 @@ public class GoalCreateServiceTest {
         LocalDateTime endDt = startDt.plusHours(2);
 
         CreateGoalRequestDTO createGoalRequest = CreateGoalRequestDTO.builder()
-                .startDt(startDt)
                 .endDt(endDt)
                 .title("title")
                 .description("description")
@@ -54,10 +54,12 @@ public class GoalCreateServiceTest {
                         .id(0L)
                         .startDt(startDt)
                         .endDt(startDt.plusHours(2))
+                        .updateDt(startDt)
+                        .createDt(startDt)
                         .title("title")
                         .description("description")
                         .isDateFixed(false)
-                        .joinCount(0)
+                        .joinCount(1)
                         .isEnd(false).build());
 
         //when

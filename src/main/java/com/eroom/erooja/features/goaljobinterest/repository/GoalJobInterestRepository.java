@@ -1,4 +1,4 @@
-package com.eroom.erooja.domain.repos;
+package com.eroom.erooja.features.goaljobinterest.repository;
 
 import com.eroom.erooja.domain.model.GoalJobInterest;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,6 +1,6 @@
 package com.eroom.erooja.features.goal.controller;
 
-import com.eroom.erooja.common.exception.GoalNotFoundException;
+import com.eroom.erooja.features.goal.exception.GoalNotFoundException;
 import com.eroom.erooja.domain.model.Goal;
 import com.eroom.erooja.features.goal.service.GoalService;
 import lombok.RequiredArgsConstructor;
@@ -49,8 +49,10 @@ public class GoalDetailControllerTest {
                 .title("title")
                 .description("description")
                 .isDateFixed(false)
-                .joinCount(0)
-                .isEnd(false).build();
+                .joinCount(1)
+                .isEnd(false)
+                .updateDt(startDt)
+                .createDt(startDt).build();
 
         given(goalService.findGoalById(goalId)).willReturn(newGoal);
 
@@ -60,13 +62,15 @@ public class GoalDetailControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id").value(goalId))
-                .andExpect(jsonPath("start_dt").exists())
-                .andExpect(jsonPath("end_dt").exists())
+                .andExpect(jsonPath("startDt").exists())
+                .andExpect(jsonPath("endDt").exists())
+                .andExpect(jsonPath("updateDt").exists())
+                .andExpect(jsonPath("createDt").exists())
                 .andExpect(jsonPath("title").value("title"))
                 .andExpect(jsonPath("description").value("description"))
-                .andExpect(jsonPath("join_count").value(0))
-                .andExpect(jsonPath("is_date_fixed").value(false))
-                .andExpect(jsonPath("is_end").value(false));
+                .andExpect(jsonPath("joinCount").value(1))
+                .andExpect(jsonPath("isDateFixed").value(false))
+                .andExpect(jsonPath("isEnd").value(false));
     }
 
     @Test
