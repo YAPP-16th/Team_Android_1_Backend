@@ -6,6 +6,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @EqualsAndHashCode(of = {"id"})
@@ -45,7 +46,7 @@ public class MemberGoal extends AuditProperties {
     private Members member;
 
     @OneToMany(mappedBy = "memberGoal", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Todo> todoList;
+    private List<Todo> todoList = new ArrayList();
 
     @Builder
     public MemberGoal(LocalDateTime createDt, LocalDateTime updateDt, String uid,

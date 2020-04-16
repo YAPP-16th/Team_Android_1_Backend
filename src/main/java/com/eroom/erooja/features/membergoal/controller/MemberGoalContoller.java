@@ -4,6 +4,7 @@ import com.eroom.erooja.domain.enums.GoalRole;
 import com.eroom.erooja.domain.model.MemberGoal;
 import com.eroom.erooja.features.auth.jwt.JwtTokenProvider;
 import com.eroom.erooja.features.membergoal.dto.ExistGoalJoinRequestDTO;
+import com.eroom.erooja.features.membergoal.dto.NewGoalJoinRequestDTO;
 import com.eroom.erooja.features.membergoal.service.MemberGoalService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -31,8 +32,11 @@ public class MemberGoalContoller {
     }
 
     @PostMapping("/new")
-    public ResponseEntity joinNewGoal(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String header){
-        return new ResponseEntity(null, HttpStatus.CREATED);
+    public ResponseEntity joinNewGoal(@RequestBody NewGoalJoinRequestDTO newGoalJoinRequest,
+                                      @RequestHeader(name = HttpHeaders.AUTHORIZATION) String header){
+        String uid = jwtTokenProvider.getUidFromHeader(header);
+        MemberGoal memberGoal = memberGoalService.joinNewGoal(uid, newGoalJoinRequest);
+        return new ResponseEntity(memberGoal, HttpStatus.CREATED);
     }
 
 

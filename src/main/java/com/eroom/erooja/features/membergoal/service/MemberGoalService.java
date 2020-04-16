@@ -7,6 +7,7 @@ import com.eroom.erooja.domain.model.MemberGoal;
 import com.eroom.erooja.domain.model.MemberGoalPK;
 import com.eroom.erooja.features.goal.repository.GoalRepository;
 import com.eroom.erooja.features.membergoal.dto.ExistGoalJoinRequestDTO;
+import com.eroom.erooja.features.membergoal.dto.NewGoalJoinRequestDTO;
 import com.eroom.erooja.features.membergoal.repository.MemberGoalRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,8 +32,14 @@ public class MemberGoalService {
             return joinGoal(uid, goalJoinRequest.getGoalId(), goalJoinRequest.getEndDt(), GoalRole.PARTICIPANT);
     }
 
-    public MemberGoal joinNewGoal(){
-        return null;
+    public MemberGoal joinNewGoal(String uid, NewGoalJoinRequestDTO newGoalJoinRequest){
+        Goal goal = goalRepository.findById(newGoalJoinRequest.getGoalId())
+                .orElseThrow(MemberGoalNotFoundException::new);
+
+        if(goal.getIsDateFixed())
+            return joinGoal(uid, goal.getId(), goal.getEndDt(), GoalRole.PARTICIPANT);
+        else
+            return joinGoal(uid, goal.getId(), newGoalJoinRequest.getEndDt(), GoalRole.PARTICIPANT);
     }
 
     public void increaseCopyCount(String uid, Long goalId) {
@@ -49,7 +56,6 @@ public class MemberGoalService {
                 .copyCount(0)
                 .startDt(LocalDateTime.now())
                 .endDt(endDt)
-                .isEnd(false)
                 .role(goalRole)
                 .isEnd(false).build());
     }
