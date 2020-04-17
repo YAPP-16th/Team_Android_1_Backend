@@ -2,35 +2,49 @@
 <configuration>
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
     <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
-    <include resource="org/springframework/boot/logging/logback/file-appender.xml"/>
 
     <root level="INFO">
         <appender-ref ref="CONSOLE"/>
     </root>
 
     <springProfile name="production">
-        <springProperty scope="context" name="ACTIVE_PROFILE" source="spring.profiles.active"/>
-        <property name="LOG_FILE" value="${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}/}spring.miningLogs}"/>
+
         <appender name="SLACK" class="com.github.maricn.logback.SlackAppender">
             <layout class="ch.qos.logback.classic.PatternLayout">
                 <pattern>%d{HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
             </layout>
-            <token>xoxb-855704080770-1056376812690-1zMcFY4T4ZUvcNt76WBDKbkq</token>
-            <webhookUri>https://hooks.slack.com/services/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</webhookUri>
-            <username>erooja-${ACTIVE_PROFILE}</username>
-            <iconEmoji>:stuck_out_tongue_winking_eye:</iconEmoji>
+            <webhookUri>https://hooks.slack.com/services/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</webhookUri>
+            <channel>#team_eroom_error_alram</channel>
             <colorCoding>true</colorCoding>
         </appender>
+
         <appender name="ASYNC_SLACK" class="ch.qos.logback.classic.AsyncAppender">
             <appender-ref ref="SLACK"/>
             <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
                 <level>ERROR</level>
             </filter>
         </appender>
+
+        <appender name="FILE-ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>logs/erooja.log</file>
+
+            <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                <fileNamePattern>logs/archived/erooja.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+                <maxFileSize>10MB</maxFileSize>
+                <totalSizeCap>20GB</totalSizeCap>
+                <maxHistory>60</maxHistory>
+            </rollingPolicy>
+
+            <encoder>
+                <pattern>%d %p %c{1.} [%t] %m%n</pattern>
+            </encoder>
+        </appender>
+
         <root level="INFO">
             <appender-ref ref="CONSOLE"/>
-            <appender-ref ref="FILE"/>
+            <appender-ref ref="FILE-ROLLING"/>
             <appender-ref ref="ASYNC_SLACK"/>
         </root>
     </springProfile>
 </configuration>
+
