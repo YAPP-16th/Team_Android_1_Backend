@@ -22,6 +22,8 @@ public class MemberAuth extends AuditProperties implements UserDetails {
 
     private AuthProvider authProvider;
 
+    @Lob
+    @Column(length = 1024 * 4 - 1)
     private String thirdPartyUserInfo;
 
     @Setter
