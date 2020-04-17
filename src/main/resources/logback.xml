@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+    <include resource="org/springframework/boot/logging/logback/file-appender.xml"/>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+    <springProfile name="production">
+        <springProperty scope="context" name="ACTIVE_PROFILE" source="spring.profiles.active"/>
+        <property name="LOG_FILE" value="${LOG_FILE:-${LOG_PATH:-${LOG_TEMP:-${java.io.tmpdir:-/tmp}}/}spring.miningLogs}"/>
+        <appender name="SLACK" class="com.github.maricn.logback.SlackAppender">
+            <layout class="ch.qos.logback.classic.PatternLayout">
+                <pattern>%d{HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            </layout>
+            <token>xoxb-855704080770-1056376812690-1zMcFY4T4ZUvcNt76WBDKbkq</token>
+            <webhookUri>https://hooks.slack.com/services/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</webhookUri>
+            <username>erooja-${ACTIVE_PROFILE}</username>
+            <iconEmoji>:stuck_out_tongue_winking_eye:</iconEmoji>
+            <colorCoding>true</colorCoding>
+        </appender>
+        <appender name="ASYNC_SLACK" class="ch.qos.logback.classic.AsyncAppender">
+            <appender-ref ref="SLACK"/>
+            <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+                <level>ERROR</level>
+            </filter>
+        </appender>
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="FILE"/>
+            <appender-ref ref="ASYNC_SLACK"/>
+        </root>
+    </springProfile>
+</configuration>
