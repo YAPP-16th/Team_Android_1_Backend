@@ -2,6 +2,7 @@ package com.eroom.erooja.domain.model;
 
 import com.eroom.erooja.domain.common.AuditProperties;
 import com.eroom.erooja.domain.enums.GoalRole;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -37,10 +38,12 @@ public class MemberGoal extends AuditProperties {
 
     private LocalDateTime endDt;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "goal_id", updatable = false, insertable = false)
     private Goal goal;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "uid", updatable = false, insertable = false)
     private Members member;

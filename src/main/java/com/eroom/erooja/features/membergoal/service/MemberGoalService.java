@@ -6,6 +6,7 @@ import com.eroom.erooja.domain.model.Goal;
 import com.eroom.erooja.domain.model.MemberGoal;
 import com.eroom.erooja.domain.model.MemberGoalPK;
 import com.eroom.erooja.features.goal.repository.GoalRepository;
+import com.eroom.erooja.features.goal.service.GoalService;
 import com.eroom.erooja.features.membergoal.dto.ExistGoalJoinRequestDTO;
 import com.eroom.erooja.features.membergoal.dto.NewGoalJoinRequestDTO;
 import com.eroom.erooja.features.membergoal.repository.MemberGoalRepository;
@@ -19,12 +20,14 @@ import java.time.LocalDateTime;
 public class MemberGoalService {
     private final MemberGoalRepository memberGoalRepository;
     private final GoalRepository goalRepository;
+    private final GoalService goalService;
 
     public MemberGoal joinExistGoal(String uid, ExistGoalJoinRequestDTO goalJoinRequest) {
         Goal goal = goalRepository.findById(goalJoinRequest.getGoalId())
                 .orElseThrow(MemberGoalNotFoundException::new);
 
         increaseCopyCount(goalJoinRequest.getOwnerUid(), goalJoinRequest.getGoalId());
+        goalService.increaseJoinCount(goal.getId());
 
         if(goal.getIsDateFixed())
             return joinGoal(uid, goalJoinRequest.getGoalId(), goal.getEndDt(), GoalRole.PARTICIPANT);
@@ -35,6 +38,8 @@ public class MemberGoalService {
     public MemberGoal joinNewGoal(String uid, NewGoalJoinRequestDTO newGoalJoinRequest){
         Goal goal = goalRepository.findById(newGoalJoinRequest.getGoalId())
                 .orElseThrow(MemberGoalNotFoundException::new);
+
+        goalService.increaseJoinCount(goal.getId());
 
         if(goal.getIsDateFixed())
             return joinGoal(uid, goal.getId(), goal.getEndDt(), GoalRole.PARTICIPANT);

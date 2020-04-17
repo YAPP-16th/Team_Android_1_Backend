@@ -19,7 +19,8 @@ import java.time.LocalDateTime;
 public class GoalService {
     private final GoalRepository goalRepository;
 
-    public Goal createGoal(CreateGoalRequestDTO createGoalDTO){ ;
+    public Goal createGoal(CreateGoalRequestDTO createGoalDTO) {
+        ;
         return goalRepository.save(Goal.builder()
                 .isDateFixed(createGoalDTO.getIsDateFixed())
                 .title(createGoalDTO.getTitle())
@@ -30,15 +31,13 @@ public class GoalService {
                 .joinCount(1).build());
     }
 
-    public Goal findGoalById(Long goalId) throws GoalNotFoundException{
-        return goalRepository
-                .findById(goalId)
+    public Goal findGoalById(Long goalId) throws GoalNotFoundException {
+        return goalRepository.findById(goalId)
                 .orElseThrow(() -> new GoalNotFoundException(ErrorEnum.GOAL_NOT_FOUND));
     }
 
-    public Page<Goal> findGoalListByInterestId(Long interestId, Pageable pageable){
-        return goalRepository
-                .findGoalByInterestId(interestId, pageable);
+    public Page<Goal> findGoalListByInterestId(Long interestId, Pageable pageable) {
+        return goalRepository.findGoalByInterestId(interestId, pageable);
     }
 
     public Page<Goal> search(GoalCriteria goalCriteria) {
@@ -47,5 +46,12 @@ public class GoalService {
         } else {
             return goalRepository.findAll(new GoalSpecifications(goalCriteria), goalCriteria.getPageRequest());
         }
+    }
+
+    public void increaseJoinCount(Long goalId) throws GoalNotFoundException {
+        Goal goal = goalRepository.findById(goalId)
+                .orElseThrow(() -> new GoalNotFoundException(ErrorEnum.GOAL_NOT_FOUND));
+        goal.increaseJoinCount(1);
+        goalRepository.save(goal);
     }
 }
