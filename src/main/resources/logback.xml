@@ -15,8 +15,7 @@
             <layout class="ch.qos.logback.classic.PatternLayout">
                 <pattern>%d{HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
             </layout>
-            <token>xoxb-855704080770-1056376812690-1zMcFY4T4ZUvcNt76WBDKbkq</token>
-            <webhookUri>https://hooks.slack.com/services/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</webhookUri>
+            <webhookUri>https://hooks.slack.com/services/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</webhookUri>
             <username>erooja-${ACTIVE_PROFILE}</username>
             <iconEmoji>:stuck_out_tongue_winking_eye:</iconEmoji>
             <colorCoding>true</colorCoding>
