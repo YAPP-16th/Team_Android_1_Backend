@@ -13,7 +13,7 @@
             <layout class="ch.qos.logback.classic.PatternLayout">
                 <pattern>%d{HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
             </layout>
-            <webhookUri>https://hooks.slack.com/services/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</webhookUri>
+            <webhookUri>https://hooks.slack.com/services/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</webhookUri>
             <channel>#team_eroom_error_alram</channel>
             <colorCoding>true</colorCoding>
         </appender>
@@ -29,7 +29,7 @@
             <file>logs/erooja.log</file>
 
             <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-                <fileNamePattern>logs/archived/erooja.%d{yyyy-MM-dd}.log</fileNamePattern>
+                <fileNamePattern>logs/archived/erooja.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
                 <maxFileSize>10MB</maxFileSize>
                 <totalSizeCap>20GB</totalSizeCap>
                 <maxHistory>60</maxHistory>
