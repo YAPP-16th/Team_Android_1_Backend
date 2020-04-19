@@ -48,6 +48,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
                 filterChain.doFilter(request, response);
             } catch (JwtException e) {
+                logger.error("JWT 오류, 에러 URL 로 Redirect 합니다. - {}", e);
                 response.sendRedirect("/api/v1/auth/token/error");
             }
         } else {
