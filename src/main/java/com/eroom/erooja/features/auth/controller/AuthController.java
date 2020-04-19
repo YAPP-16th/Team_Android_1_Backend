@@ -9,6 +9,8 @@ import com.eroom.erooja.features.auth.service.MemberAuthService;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -21,16 +23,15 @@ import static com.eroom.erooja.common.constants.ErrorEnum.AUTH_ACCESS_DENIED;
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 public class AuthController {
+    private final static Logger logger = LoggerFactory.getLogger(AuthController.class);
+
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberAuthService memberAuthService;
 
-    @GetMapping("/error")
-    public ResponseEntity<?> error() {
-        throw new EroojaException(AUTH_ACCESS_DENIED);
-    }
-
     @GetMapping("/token/error")
     public ResponseEntity<?> tokenError(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
+        logger.error("토큰 에러 엔드포인트 요청 감지 - Authorization Header : {}", authorizationHeader);
+
         jwtTokenProvider.getUidFromHeader(authorizationHeader);
         throw new JwtException("알 수 없는 JWT 오류입니다.");
     }
