@@ -95,7 +95,7 @@ public class GoalCreateControllerTest {
                 .willReturn(new ArrayList());
         given(jwtTokenProvider.getUidFromHeader("Bearer [TOKEN]"))
                 .willReturn(mockUid);
-        given(memberGoalService.joinGoal(mockUid, newGoal.getId(), newGoal.getEndDt(), GoalRole.OWNER))
+        given(memberGoalService.addMemberGoal(mockUid, newGoal.getId(), newGoal.getEndDt(), GoalRole.OWNER))
                 .willReturn(newMemberGoal);
 
         //when, then

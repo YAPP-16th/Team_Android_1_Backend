@@ -10,6 +10,7 @@ import com.eroom.erooja.features.goal.service.GoalService;
 import com.eroom.erooja.features.membergoal.dto.ExistGoalJoinRequestDTO;
 import com.eroom.erooja.features.membergoal.dto.NewGoalJoinRequestDTO;
 import com.eroom.erooja.features.membergoal.repository.MemberGoalRepository;
+import com.eroom.erooja.features.todo.service.TodoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,7 @@ public class MemberGoalService {
     private final MemberGoalRepository memberGoalRepository;
     private final GoalRepository goalRepository;
     private final GoalService goalService;
+    private final TodoService todoService;
 
     public MemberGoal joinExistGoal(String uid, ExistGoalJoinRequestDTO goalJoinRequest) {
         Goal goal = goalRepository.findById(goalJoinRequest.getGoalId())
@@ -29,22 +31,31 @@ public class MemberGoalService {
         increaseCopyCount(goalJoinRequest.getOwnerUid(), goalJoinRequest.getGoalId());
         goalService.increaseJoinCount(goal.getId());
 
-        if(goal.getIsDateFixed())
-            return joinGoal(uid, goalJoinRequest.getGoalId(), goal.getEndDt(), GoalRole.PARTICIPANT);
-        else
-            return joinGoal(uid, goalJoinRequest.getGoalId(), goalJoinRequest.getEndDt(), GoalRole.PARTICIPANT);
+        MemberGoal memberGoal = null;
+        if (goal.getIsDateFixed()) {
+            memberGoal = addMemberGoal(uid, goal.getId(), goal.getEndDt(), GoalRole.PARTICIPANT);
+        } else {
+            memberGoal = addMemberGoal(uid, goal.getId(), goalJoinRequest.getEndDt(), GoalRole.PARTICIPANT);
+        }
+        todoService.addTodo(uid, goal.getId(), goalJoinRequest.getTodoList());
+        return memberGoal;
     }
 
-    public MemberGoal joinNewGoal(String uid, NewGoalJoinRequestDTO newGoalJoinRequest){
+    public MemberGoal joinNewGoal(String uid, NewGoalJoinRequestDTO newGoalJoinRequest) {
         Goal goal = goalRepository.findById(newGoalJoinRequest.getGoalId())
                 .orElseThrow(MemberGoalNotFoundException::new);
 
         goalService.increaseJoinCount(goal.getId());
 
-        if(goal.getIsDateFixed())
-            return joinGoal(uid, goal.getId(), goal.getEndDt(), GoalRole.PARTICIPANT);
-        else
-            return joinGoal(uid, goal.getId(), newGoalJoinRequest.getEndDt(), GoalRole.PARTICIPANT);
+        MemberGoal memberGoal = null;
+        if (goal.getIsDateFixed()) {
+            memberGoal = addMemberGoal(uid, goal.getId(), goal.getEndDt(), GoalRole.PARTICIPANT);
+        } else {
+            memberGoal = addMemberGoal(uid, goal.getId(), newGoalJoinRequest.getEndDt(), GoalRole.PARTICIPANT);
+        }
+        todoService.addTodo(uid, goal.getId(), newGoalJoinRequest.getTodoList());
+
+        return memberGoal;
     }
 
     public void increaseCopyCount(String uid, Long goalId) {
@@ -54,7 +65,7 @@ public class MemberGoalService {
         memberGoalRepository.save(memberGoal);
     }
 
-    public MemberGoal joinGoal(String uid, Long goalId, LocalDateTime endDt, GoalRole goalRole) {
+    public MemberGoal addMemberGoal(String uid, Long goalId, LocalDateTime endDt, GoalRole goalRole) {
         return memberGoalRepository.save(MemberGoal.builder()
                 .goalId(goalId)
                 .uid(uid)
