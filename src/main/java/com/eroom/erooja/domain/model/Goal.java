@@ -42,7 +42,7 @@ public class Goal extends AuditProperties {
     private LocalDateTime endDt;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "goal", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "goal", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GoalJobInterest> goalJobInterests;
 
     @JsonProperty(value = "jobInterests")
@@ -69,6 +69,10 @@ public class Goal extends AuditProperties {
         this.startDt = startDt;
         this.endDt = endDt;
         this.goalJobInterests = goalJobInterests;
+    }
+
+    public int increaseJoinCount(int count){
+        return this.joinCount += count;
     }
 
 }
