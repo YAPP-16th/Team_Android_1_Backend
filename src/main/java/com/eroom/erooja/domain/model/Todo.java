@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @EqualsAndHashCode(of = {"id"})
+@Builder
 @NoArgsConstructor @AllArgsConstructor
 @Getter @Setter
 @Entity
@@ -19,7 +20,7 @@ public class Todo extends AuditProperties {
     private String content;
 
     @Column(nullable = false)
-    private Boolean isEnd;
+    private Boolean isEnd = false;
 
     @Column(nullable = false)
     private int priority;

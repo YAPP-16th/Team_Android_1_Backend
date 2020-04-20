@@ -7,10 +7,12 @@ import com.eroom.erooja.features.goal.repository.GoalRepository;
 import com.eroom.erooja.domain.specification.GoalCriteria;
 import com.eroom.erooja.domain.specification.GoalSpecifications;
 import com.eroom.erooja.features.goal.dto.CreateGoalRequestDTO;
+import com.eroom.erooja.features.todo.service.TodoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
@@ -18,9 +20,9 @@ import java.time.LocalDateTime;
 @Service
 public class GoalService {
     private final GoalRepository goalRepository;
+    private final TodoService todoService;
 
     public Goal createGoal(CreateGoalRequestDTO createGoalDTO) {
-        ;
         return goalRepository.save(Goal.builder()
                 .isDateFixed(createGoalDTO.getIsDateFixed())
                 .title(createGoalDTO.getTitle())
