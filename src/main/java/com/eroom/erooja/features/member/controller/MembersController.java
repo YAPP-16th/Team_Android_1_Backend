@@ -57,7 +57,7 @@ public class MembersController {
     @PostMapping("/nickname/duplicity")
     public ResponseEntity checkNicknameDuplicity(@RequestBody MemberDTO memberDTO) throws EroojaException {
         if (memberService.isNicknameExist(memberDTO.getNickname().trim())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(true);
+            return ResponseEntity.ok(true);
         } else {
             return ResponseEntity.ok(false);
         }
