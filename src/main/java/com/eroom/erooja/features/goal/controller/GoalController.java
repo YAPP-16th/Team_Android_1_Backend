@@ -93,7 +93,7 @@ public class GoalController {
         goalJobInterestService.addJobInterestListForGoal(newGoal.getId(),
                 createGoalRequest.getInterestIdList());
 
-        memberGoalService.joinGoal(uid,
+        memberGoalService.addMemberGoal(uid,
                 newGoal.getId(),
                 newGoal.getEndDt(),
                 GoalRole.OWNER);

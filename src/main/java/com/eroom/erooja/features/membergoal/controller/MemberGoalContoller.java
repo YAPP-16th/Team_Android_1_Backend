@@ -7,11 +7,16 @@ import com.eroom.erooja.features.membergoal.dto.ExistGoalJoinRequestDTO;
 import com.eroom.erooja.features.membergoal.dto.NewGoalJoinRequestDTO;
 import com.eroom.erooja.features.membergoal.service.MemberGoalService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/membergoal")
@@ -19,10 +24,17 @@ import org.springframework.web.bind.annotation.*;
 public class MemberGoalContoller {
     private final MemberGoalService memberGoalService;
     private final JwtTokenProvider jwtTokenProvider;
+    private static final Logger logger = LoggerFactory.getLogger(MemberGoalContoller.class);
 
-    @PostMapping
-    public ResponseEntity joinExistGoal(@RequestBody ExistGoalJoinRequestDTO goalJoinRequest,
-                                        @RequestHeader(name = HttpHeaders.AUTHORIZATION) String header){
+    @PostMapping(produces = "application/json; charset=utf-8")
+    public ResponseEntity joinExistGoal(@RequestBody @Valid ExistGoalJoinRequestDTO goalJoinRequest,
+                                        @RequestHeader(name = HttpHeaders.AUTHORIZATION) String header,
+                                        Errors errors) {
+        if (errors.hasErrors()) {
+            logger.info("error : {}", errors.getFieldError().getDefaultMessage());
+            return new ResponseEntity(errors.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST);
+        }
+
         String uid = jwtTokenProvider.getUidFromHeader(header);
         MemberGoal memberGoal = memberGoalService.joinExistGoal(
                 uid,
@@ -32,8 +44,14 @@ public class MemberGoalContoller {
     }
 
     @PostMapping("/new")
-    public ResponseEntity joinNewGoal(@RequestBody NewGoalJoinRequestDTO newGoalJoinRequest,
-                                      @RequestHeader(name = HttpHeaders.AUTHORIZATION) String header){
+    public ResponseEntity joinNewGoal(@RequestBody @Valid NewGoalJoinRequestDTO newGoalJoinRequest,
+                                      @RequestHeader(name = HttpHeaders.AUTHORIZATION) String header,
+                                      Errors errors) {
+        if (errors.hasErrors()) {
+            logger.info("error : {}", errors.getFieldError().getDefaultMessage());
+            return new ResponseEntity(errors.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST);
+        }
+
         String uid = jwtTokenProvider.getUidFromHeader(header);
         MemberGoal memberGoal = memberGoalService.joinNewGoal(uid, newGoalJoinRequest);
         return new ResponseEntity(memberGoal, HttpStatus.CREATED);
@@ -41,12 +59,12 @@ public class MemberGoalContoller {
 
 
     @GetMapping("/goal")
-    public ResponseEntity getGoalJoinListByUid(@RequestParam String uid){
+    public ResponseEntity getGoalJoinListByUid(@RequestParam String uid) {
         return new ResponseEntity(null, HttpStatus.OK);
     }
 
     @GetMapping("/member")
-    public ResponseEntity getMemberListByGoalId(@RequestParam Long goalId){
+    public ResponseEntity getMemberListByGoalId(@RequestParam Long goalId) {
         return new ResponseEntity(null, HttpStatus.OK);
     }
 }
