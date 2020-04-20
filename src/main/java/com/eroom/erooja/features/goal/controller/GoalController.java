@@ -12,6 +12,7 @@ import com.eroom.erooja.features.goal.dto.GoalSearchRequestDTO;
 import com.eroom.erooja.features.goal.service.GoalService;
 import com.eroom.erooja.features.goaljobinterest.service.GoalJobInterestService;
 import com.eroom.erooja.features.membergoal.service.MemberGoalService;
+import com.eroom.erooja.features.todo.service.TodoService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,7 @@ public class GoalController {
     private final GoalService goalService;
     private final GoalJobInterestService goalJobInterestService;
     private final MemberGoalService memberGoalService;
+    private final TodoService todoService;
     private final JwtTokenProvider jwtTokenProvider;
     private static final Logger logger = LoggerFactory.getLogger(GoalController.class);
 
@@ -95,6 +97,8 @@ public class GoalController {
                 newGoal.getId(),
                 newGoal.getEndDt(),
                 GoalRole.OWNER);
+
+        todoService.addTodo(uid, newGoal.getId(), createGoalRequest.getTodoList());
 
         return new ResponseEntity(newGoal, HttpStatus.CREATED);
     }
