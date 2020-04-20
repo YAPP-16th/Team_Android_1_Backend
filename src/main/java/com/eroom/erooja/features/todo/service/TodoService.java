@@ -6,11 +6,8 @@ import com.eroom.erooja.features.todo.dto.TodoDTO;
 import com.eroom.erooja.features.todo.repository.TodoRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;i
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,7 +16,6 @@ import java.util.stream.Collectors;
 public class TodoService {
     private final TodoRepository todoRepository;
     private final ModelMapper modelMapper;
-    private Logger logger = LoggerFactory.getLogger(TodoService.class);
 
     public List<Todo> addTodo(String uid, Long goalId, List<TodoDTO> todoDTOList) {
         List<Todo> todoList = todoDTOList.stream()

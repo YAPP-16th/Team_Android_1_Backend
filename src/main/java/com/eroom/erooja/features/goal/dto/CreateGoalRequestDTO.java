@@ -1,5 +1,6 @@
 package com.eroom.erooja.features.goal.dto;
 
+import com.eroom.erooja.features.todo.dto.TodoDTO;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
@@ -30,4 +31,8 @@ public class CreateGoalRequestDTO {
     @NotNull(message = "관련직무를 1개 이상 선택해주세요")
     @Size(min = 1, message = "관련직무를 1개 이상 선택해주세요")
     private List<Long> interestIdList;
+
+    @NotNull(message = "1개 이상의 리스트를 추가해주세요")
+    @Size(min = 1, message = "1개 이상의 리스트를 추가해주세요")
+    private List<TodoDTO> todoList;
 }
