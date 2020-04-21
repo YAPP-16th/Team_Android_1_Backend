@@ -1,5 +1,6 @@
 package com.eroom.erooja.features.membergoal.controller;
 
+import com.eroom.erooja.common.exception.EroojaException;
 import com.eroom.erooja.domain.model.MemberGoal;
 import com.eroom.erooja.features.auth.jwt.JwtTokenProvider;
 import com.eroom.erooja.features.membergoal.dto.GoalJoinRequestDTO;
@@ -15,6 +16,8 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+
+import static com.eroom.erooja.common.constants.ErrorEnum.GOAL_JOIN_ALREADY_EXIST;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/membergoal")
@@ -34,6 +37,10 @@ public class MemberGoalContoller {
         }
 
         String uid = jwtTokenProvider.getUidFromHeader(header);
+
+        if (memberGoalService.isAlreadyExistJoin(uid, goalJoinRequest.getGoalId()))
+            throw new EroojaException(GOAL_JOIN_ALREADY_EXIST);
+
         MemberGoal memberGoal = memberGoalService.joinExistGoal(
                 uid,
                 goalJoinRequest);

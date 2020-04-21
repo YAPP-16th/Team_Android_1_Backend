@@ -47,6 +47,11 @@ public enum ErrorEnum {
     TODO_PRIORITY_NOT_CORRECT(HttpStatus.NOT_FOUND, "TOD_001", "할일 우선순위는 0부터 1씩 차례대로 존재해야합니다."),
     /* 할일 CRUD 오류 메세지 정의 끝 */
 
+    /* 목표참여 CRUD 오류 메세지 정의 */
+    GOAL_JOIN_ALREADY_EXIST(HttpStatus.NOT_FOUND, "TOD_001", "이미 목표담기를 했습니다. 중복담기 불가능합니다."),
+    /* 목표참여CRUD 오류 메세지 정의 끝 */
+
+
     ETC(HttpStatus.INTERNAL_SERVER_ERROR, "ETC_000", "알 수 없는 오류입니다.");
 
     private ErrorResponse errorResponse;
