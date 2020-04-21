@@ -7,8 +7,7 @@ import com.eroom.erooja.domain.model.MemberGoal;
 import com.eroom.erooja.domain.model.MemberGoalPK;
 import com.eroom.erooja.features.goal.repository.GoalRepository;
 import com.eroom.erooja.features.goal.service.GoalService;
-import com.eroom.erooja.features.membergoal.dto.ExistGoalJoinRequestDTO;
-import com.eroom.erooja.features.membergoal.dto.NewGoalJoinRequestDTO;
+import com.eroom.erooja.features.membergoal.dto.GoalJoinRequestDTO;
 import com.eroom.erooja.features.membergoal.repository.MemberGoalRepository;
 import com.eroom.erooja.features.todo.service.TodoService;
 import lombok.RequiredArgsConstructor;
@@ -24,37 +23,22 @@ public class MemberGoalService {
     private final GoalService goalService;
     private final TodoService todoService;
 
-    public MemberGoal joinExistGoal(String uid, ExistGoalJoinRequestDTO goalJoinRequest) {
+    public MemberGoal joinExistGoal(String uid, GoalJoinRequestDTO goalJoinRequest) {
         Goal goal = goalRepository.findById(goalJoinRequest.getGoalId())
                 .orElseThrow(MemberGoalNotFoundException::new);
 
-        increaseCopyCount(goalJoinRequest.getOwnerUid(), goalJoinRequest.getGoalId());
+        if(goalJoinRequest.isExistOwnerUid())
+            increaseCopyCount(goalJoinRequest.getOwnerUid(), goalJoinRequest.getGoalId());
+
         goalService.increaseJoinCount(goal.getId());
 
         MemberGoal memberGoal = null;
-        if (goal.getIsDateFixed()) {
+        if (goal.getIsDateFixed())
             memberGoal = addMemberGoal(uid, goal.getId(), goal.getEndDt(), GoalRole.PARTICIPANT);
-        } else {
+        else
             memberGoal = addMemberGoal(uid, goal.getId(), goalJoinRequest.getEndDt(), GoalRole.PARTICIPANT);
-        }
+
         todoService.addTodo(uid, goal.getId(), goalJoinRequest.getTodoList());
-        return memberGoal;
-    }
-
-    public MemberGoal joinNewGoal(String uid, NewGoalJoinRequestDTO newGoalJoinRequest) {
-        Goal goal = goalRepository.findById(newGoalJoinRequest.getGoalId())
-                .orElseThrow(MemberGoalNotFoundException::new);
-
-        goalService.increaseJoinCount(goal.getId());
-
-        MemberGoal memberGoal = null;
-        if (goal.getIsDateFixed()) {
-            memberGoal = addMemberGoal(uid, goal.getId(), goal.getEndDt(), GoalRole.PARTICIPANT);
-        } else {
-            memberGoal = addMemberGoal(uid, goal.getId(), newGoalJoinRequest.getEndDt(), GoalRole.PARTICIPANT);
-        }
-        todoService.addTodo(uid, goal.getId(), newGoalJoinRequest.getTodoList());
-
         return memberGoal;
     }
 
@@ -64,6 +48,7 @@ public class MemberGoalService {
         memberGoal.increaseCopyCount();
         memberGoalRepository.save(memberGoal);
     }
+
 
     public MemberGoal addMemberGoal(String uid, Long goalId, LocalDateTime endDt, GoalRole goalRole) {
         return memberGoalRepository.save(MemberGoal.builder()
