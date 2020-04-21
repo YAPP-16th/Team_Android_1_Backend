@@ -15,7 +15,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GoalJoinRequestDTO {
+    @NotNull(message = "목표id를 전송해야 합니다.")
     Long goalId;
+
     String ownerUid;
 
     @Future(message = "반드시 미래 날짜여야합니다.")
