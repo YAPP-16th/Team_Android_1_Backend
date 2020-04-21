@@ -1,5 +1,7 @@
 package com.eroom.erooja.features.membergoal.service;
 
+import com.eroom.erooja.common.constants.ErrorEnum;
+import com.eroom.erooja.common.exception.EroojaException;
 import com.eroom.erooja.common.exception.MemberGoalNotFoundException;
 import com.eroom.erooja.domain.enums.GoalRole;
 import com.eroom.erooja.domain.model.Goal;
@@ -14,6 +16,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
+
+import static com.eroom.erooja.common.constants.ErrorEnum.GOAL_JOIN_ALREADY_EXIST;
 
 @RequiredArgsConstructor
 @Service
@@ -49,6 +54,13 @@ public class MemberGoalService {
         memberGoalRepository.save(memberGoal);
     }
 
+    public Boolean isAlreadyExistJoin(String uid, Long goalId){
+        Optional<MemberGoal> memberGoal = memberGoalRepository.findById(new MemberGoalPK(uid, goalId));
+        if(memberGoal.isPresent()){
+            return true;
+        }
+        return false;
+    }
 
     public MemberGoal addMemberGoal(String uid, Long goalId, LocalDateTime endDt, GoalRole goalRole) {
         return memberGoalRepository.save(MemberGoal.builder()
