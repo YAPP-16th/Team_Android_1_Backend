@@ -1,10 +1,8 @@
 package com.eroom.erooja.features.membergoal.controller;
 
-import com.eroom.erooja.domain.enums.GoalRole;
 import com.eroom.erooja.domain.model.MemberGoal;
 import com.eroom.erooja.features.auth.jwt.JwtTokenProvider;
-import com.eroom.erooja.features.membergoal.dto.ExistGoalJoinRequestDTO;
-import com.eroom.erooja.features.membergoal.dto.NewGoalJoinRequestDTO;
+import com.eroom.erooja.features.membergoal.dto.GoalJoinRequestDTO;
 import com.eroom.erooja.features.membergoal.service.MemberGoalService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -27,7 +25,7 @@ public class MemberGoalContoller {
     private static final Logger logger = LoggerFactory.getLogger(MemberGoalContoller.class);
 
     @PostMapping(produces = "application/json; charset=utf-8")
-    public ResponseEntity joinExistGoal(@RequestBody @Valid ExistGoalJoinRequestDTO goalJoinRequest,
+    public ResponseEntity joinExistGoal(@RequestBody @Valid GoalJoinRequestDTO goalJoinRequest,
                                         @RequestHeader(name = HttpHeaders.AUTHORIZATION) String header,
                                         Errors errors) {
         if (errors.hasErrors()) {
@@ -42,21 +40,6 @@ public class MemberGoalContoller {
 
         return new ResponseEntity(memberGoal, HttpStatus.CREATED);
     }
-
-    @PostMapping("/new")
-    public ResponseEntity joinNewGoal(@RequestBody @Valid NewGoalJoinRequestDTO newGoalJoinRequest,
-                                      @RequestHeader(name = HttpHeaders.AUTHORIZATION) String header,
-                                      Errors errors) {
-        if (errors.hasErrors()) {
-            logger.info("error : {}", errors.getFieldError().getDefaultMessage());
-            return new ResponseEntity(errors.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST);
-        }
-
-        String uid = jwtTokenProvider.getUidFromHeader(header);
-        MemberGoal memberGoal = memberGoalService.joinNewGoal(uid, newGoalJoinRequest);
-        return new ResponseEntity(memberGoal, HttpStatus.CREATED);
-    }
-
 
     @GetMapping("/goal")
     public ResponseEntity getGoalJoinListByUid(@RequestParam String uid) {

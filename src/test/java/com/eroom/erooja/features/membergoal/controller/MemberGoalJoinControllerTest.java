@@ -4,7 +4,7 @@ import com.eroom.erooja.domain.enums.GoalRole;
 import com.eroom.erooja.domain.model.Goal;
 import com.eroom.erooja.domain.model.MemberGoal;
 import com.eroom.erooja.features.auth.jwt.JwtTokenProvider;
-import com.eroom.erooja.features.membergoal.dto.ExistGoalJoinRequestDTO;
+import com.eroom.erooja.features.membergoal.dto.GoalJoinRequestDTO;
 import com.eroom.erooja.features.membergoal.service.MemberGoalService;
 import com.eroom.erooja.features.todo.dto.TodoDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -91,7 +91,7 @@ public class MemberGoalJoinControllerTest {
                 .createDt(LocalDateTime.now())
                 .role(GoalRole.PARTICIPANT).build();
 
-        ExistGoalJoinRequestDTO goalJoinRequest = ExistGoalJoinRequestDTO.builder()
+        GoalJoinRequestDTO goalJoinRequest = GoalJoinRequestDTO.builder()
                 .goalId(goal.getId())
                 .ownerUid(existMemberGoal.getUid())
                 .endDt(endDt)
@@ -101,7 +101,7 @@ public class MemberGoalJoinControllerTest {
                 .willReturn(mockUid);
 
         given(memberGoalService.joinExistGoal(eq(mockUid),
-                any(ExistGoalJoinRequestDTO.class)))
+                any(GoalJoinRequestDTO.class)))
                 .willReturn(newMemberGoal);
 
         this.mockMvc.perform(post("/api/v1/membergoal")
