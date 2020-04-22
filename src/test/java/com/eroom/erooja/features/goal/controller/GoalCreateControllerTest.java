@@ -8,6 +8,8 @@ import com.eroom.erooja.features.goal.dto.CreateGoalRequestDTO;
 import com.eroom.erooja.features.goal.service.GoalService;
 import com.eroom.erooja.features.goaljobinterest.service.GoalJobInterestService;
 import com.eroom.erooja.features.membergoal.service.MemberGoalService;
+import com.eroom.erooja.features.todo.dto.TodoDTO;
+import com.eroom.erooja.features.todo.service.TodoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
@@ -26,6 +28,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
@@ -49,6 +52,8 @@ public class GoalCreateControllerTest {
     private JwtTokenProvider jwtTokenProvider;
     @MockBean
     private MemberGoalService memberGoalService;
+    @MockBean
+    private TodoService todoService;
     private final MockMvc mockMvc;
     private final ObjectMapper objectMapper;
 
@@ -60,12 +65,18 @@ public class GoalCreateControllerTest {
         LocalDateTime endDt = startDt.plusHours(2);
         String mockUid = "KAKAO@testId";
 
+        List<TodoDTO> todoDTOList = new ArrayList();
+        todoDTOList.add(TodoDTO.builder()
+                .content("fisrt")
+                .priority(0).build());
+
         CreateGoalRequestDTO createGoalRequest = CreateGoalRequestDTO.builder()
                 .endDt(endDt)
                 .title("title")
                 .description("description")
                 .isDateFixed(false)
-                .interestIdList(Arrays.asList(0L)).build();
+                .interestIdList(Arrays.asList(0L))
+                .todoList(todoDTOList).build();
 
         Goal newGoal = Goal.builder()
                 .id(0L)
@@ -95,8 +106,10 @@ public class GoalCreateControllerTest {
                 .willReturn(new ArrayList());
         given(jwtTokenProvider.getUidFromHeader("Bearer [TOKEN]"))
                 .willReturn(mockUid);
-        given(memberGoalService.joinGoal(mockUid, newGoal.getId(), newGoal.getEndDt(), GoalRole.OWNER))
+        given(memberGoalService.addMemberGoal(mockUid, newGoal.getId(), newGoal.getEndDt(), GoalRole.OWNER))
                 .willReturn(newMemberGoal);
+        given(todoService.addTodo(anyString(), anyLong(), anyList()))
+                .willReturn(new ArrayList());
 
         //when, then
         this.mockMvc.perform(post("/api/v1/goal")
