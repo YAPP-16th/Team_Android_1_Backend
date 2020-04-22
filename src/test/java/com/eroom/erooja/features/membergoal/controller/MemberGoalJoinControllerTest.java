@@ -4,8 +4,9 @@ import com.eroom.erooja.domain.enums.GoalRole;
 import com.eroom.erooja.domain.model.Goal;
 import com.eroom.erooja.domain.model.MemberGoal;
 import com.eroom.erooja.features.auth.jwt.JwtTokenProvider;
-import com.eroom.erooja.features.membergoal.dto.ExistGoalJoinRequestDTO;
+import com.eroom.erooja.features.membergoal.dto.GoalJoinRequestDTO;
 import com.eroom.erooja.features.membergoal.service.MemberGoalService;
+import com.eroom.erooja.features.todo.dto.TodoDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
@@ -16,12 +17,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -31,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ActiveProfiles("test")
+@Profile({"test"}) @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @AutoConfigureMockMvc(addFilters = false)
@@ -52,6 +56,11 @@ public class MemberGoalJoinControllerTest {
         LocalDateTime startDt = LocalDateTime.now();
         LocalDateTime endDt = startDt.plusHours(2);
         String mockUid = "KAKAO@testId";
+
+        List<TodoDTO> todoDTOList = new ArrayList();
+        todoDTOList.add(TodoDTO.builder()
+                .content("fisrt")
+                .priority(0).build());
 
         Goal goal = Goal.builder()
                 .id(0L)
@@ -83,16 +92,17 @@ public class MemberGoalJoinControllerTest {
                 .createDt(LocalDateTime.now())
                 .role(GoalRole.PARTICIPANT).build();
 
-        ExistGoalJoinRequestDTO goalJoinRequest = ExistGoalJoinRequestDTO.builder()
+        GoalJoinRequestDTO goalJoinRequest = GoalJoinRequestDTO.builder()
                 .goalId(goal.getId())
                 .ownerUid(existMemberGoal.getUid())
-                .endDt(endDt).build();
+                .endDt(endDt)
+                .todoList(todoDTOList).build();
 
         given(jwtTokenProvider.getUidFromHeader("Bearer [TOKEN]"))
                 .willReturn(mockUid);
 
         given(memberGoalService.joinExistGoal(eq(mockUid),
-                any(ExistGoalJoinRequestDTO.class)))
+                any(GoalJoinRequestDTO.class)))
                 .willReturn(newMemberGoal);
 
         this.mockMvc.perform(post("/api/v1/membergoal")
