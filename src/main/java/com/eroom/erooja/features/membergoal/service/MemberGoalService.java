@@ -96,4 +96,8 @@ public class MemberGoalService {
 
         return new PageImpl<>(members, memberGoalPage.getPageable(), memberGoalPage.getTotalElements());
     }
+
+    public int countGoalJoinByGoalId(Long goalId){
+        return memberGoalRepository.countMemberGoalByGoalId(goalId);
+    }
 }

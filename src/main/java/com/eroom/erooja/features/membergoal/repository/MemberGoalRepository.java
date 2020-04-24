@@ -15,6 +15,8 @@ public interface MemberGoalRepository extends JpaRepository<MemberGoal, MemberGo
 
     Page<MemberGoal> findAllByGoal_Id(Long goalId, Pageable pageable);
 
+    int countMemberGoalByGoalId(Long goalId);
+
     Page<MemberGoal> findAllByUidAndEndDtIsAfter(String uid, Pageable pageable, LocalDateTime now);
 
     Page<MemberGoal> findAllByUidAndEndDtIsBefore(String uid, Pageable pageable, LocalDateTime now);

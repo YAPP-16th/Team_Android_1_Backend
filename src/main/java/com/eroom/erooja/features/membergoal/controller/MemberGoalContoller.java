@@ -106,4 +106,10 @@ public class MemberGoalContoller {
     public ResponseEntity getMemberListByGoalId(@RequestParam Long goalId) {
         return new ResponseEntity(null, HttpStatus.OK);
     }
+
+    @GetMapping("{goalId}/count")
+    public ResponseEntity countGoalJoinByGoalId(@PathVariable Long goalId){
+        int count = memberGoalService.countGoalJoinByGoalId(goalId);
+        return ResponseEntity.status(HttpStatus.OK).body(count);
+    }
 }

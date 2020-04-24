@@ -11,18 +11,19 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.MariaDBDialect
     open-in-view: false
+    show_sql : true
     hibernate:
       ddl-auto: update
     properties:
       hibernate:
-        show-sql: false
-        format_sql: false
+        format_sql: true
+
 
   datasource:
     platform: mariadb
-    url: jdbc:mariadb:failover://localhost:3306/erooja_test?autoReconnect=true
+    url: jdbc:mariadb:failover://localhost:3307/erooja_test?autoReconnect=true
     username: root
-    password:
+    password: 1234
     driverClassName: org.mariadb.jdbc.Driver
 
   data:
@@ -32,3 +33,5 @@ spring:
 jwt:
   secret: jwtLocalSecret
 
+KAKAO_ADMIN_KEY: 611a38980c02a420fac02e66330bc526
+KAKAO_REST_API_KEY: 56711aad026298f90acfba38429b10fa
