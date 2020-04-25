@@ -9,14 +9,12 @@ import com.eroom.erooja.features.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/member")
@@ -61,5 +59,37 @@ public class MembersController {
         } else {
             return ResponseEntity.ok(false);
         }
+    }
+
+    @PutMapping(value = "/image", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity uploadAndUpdateImage(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String header,
+                                               @RequestBody MultipartFile multipartImageFile) {
+        String uid = jwtTokenProvider.getUidFromHeader(header);
+
+        Members member = memberService.updateProfilePicture(uid, multipartImageFile);
+        return ResponseEntity.ok(MemberDTO.of(member));
+    }
+
+    @GetMapping("/images")
+    public ResponseEntity getSavedImage(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String header) {
+        String uid = jwtTokenProvider.getUidFromHeader(header);
+
+        return ResponseEntity.ok(memberService.getSavedImagePaths(uid));
+    }
+
+    @DeleteMapping("/images")
+    public ResponseEntity deleteImage(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String header,
+                                      @RequestBody List<String> imagePaths) {
+        String uid = jwtTokenProvider.getUidFromHeader(header);
+
+        for (String path : imagePaths) {
+            if (!path.contains(uid)) {
+                throw new EroojaException(ErrorEnum.MEMBER_IMAGE_DELETE_UNAUTHORIZED);
+            }
+        }
+
+        memberService.deleteSavedImages(imagePaths);
+
+        return ResponseEntity.ok().build();
     }
 }
