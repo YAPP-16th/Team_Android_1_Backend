@@ -105,7 +105,7 @@ public class MemberGoalContoller {
 
     @GetMapping("/{goalId}/todo")
     public ResponseEntity getJoinTodoListByGoalId(Pageable pageable, @PathVariable Long goalId) {
-        Page<MemberGoal> goalJoinTodoDtoPage = memberGoalService.getJoinTodoListByGoalId(goalId, pageable);
+        Page<GoalJoinTodoDto> goalJoinTodoDtoPage = memberGoalService.getJoinTodoListByGoalId(goalId, pageable);
         return new ResponseEntity(goalJoinTodoDtoPage, HttpStatus.OK);
     }
 

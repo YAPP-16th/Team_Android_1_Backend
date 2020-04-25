@@ -101,8 +101,9 @@ public class MemberGoalService {
         return memberGoalRepository.countMemberGoalByGoalId(goalId);
     }
 
-    public Page<MemberGoal> getJoinTodoListByGoalId(Long goalId, Pageable pageable){
-        return memberGoalRepository.findAllByGoalId(goalId, pageable);
-        //return memberGoalRepository.getJoinTodoListByGoalId(goalId, pageable);
+    public Page<GoalJoinTodoDto> getJoinTodoListByGoalId(Long goalId, Pageable pageable){
+        //return memberGoalRepository.findAllByGoalId(goalId, pageable);
+        return memberGoalRepository.getJoinTodoListByGoalId(goalId, pageable);
     }
+
 }
