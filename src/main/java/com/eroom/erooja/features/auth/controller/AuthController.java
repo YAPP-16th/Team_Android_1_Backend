@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import static com.eroom.erooja.common.constants.ErrorEnum.AUTH_ACCESS_DENIED;
@@ -31,6 +32,9 @@ public class AuthController {
     @GetMapping("/token/error")
     public ResponseEntity<?> tokenError(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
         logger.error("토큰 에러 엔드포인트 요청 감지 - Authorization Header : {}", authorizationHeader);
+        if (StringUtils.isEmpty(authorizationHeader)) {
+            throw new JwtException("JWT 헤더가 비었습니다.");
+        }
 
         jwtTokenProvider.getUidFromHeader(authorizationHeader);
         throw new JwtException("알 수 없는 JWT 오류입니다.");

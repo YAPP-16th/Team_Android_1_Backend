@@ -80,4 +80,15 @@ public class MemberJobInterestService {
 
         return savedCount;
     }
+
+    public Map<String, List<JobInterest>> getJobInterestsByUids(List<String> uids) {
+        Map<String, List<JobInterest>> jobInterestsByUid = new HashMap<>();
+
+        uids.forEach(uid -> {
+            List<MemberJobInterest> memberJobInterest = memberJobInterestRepository.getAllByMember_Uid(uid);
+            jobInterestsByUid.put(uid, memberJobInterest.stream().map(MemberJobInterest::getJobInterest).collect(Collectors.toList()));
+        });
+
+        return jobInterestsByUid;
+    }
 }
