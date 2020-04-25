@@ -20,6 +20,7 @@ public class GoalJoinListRequestDTO {
     private int size;
     private int page;
 
+    private boolean endDtIsBeforeNow = false;
     private GoalSortBy sortBy;
     private Sort.Direction direction;
 

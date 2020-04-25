@@ -80,8 +80,12 @@ public class MemberGoalService {
                 .isEnd(false).build());
     }
 
-    public Page<MemberGoal> getGoalJoinPageByUid(String uid, Pageable pageable) {
-        return memberGoalRepository.findAllByUid(uid, pageable);
+    public Page<MemberGoal> getGoalJoinPageByUidAndEndDtBeforeNow(String uid, Pageable pageable) {
+        return memberGoalRepository.findAllByUidAndEndDtIsBefore(uid, pageable, LocalDateTime.now());
+    }
+
+    public Page<MemberGoal> getGoalJoinPageByUidAndEndDtAfterNow(String uid, Pageable pageable) {
+        return memberGoalRepository.findAllByUidAndEndDtIsAfter(uid, pageable, LocalDateTime.now());
     }
 
     public Page<Members> getMembersAllByGoalId(Long goalId, Pageable pageable) {

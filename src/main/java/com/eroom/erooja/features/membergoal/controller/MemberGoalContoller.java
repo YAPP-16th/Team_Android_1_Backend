@@ -79,10 +79,15 @@ public class MemberGoalContoller {
 
     @GetMapping
     public ResponseEntity getGoalJoinListByUid(GoalJoinListRequestDTO goalJoinListRequestDTO) {
-
-        Page<MemberGoal> goalJoinPageByUid = memberGoalService.getGoalJoinPageByUid(
-                goalJoinListRequestDTO.getUid(),
-                goalJoinListRequestDTO.getPageable());
+        Page<MemberGoal> goalJoinPageByUid
+                = (goalJoinListRequestDTO.isEndDtIsBeforeNow())?
+                    memberGoalService.getGoalJoinPageByUidAndEndDtBeforeNow(
+                        goalJoinListRequestDTO.getUid(),
+                        goalJoinListRequestDTO.getPageable())
+                        :
+                    memberGoalService.getGoalJoinPageByUidAndEndDtAfterNow(
+                            goalJoinListRequestDTO.getUid(),
+                            goalJoinListRequestDTO.getPageable());
 
         Page<GoalJoinMemberDTO> memberGoalPage = convertPage2DTO(goalJoinPageByUid);
 
