@@ -10,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -35,7 +36,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-        if (authHeader != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (!StringUtils.isEmpty(authHeader) && SecurityContextHolder.getContext().getAuthentication() == null) {
             try {
                 String uid = jwtTokenProvider.getUidFromHeader(authHeader);
                 MemberAuth memberAuth = (MemberAuth) memberAuthService.loadUserByUsername(uid);
