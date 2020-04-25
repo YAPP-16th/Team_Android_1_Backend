@@ -27,11 +27,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
             .authorizeRequests()
                 /* GUEST, PUBLIC */
+                .antMatchers(HttpMethod.GET, "/api/v1/**")
+                    .permitAll()
                 .antMatchers("/api/v1/auth/**")
-                    .permitAll()
-                .antMatchers(HttpMethod.GET, "/api/v1/jobGroup/**","/api/v1/goal/**")
-                    .permitAll()
-                .antMatchers(HttpMethod.GET, "/api/v1/jobInterest/**")
                     .permitAll()
                 /* GENERAL MEMBERS */
                 .antMatchers("/api/v1/**")
