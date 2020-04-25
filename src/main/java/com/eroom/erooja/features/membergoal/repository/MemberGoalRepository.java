@@ -18,6 +18,7 @@ public interface MemberGoalRepository extends JpaRepository<MemberGoal, MemberGo
     Page<MemberGoal> findAllByGoal_Id(Long goalId, Pageable pageable);
 
     int countMemberGoalByGoalId(Long goalId);
+
     Page<GoalJoinTodoDto> getJoinTodoListByGoalId(Long goalId, Pageable pageable);
     Page<MemberGoal> findAllByGoalId(Long goalId, Pageable pageable);
 

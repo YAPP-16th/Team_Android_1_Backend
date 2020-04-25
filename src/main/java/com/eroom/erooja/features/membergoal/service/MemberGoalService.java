@@ -11,6 +11,7 @@ import com.eroom.erooja.domain.model.Members;
 import com.eroom.erooja.features.goal.repository.GoalRepository;
 import com.eroom.erooja.features.goal.service.GoalService;
 import com.eroom.erooja.features.membergoal.dto.GoalJoinRequestDTO;
+import com.eroom.erooja.features.membergoal.dto.GoalJoinTodoDto;
 import com.eroom.erooja.features.membergoal.repository.MemberGoalRepository;
 import com.eroom.erooja.features.todo.service.TodoService;
 import lombok.RequiredArgsConstructor;
@@ -102,7 +103,6 @@ public class MemberGoalService {
     }
 
     public Page<GoalJoinTodoDto> getJoinTodoListByGoalId(Long goalId, Pageable pageable){
-        //return memberGoalRepository.findAllByGoalId(goalId, pageable);
         return memberGoalRepository.getJoinTodoListByGoalId(goalId, pageable);
     }
 
