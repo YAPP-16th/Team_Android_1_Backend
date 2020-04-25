@@ -45,12 +45,12 @@ public class MemberAuthService implements UserDetailsService {
         String uid = MemberAuth.generateUid(AuthProvider.KAKAO, kakaoUserJSON.getId().toString());
         Map<String, String> properties = kakaoUserJSON.getProperties();
 
-        properties.putIfAbsent("imagePath", null);
+        properties.putIfAbsent("thumbnail_image", null);
 
         Members member = Members.builder()
                 .uid(uid)
                 .nickname(null)
-                .imagePath(properties.get("imagePath"))
+                .imagePath(properties.get("thumbnail_image"))
                 .build();
 
         MemberAuth build = MemberAuth.builder()

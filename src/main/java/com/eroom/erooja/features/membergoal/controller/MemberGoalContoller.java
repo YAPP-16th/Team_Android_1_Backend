@@ -1,27 +1,36 @@
 package com.eroom.erooja.features.membergoal.controller;
 
 import com.eroom.erooja.common.exception.EroojaException;
+import com.eroom.erooja.domain.model.JobInterest;
 import com.eroom.erooja.domain.model.MemberGoal;
+import com.eroom.erooja.domain.model.MemberJobInterest;
+import com.eroom.erooja.domain.model.Members;
 import com.eroom.erooja.features.auth.jwt.JwtTokenProvider;
 import com.eroom.erooja.features.goal.service.GoalService;
+import com.eroom.erooja.features.member.service.MemberJobInterestService;
 import com.eroom.erooja.features.membergoal.dto.GoalJoinListRequestDTO;
 import com.eroom.erooja.features.membergoal.dto.GoalJoinMemberDTO;
 import com.eroom.erooja.features.membergoal.dto.GoalJoinRequestDTO;
+import com.eroom.erooja.features.membergoal.dto.MemberPageDTO;
 import com.eroom.erooja.features.membergoal.service.MemberGoalService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.eroom.erooja.common.constants.ErrorEnum.GOAL_JOIN_ALREADY_EXIST;
@@ -33,6 +42,7 @@ public class MemberGoalContoller {
     private static final Logger logger = LoggerFactory.getLogger(MemberGoalContoller.class);
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final MemberJobInterestService memberJobInterestService;
     private final MemberGoalService memberGoalService;
     private final GoalService goalService;
 
@@ -56,6 +66,15 @@ public class MemberGoalContoller {
                 goalJoinRequest);
 
         return new ResponseEntity(memberGoal, HttpStatus.CREATED);
+    }
+
+    @Transactional
+    @GetMapping("/{goalId}")
+    public ResponseEntity getMembers(@PathVariable Long goalId, Pageable pageable) {
+        Page<Members> members = memberGoalService.getMembersAllByGoalId(goalId, pageable);
+        List<String> uidList = members.stream().map(Members::getUid).collect(Collectors.toList());
+        Map<String, List<JobInterest>> jobInterestByUid = memberJobInterestService.getJobInterestsByUids(uidList);
+        return ResponseEntity.ok(MemberPageDTO.of(members, jobInterestByUid));
     }
 
     @GetMapping

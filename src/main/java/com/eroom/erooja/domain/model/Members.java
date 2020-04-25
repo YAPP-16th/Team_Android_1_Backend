@@ -13,8 +13,7 @@ import javax.persistence.*;
 @ToString
 @NoArgsConstructor
 @EqualsAndHashCode(of = {"uid", "nickname"}, callSuper = false)
-public class
-Members extends AuditProperties {
+public class Members extends AuditProperties {
     @Id
     private String uid;
 

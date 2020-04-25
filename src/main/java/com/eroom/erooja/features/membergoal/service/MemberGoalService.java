@@ -7,6 +7,7 @@ import com.eroom.erooja.domain.enums.GoalRole;
 import com.eroom.erooja.domain.model.Goal;
 import com.eroom.erooja.domain.model.MemberGoal;
 import com.eroom.erooja.domain.model.MemberGoalPK;
+import com.eroom.erooja.domain.model.Members;
 import com.eroom.erooja.features.goal.repository.GoalRepository;
 import com.eroom.erooja.features.goal.service.GoalService;
 import com.eroom.erooja.features.membergoal.dto.GoalJoinRequestDTO;
@@ -14,11 +15,15 @@ import com.eroom.erooja.features.membergoal.repository.MemberGoalRepository;
 import com.eroom.erooja.features.todo.service.TodoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.eroom.erooja.common.constants.ErrorEnum.GOAL_JOIN_ALREADY_EXIST;
 
@@ -77,5 +82,14 @@ public class MemberGoalService {
 
     public Page<MemberGoal> getGoalJoinPageByUid(String uid, Pageable pageable) {
         return memberGoalRepository.findAllByUid(uid, pageable);
+    }
+
+    public Page<Members> getMembersAllByGoalId(Long goalId, Pageable pageable) {
+        Page<MemberGoal> memberGoalPage = memberGoalRepository.findAllByGoal_Id(goalId, pageable);
+        List<Members> members = memberGoalPage.getContent().stream()
+                .map(MemberGoal::getMember)
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(members, memberGoalPage.getPageable(), memberGoalPage.getTotalElements());
     }
 }
