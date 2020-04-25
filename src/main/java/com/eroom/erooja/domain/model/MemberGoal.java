@@ -9,7 +9,9 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @EqualsAndHashCode(of = {"id"})
 @NoArgsConstructor
@@ -52,6 +54,14 @@ public class MemberGoal extends AuditProperties {
     @JsonIgnore
     @OneToMany(mappedBy = "memberGoal", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Todo> todoList = new ArrayList<>();
+
+    @JsonProperty(value = "todoList")
+    public List<Todo> todoList() {
+        if (todoList == null) {
+            return Collections.emptyList();
+        }
+        return todoList;
+    }
 
     @Builder
     public MemberGoal(LocalDateTime createDt, LocalDateTime updateDt, String uid,
