@@ -40,14 +40,9 @@ public class MemberGoal extends AuditProperties {
     private LocalDateTime endDt;
 
     @JsonIgnore
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "goal_id", updatable = false, insertable = false)
     private Goal goal;
-
-    @JsonProperty(value = "goalDetail")
-    public Goal getMinimalizedGoal() {
-        return this.goal;
-    }
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
