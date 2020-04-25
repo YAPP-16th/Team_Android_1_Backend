@@ -72,21 +72,10 @@ public class MemberJobInterestService {
     }
 
     public Integer addJobInterestListForUid(String uid, List<Long> ids) {
-        Members member = Members.builder().uid(uid).build();
-
         int savedCount = 0;
         for(Long id : ids) {
             if (!jobInterestRepository.existsById(id)) continue;
-
-            JobInterest jobInterest = JobInterest.builder().id(id).build();
-
-            memberJobInterestRepository.save(
-                    MemberJobInterest.builder()
-                            .jobInterest(jobInterest)
-                            .member(member)
-                        .build());
-
-            savedCount += 1;
+            if (this.addJobInterestForUid(uid, id) != null) savedCount += 1;
         }
 
         return savedCount;
