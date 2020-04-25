@@ -13,6 +13,8 @@ import com.eroom.erooja.features.membergoal.dto.GoalJoinRequestDTO;
 import com.eroom.erooja.features.membergoal.repository.MemberGoalRepository;
 import com.eroom.erooja.features.todo.service.TodoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -71,5 +73,9 @@ public class MemberGoalService {
                 .endDt(endDt)
                 .role(goalRole)
                 .isEnd(false).build());
+    }
+
+    public Page<MemberGoal> getGoalJoinPageByUid(String uid, Pageable pageable) {
+        return memberGoalRepository.findAllByUid(uid, pageable);
     }
 }

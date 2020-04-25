@@ -3,11 +3,13 @@ package com.eroom.erooja.features.membergoal.controller;
 import com.eroom.erooja.common.exception.EroojaException;
 import com.eroom.erooja.domain.model.MemberGoal;
 import com.eroom.erooja.features.auth.jwt.JwtTokenProvider;
+import com.eroom.erooja.features.membergoal.dto.GoalJoinListRequestDTO;
 import com.eroom.erooja.features.membergoal.dto.GoalJoinRequestDTO;
 import com.eroom.erooja.features.membergoal.service.MemberGoalService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,8 +51,12 @@ public class MemberGoalContoller {
     }
 
     @GetMapping("/goal")
-    public ResponseEntity getGoalJoinListByUid(@RequestParam String uid) {
-        return new ResponseEntity(null, HttpStatus.OK);
+    public ResponseEntity getGoalJoinListByUid(GoalJoinListRequestDTO goalJoinListRequestDTO) {
+        Page<MemberGoal> memberGoalPage = memberGoalService.getGoalJoinPageByUid(
+                goalJoinListRequestDTO.getUid(),
+                goalJoinListRequestDTO.getPageable());
+
+        return ResponseEntity.ok(memberGoalPage);
     }
 
     @GetMapping("/member")
