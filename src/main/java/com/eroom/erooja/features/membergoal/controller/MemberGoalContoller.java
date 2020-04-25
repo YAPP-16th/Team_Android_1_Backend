@@ -8,10 +8,7 @@ import com.eroom.erooja.domain.model.Members;
 import com.eroom.erooja.features.auth.jwt.JwtTokenProvider;
 import com.eroom.erooja.features.goal.service.GoalService;
 import com.eroom.erooja.features.member.service.MemberJobInterestService;
-import com.eroom.erooja.features.membergoal.dto.GoalJoinListRequestDTO;
-import com.eroom.erooja.features.membergoal.dto.GoalJoinMemberDTO;
-import com.eroom.erooja.features.membergoal.dto.GoalJoinRequestDTO;
-import com.eroom.erooja.features.membergoal.dto.MemberPageDTO;
+import com.eroom.erooja.features.membergoal.dto.*;
 import com.eroom.erooja.features.membergoal.service.MemberGoalService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -22,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
@@ -102,8 +100,15 @@ public class MemberGoalContoller {
                 origin.getPageable(), origin.getTotalElements());
     }
 
-    @GetMapping("/member")
-    public ResponseEntity getMemberListByGoalId(@RequestParam Long goalId) {
-        return new ResponseEntity(null, HttpStatus.OK);
+    @GetMapping("/{goalId}/todo")
+    public ResponseEntity getJoinTodoListByGoalId(Pageable pageable, @PathVariable Long goalId) {
+        Page<GoalJoinTodoDto> goalJoinTodoDtoPage = memberGoalService.getJoinTodoListByGoalId(goalId, pageable);
+        return new ResponseEntity(goalJoinTodoDtoPage, HttpStatus.OK);
+    }
+
+    @GetMapping("{goalId}/count")
+    public ResponseEntity countGoalJoinByGoalId(@PathVariable Long goalId) {
+        int count = memberGoalService.countGoalJoinByGoalId(goalId);
+        return ResponseEntity.status(HttpStatus.OK).body(count);
     }
 }

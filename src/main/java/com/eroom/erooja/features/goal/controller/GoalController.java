@@ -1,5 +1,6 @@
 package com.eroom.erooja.features.goal.controller;
 
+import com.eroom.erooja.domain.model.QMemberGoal;
 import com.eroom.erooja.features.goal.exception.GoalNotFoundException;
 import com.eroom.erooja.domain.enums.GoalRole;
 import com.eroom.erooja.features.auth.jwt.JwtTokenProvider;
@@ -87,7 +88,6 @@ public class GoalController {
         }
 
         String uid = jwtTokenProvider.getUidFromHeader(header);
-
         Goal newGoal = goalService.createGoal(createGoalRequest);
 
         goalJobInterestService.addJobInterestListForGoal(newGoal.getId(),

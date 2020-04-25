@@ -1,6 +1,7 @@
 package com.eroom.erooja.domain.model;
 
 import com.eroom.erooja.domain.common.AuditProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -25,6 +26,7 @@ public class Todo extends AuditProperties {
     @Column(nullable = false)
     private int priority;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns({
             @JoinColumn(name="uid"),

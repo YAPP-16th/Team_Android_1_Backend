@@ -15,8 +15,8 @@ spring:
       ddl-auto: update
     properties:
       hibernate:
-        show-sql: false
         format_sql: false
+      hibernate.default_batch_fetch_size: 1000
 
   datasource:
     platform: mariadb
@@ -31,4 +31,3 @@ spring:
 
 jwt:
   secret: jwtLocalSecret
-
