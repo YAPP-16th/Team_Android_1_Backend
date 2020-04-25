@@ -1,11 +1,13 @@
 package com.eroom.erooja.features.membergoal.controller;
 
 import com.eroom.erooja.common.exception.EroojaException;
+import com.eroom.erooja.domain.model.JobInterest;
 import com.eroom.erooja.domain.model.MemberGoal;
+import com.eroom.erooja.domain.model.MemberJobInterest;
 import com.eroom.erooja.domain.model.Members;
 import com.eroom.erooja.features.auth.jwt.JwtTokenProvider;
 import com.eroom.erooja.features.goal.service.GoalService;
-import com.eroom.erooja.features.member.dto.MemberDTO;
+import com.eroom.erooja.features.member.service.MemberJobInterestService;
 import com.eroom.erooja.features.membergoal.dto.GoalJoinListRequestDTO;
 import com.eroom.erooja.features.membergoal.dto.GoalJoinMemberDTO;
 import com.eroom.erooja.features.membergoal.dto.GoalJoinRequestDTO;
@@ -28,6 +30,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.eroom.erooja.common.constants.ErrorEnum.GOAL_JOIN_ALREADY_EXIST;
@@ -39,6 +42,7 @@ public class MemberGoalContoller {
     private static final Logger logger = LoggerFactory.getLogger(MemberGoalContoller.class);
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final MemberJobInterestService memberJobInterestService;
     private final MemberGoalService memberGoalService;
     private final GoalService goalService;
 
@@ -68,7 +72,9 @@ public class MemberGoalContoller {
     @GetMapping("/{goalId}")
     public ResponseEntity getMembers(@PathVariable Long goalId, Pageable pageable) {
         Page<Members> members = memberGoalService.getMembersAllByGoalId(goalId, pageable);
-        return ResponseEntity.ok(MemberPageDTO.of(members));
+        List<String> uidList = members.stream().map(Members::getUid).collect(Collectors.toList());
+        Map<String, List<JobInterest>> jobInterestByUid = memberJobInterestService.getJobInterestsByUids(uidList);
+        return ResponseEntity.ok(MemberPageDTO.of(members, jobInterestByUid));
     }
 
     @GetMapping
