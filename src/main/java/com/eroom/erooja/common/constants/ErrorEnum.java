@@ -31,6 +31,8 @@ public enum ErrorEnum {
 
     MEMBER_JOB_INTEREST_INVALID_BODY(HttpStatus.BAD_REQUEST, "MJI_001", "올바르지 않은 리퀘스트 바디입니다."),
     MEMBER_JOB_INTEREST_ALREADY_EXISTS(HttpStatus.CONFLICT, "MJI_002", "이미 존재하는 직군 혹은 직무입니다."),
+
+    MEMBER_IMAGE_DELETE_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "MID_001", "삭제할 수 없는 이미지입니다."),
     /* 멤버 CRUD 오류 메세지 정의 끝*/
 
     /* 직군 CRUD 오류 메세지 정의 */
@@ -49,7 +51,7 @@ public enum ErrorEnum {
 
     /* 목표참여 CRUD 오류 메세지 정의 */
     GOAL_JOIN_ALREADY_EXIST(HttpStatus.NOT_FOUND, "TOD_001", "이미 목표담기를 했습니다. 중복담기 불가능합니다."),
-    /* 목표참여CRUD 오류 메세지 정의 끝 */
+    /* 목표참여 CRUD 오류 메세지 정의 끝 */
 
 
     ETC(HttpStatus.INTERNAL_SERVER_ERROR, "ETC_000", "알 수 없는 오류입니다.");
