@@ -55,14 +55,6 @@ public class MemberGoal extends AuditProperties {
     @OneToMany(mappedBy = "memberGoal", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Todo> todoList = new ArrayList<>();
 
-    @JsonProperty(value = "todoList")
-    public List<Todo> todoList() {
-        if (todoList == null) {
-            return Collections.emptyList();
-        }
-        return todoList;
-    }
-
     @Builder
     public MemberGoal(LocalDateTime createDt, LocalDateTime updateDt, String uid,
                       Long goalId, GoalRole role, Boolean isEnd, int copyCount,
