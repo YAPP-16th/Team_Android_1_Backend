@@ -50,7 +50,7 @@ public class MemberGoalContoller {
         return new ResponseEntity(memberGoal, HttpStatus.CREATED);
     }
 
-    @GetMapping("/goal")
+    @GetMapping
     public ResponseEntity getGoalJoinListByUid(GoalJoinListRequestDTO goalJoinListRequestDTO) {
         Page<MemberGoal> memberGoalPage = memberGoalService.getGoalJoinPageByUid(
                 goalJoinListRequestDTO.getUid(),
