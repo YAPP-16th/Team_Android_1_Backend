@@ -85,6 +85,14 @@
         </dependency>
         <!-- 데이터베이스 JDBC 의존성 끝 -->
 
+        <!-- AWS Client 유틸리티 의존성 -->
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk</artifactId>
+            <version>1.11.133</version>
+        </dependency>
+        <!-- AWS Client 유틸리티 의존성  -->
+
         <!-- 유틸리티 의존성 끝 -->
         <dependency>
             <groupId>com.github.maricn</groupId>

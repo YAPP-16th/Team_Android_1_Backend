@@ -1,5 +1,6 @@
 package com.eroom.erooja.features.member.service;
 
+import com.eroom.erooja.common.component.AwsClient;
 import com.eroom.erooja.common.constants.ErrorEnum;
 import com.eroom.erooja.common.exception.EroojaException;
 import com.eroom.erooja.domain.model.MemberAuth;
@@ -12,12 +13,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class MemberService {
+    private final AwsClient awsClient;
     private final MemberRepository memberRepository;
     private final MemberAuthRepository memberAuthRepository;
 
@@ -47,5 +51,29 @@ public class MemberService {
     public Boolean isNicknameExist(String nickname) {
         String trimmedNickname = nickname.trim();
         return memberRepository.existsByNickname(trimmedNickname);
+    }
+
+    @Transactional
+    public Members updateProfilePicture(String uid, MultipartFile multipartFile) {
+        Members member = memberRepository.getOne(uid);
+
+        String imagePath = awsClient.uploadFile(uid, multipartFile);
+
+        return memberRepository.save(
+                Members.builder()
+                        .uid(member.getUid())
+                        .nickname(member.getNickname())
+                        .memberAuth(member.getMemberAuth())
+                        .imagePath(imagePath)
+                    .build()
+        );
+    }
+
+    public List<String> getSavedImagePaths(String uid) {
+        return awsClient.listUpFilePath(uid);
+    }
+
+    public void deleteSavedImages(List<String> imagePaths) {
+        imagePaths.forEach(awsClient::deleteFileFromS3Bucket);
     }
 }
