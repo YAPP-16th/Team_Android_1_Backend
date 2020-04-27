@@ -7,6 +7,8 @@ import com.eroom.erooja.features.todo.dto.TodoDTO;
 import com.eroom.erooja.features.todo.repository.TodoRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,6 +38,10 @@ public class TodoService {
                 return true;
         }
         return false;
+    }
+
+    public Page<Todo> getTodoListByGoalIdAndUid(Pageable pageable, Long goalId, String uid){
+        return todoRepository.getTodoListByGoalIdAndUid(pageable, goalId, uid);
     }
 
     public List<Todo> mapDTOtoTodo(String uid, Long goalId, List<TodoDTO> todoDTOList) {
