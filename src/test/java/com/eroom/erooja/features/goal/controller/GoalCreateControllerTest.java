@@ -1,5 +1,6 @@
 package com.eroom.erooja.features.goal.controller;
 
+import com.eroom.erooja.documentation.v1.RestDocsConfiguration;
 import com.eroom.erooja.domain.enums.GoalRole;
 import com.eroom.erooja.domain.model.Goal;
 import com.eroom.erooja.domain.model.MemberGoal;
@@ -17,13 +18,18 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.payload.FieldDescriptor;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -33,11 +39,20 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@AutoConfigureRestDocs
+@Import(RestDocsConfiguration.class)
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -112,7 +127,7 @@ public class GoalCreateControllerTest {
                 .willReturn(new ArrayList());
 
         //when, then
-        this.mockMvc.perform(post("/api/v1/goal")
+        ResultActions resultActions = this.mockMvc.perform(post("/api/v1/goal")
                 .content(objectMapper.writeValueAsString(createGoalRequest))
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
@@ -130,6 +145,37 @@ public class GoalCreateControllerTest {
                 .andExpect(jsonPath("description").isString())
                 .andExpect(jsonPath("isDateFixed").value(false))
                 .andExpect(jsonPath("isEnd").value(false));
+
+        //Documentation
+        FieldDescriptor[] todo = new FieldDescriptor[] {
+                fieldWithPath("content").description("내용"),
+                fieldWithPath("priority").description("우선순위") };
+
+        resultActions.andDo(
+                document("create-goal",
+                        requestHeaders(headerWithName("Authorization").description("jwt 토큰 Bearer type")),
+                        requestFields(
+                                fieldWithPath("title").description("새 목표명"),
+                                fieldWithPath("description").description("상세설명"),
+                                fieldWithPath("isDateFixed").description("기간고정여부"),
+                                fieldWithPath("endDt").description("종료일자"),
+                                fieldWithPath("interestIdList[]").description("관련직무"),
+                                fieldWithPath("todoList[]").description("달성할리스트"),
+                                fieldWithPath("todoList[].content").description("달성할리스트 내용"),
+                                fieldWithPath("todoList[].priority").description("달성할리스트 우선순위")
+                        ),
+                        relaxedResponseFields(
+                                fieldWithPath("id").description("목표 구분값"),
+                                fieldWithPath("startDt").description("목표 시작일"),
+                                fieldWithPath("endDt").description("목표 종료일"),
+                                fieldWithPath("createDt").description("목표 생성일"),
+                                fieldWithPath("updateDt").description("목표 수정일"),
+                                fieldWithPath("description").description("목표 상세설명"),
+                                fieldWithPath("joinCount").description("목표 참여자 수"),
+                                fieldWithPath("isDateFixed").description("기간 고정여부"),
+                                fieldWithPath("isEnd").description("목표 종료여부")
+                        )
+                ));
     }
 
     @Test
