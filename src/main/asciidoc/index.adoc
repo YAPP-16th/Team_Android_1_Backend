@@ -83,3 +83,47 @@ Response fields:
 include::{snippets}/goal-detail/response-fields.adoc[]
 
 
+
+[[Goal-detail]]
+=== 목표 상세조회
+
+==== Resquest
+include::{snippets}/goal-detail/curl-request.adoc[]
+include::{snippets}/goal-detail/http-request.adoc[]
+Path Parmeters:
+include::{snippets}/goal-detail/path-parameters.adoc[]
+
+==== Response
+include::{snippets}/goal-detail/http-response.adoc[]
+Response fields:
+include::{snippets}/goal-detail/response-fields.adoc[]
+
+
+
+[[Goal-list-serarch]]
+=== 목표리스트조회 (관심직무별)
+
+==== Resquest
+include::{snippets}/goal-list-interest/curl-request.adoc[]
+include::{snippets}/goal-list-interest/http-request.adoc[]
+Path Parmeters:
+include::{snippets}/goal-list-interest/path-parameters.adoc[]
+Request parameters:
+include::{snippets}/goal-list-interest/request-parameters.adoc[]
+
+TIP: 정렬방식(sort) 요청값
+
+- createDt,desc    // 생성날짜기준 내림차순 (최근올린순)
+- createDt,asc // 생성날짜기준 오름차순 (오래전 올린순)
+- joinCount,desc  // 참여자수기준 내림차순
+- joinCount,asc // (많은순) 참여자수기준 오름차순
+- endDt,asc  // 마감임박순
+- endDt,desc  // 마감 많이남은순
+
+==== Response
+include::{snippets}/goal-list-interest/http-response.adoc[]
+Response fields:
+include::{snippets}/goal-list-interest/response-fields.adoc[]
+
+
+
