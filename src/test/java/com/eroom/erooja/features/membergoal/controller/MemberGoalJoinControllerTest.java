@@ -1,5 +1,6 @@
 package com.eroom.erooja.features.membergoal.controller;
 
+import com.eroom.erooja.documentation.v1.RestDocsConfiguration;
 import com.eroom.erooja.domain.enums.GoalRole;
 import com.eroom.erooja.domain.model.Goal;
 import com.eroom.erooja.domain.model.MemberGoal;
@@ -14,14 +15,18 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -30,12 +35,20 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Profile({"test"}) @ActiveProfiles("test")
+@AutoConfigureRestDocs
+@Import(RestDocsConfiguration.class)
+@Profile({"test"})
+@ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @AutoConfigureMockMvc(addFilters = false)
@@ -105,7 +118,8 @@ public class MemberGoalJoinControllerTest {
                 any(GoalJoinRequestDTO.class)))
                 .willReturn(newMemberGoal);
 
-        this.mockMvc.perform(post("/api/v1/membergoal")
+        ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders
+                .post("/api/v1/membergoal")
                 .content(objectMapper.writeValueAsString(goalJoinRequest))
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
@@ -119,5 +133,26 @@ public class MemberGoalJoinControllerTest {
                 .andExpect(jsonPath("endDt").exists())
                 .andExpect(jsonPath("copyCount").value(0))
                 .andExpect(jsonPath("isEnd").isBoolean());
+
+        resultActions.andDo(
+                document("member-goal-join",
+                        requestHeaders(headerWithName("Authorization").description("jwt 토큰 Bearer type")),
+                        requestFields(
+                                fieldWithPath("goalId").description("새 목표명"),
+                                fieldWithPath("ownerUid").description("(nullable) 목표담기 복사한 대상 uid"),
+                                fieldWithPath("endDt").description("종료일자"),
+                                fieldWithPath("todoList[]").description("달성할리스트"),
+                                fieldWithPath("todoList[].content").description("달성할리스트 내용"),
+                                fieldWithPath("todoList[].priority").description("달성할리스트 우선순위")
+                        ),
+                        relaxedResponseFields(
+                                fieldWithPath("goalId").description("목표 구분값"),
+                                fieldWithPath("uid").description("사용자 구분값"),
+                                fieldWithPath("startDt").description("목표 시작일"),
+                                fieldWithPath("endDt").description("목표 종료일"),
+                                fieldWithPath("copyCount").description("사용자들이 담아간 횟수"),
+                                fieldWithPath("isEnd").description("목표 종료여부")
+                        )
+                ));
     }
 }

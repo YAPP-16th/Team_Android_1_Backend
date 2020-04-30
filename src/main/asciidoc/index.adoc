@@ -126,4 +126,19 @@ Response fields:
 include::{snippets}/goal-list-interest/response-fields.adoc[]
 
 
+[[Goal-member-join]]
+=== 기존 목표담기
+
+==== Resquest
+include::{snippets}/member-goal-join/curl-request.adoc[]
+include::{snippets}/member-goal-join/http-request.adoc[]
+Request headers:
+include::{snippets}/member-goal-join/request-headers.adoc[]
+Request fields:
+include::{snippets}/member-goal-join/request-fields.adoc[]
+
+==== Response
+include::{snippets}/member-goal-join/http-response.adoc[]
+Response fields:
+include::{snippets}/member-goal-join/response-fields.adoc[]
 
