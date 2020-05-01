@@ -80,20 +80,6 @@ Response fields:
 include::{snippets}/goal-detail/response-fields.adoc[]
 
 
-=== 목표 상세조회
-
-==== Resquest
-include::{snippets}/goal-detail/curl-request.adoc[]
-include::{snippets}/goal-detail/http-request.adoc[]
-Path Parmeters:
-include::{snippets}/goal-detail/path-parameters.adoc[]
-
-==== Response
-include::{snippets}/goal-detail/http-response.adoc[]
-Response fields:
-include::{snippets}/goal-detail/response-fields.adoc[]
-
-
 
 === 목표리스트조회 (관심직무별)
 
@@ -139,6 +125,17 @@ include::{snippets}/member-goal-join/http-response.adoc[]
 Response fields:
 include::{snippets}/member-goal-join/response-fields.adoc[]
 
+=== 목표 참여자수 조회
+
+==== Resquest
+include::{snippets}/member-goal-count/curl-request.adoc[]
+include::{snippets}/member-goal-count/http-request.adoc[]
+Path Parmeters:
+include::{snippets}/member-goal-count/path-parameters.adoc[]
+
+==== Response
+include::{snippets}/member-goal-count/http-response.adoc[]
+
 == 할일리스트 API
 
 === 특정회원 할일조회
@@ -155,4 +152,6 @@ include::{snippets}/goal-list-interest/request-parameters.adoc[]
 include::{snippets}/todo-search/http-response.adoc[]
 Response fields:
 include::{snippets}/todo-search/response-fields.adoc[]
+
+
 

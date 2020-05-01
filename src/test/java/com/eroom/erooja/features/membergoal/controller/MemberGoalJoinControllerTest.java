@@ -137,6 +137,7 @@ public class MemberGoalJoinControllerTest {
                 .andExpect(jsonPath("copyCount").value(0))
                 .andExpect(jsonPath("isEnd").isBoolean());
 
+        //Documentation
         resultActions.andDo(
                 document("member-goal-join",
                         requestHeaders(headerWithName("Authorization").description("jwt 토큰 Bearer type")),

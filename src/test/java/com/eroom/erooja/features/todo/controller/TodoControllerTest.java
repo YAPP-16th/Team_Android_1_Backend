@@ -57,7 +57,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class TodoControllerTest {
     @MockBean
     private TodoService todoService;
-    @MockBean
     private final MockMvc mockMvc;
 
 
@@ -66,7 +65,6 @@ public class TodoControllerTest {
     public void todo_search_success() throws Exception {
         //given
         LocalDateTime startDt = LocalDateTime.now();
-        LocalDateTime endDt = startDt.plusHours(2);
         String mockUid = "KAKAO@testId";
 
         Goal goal = Goal.builder()
@@ -80,14 +78,24 @@ public class TodoControllerTest {
 
         List<Todo> todoList = new ArrayList();
         todoList.add(Todo.builder()
+                .id(0L)
+                .isEnd(false)
                 .content("fisrt")
-                .priority(0).build());
+                .priority(0)
+                .createDt(startDt)
+                .updateDt(startDt).build());
         todoList.add(Todo.builder()
                 .content("two")
-                .priority(1).build());
+                .isEnd(false)
+                .priority(1)
+                .createDt(startDt)
+                .updateDt(startDt).build());
         todoList.add(Todo.builder()
                 .content("three")
-                .priority(2).build());
+                .isEnd(false)
+                .priority(2)
+                .createDt(startDt)
+                .updateDt(startDt).build());
 
         Page<Todo> todoPage = new PageImpl(todoList);
 
@@ -101,6 +109,7 @@ public class TodoControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk());
 
+        //Documentation
         resultActions.andDo(
                 document("todo-search",
                         requestParameters(
