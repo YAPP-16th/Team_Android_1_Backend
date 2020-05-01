@@ -140,7 +140,8 @@ public class MemberGoalJoinControllerTest {
         //Documentation
         resultActions.andDo(
                 document("member-goal-join",
-                        requestHeaders(headerWithName("Authorization").description("jwt 토큰 Bearer type")),
+                        requestHeaders(headerWithName("Authorization").description("jwt 토큰 Bearer type")
+                        ),
                         requestFields(
                                 fieldWithPath("goalId").description("새 목표명"),
                                 fieldWithPath("ownerUid").description("(nullable) 목표담기 복사한 대상 uid"),

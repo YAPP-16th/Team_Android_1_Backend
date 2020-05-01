@@ -136,6 +136,19 @@ include::{snippets}/member-goal-count/path-parameters.adoc[]
 ==== Response
 include::{snippets}/member-goal-count/http-response.adoc[]
 
+=== 목표 참여자 리스트 조회 (할일리스트 포함)
+
+==== Resquest
+include::{snippets}/join-todo-list/curl-request.adoc[]
+include::{snippets}/join-todo-list/http-request.adoc[]
+Path Parmeters:
+include::{snippets}/join-todo-list/path-parameters.adoc[]
+
+==== Response
+include::{snippets}/join-todo-list/http-response.adoc[]
+Response fields:
+include::{snippets}/join-todo-list/response-fields.adoc[]
+
 == 할일리스트 API
 
 === 특정회원 할일조회
@@ -144,13 +157,14 @@ include::{snippets}/member-goal-count/http-response.adoc[]
 include::{snippets}/todo-search/curl-request.adoc[]
 include::{snippets}/todo-search/http-request.adoc[]
 Path Parmeters:
-include::{snippets}/goal-list-interest/path-parameters.adoc[]
+include::{snippets}/todo-search/path-parameters.adoc[]
 Request parameters:
-include::{snippets}/goal-list-interest/request-parameters.adoc[]
+include::{snippets}/todo-search/request-parameters.adoc[]
 
 ==== Response
 include::{snippets}/todo-search/http-response.adoc[]
 Response fields:
+
 include::{snippets}/todo-search/response-fields.adoc[]
 
 

@@ -94,7 +94,8 @@ public class GoalDetailControllerTest {
         resultActions.andDo(
                 document("goal-detail",
                         pathParameters(
-                                parameterWithName("goalId").description("상세정보 대상 goalId")),
+                                parameterWithName("goalId").description("상세정보 대상 goalId")
+                        ),
                         relaxedResponseFields(
                                 fieldWithPath("createDt").description("목표 생성일"),
                                 fieldWithPath("updateDt").description("목표 수정일"),

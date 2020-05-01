@@ -93,12 +93,15 @@ public class GoalListControllerTest {
         resultActions.andDo(
                 document("goal-list-interest",
                         pathParameters(
-                                parameterWithName("interestId").description("상세정보 대상 goalId")),
+                                parameterWithName("interestId").description("상세정보 대상 goalId")
+                        ),
                         requestParameters(
                                 parameterWithName("page").description("페이지 위치"),
                                 parameterWithName("size").description("한 페이지당 조회할 크기"),
-                                parameterWithName("sort").description("정렬방식")),
+                                parameterWithName("sort").description("정렬방식")
+                        ),
                         relaxedResponseFields(
+                                fieldWithPath("content[]").description("목표 리스트"),
                                 fieldWithPath("content[].createDt").description("목표 생성일"),
                                 fieldWithPath("content[].updateDt").description("목표 수정일"),
                                 fieldWithPath("content[].id").description("목표 구분값"),

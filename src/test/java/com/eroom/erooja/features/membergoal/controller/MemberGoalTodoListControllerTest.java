@@ -1,4 +1,4 @@
-package com.eroom.erooja.features.todo.controller;
+package com.eroom.erooja.features.membergoal.controller;
 
 import com.eroom.erooja.documentation.v1.RestDocsConfiguration;
 import com.eroom.erooja.domain.enums.GoalRole;
@@ -6,8 +6,10 @@ import com.eroom.erooja.domain.model.Goal;
 import com.eroom.erooja.domain.model.MemberGoal;
 import com.eroom.erooja.domain.model.Todo;
 import com.eroom.erooja.features.auth.jwt.JwtTokenProvider;
+import com.eroom.erooja.features.membergoal.dto.GoalJoinRequestDTO;
+import com.eroom.erooja.features.membergoal.dto.GoalJoinTodoDto;
+import com.eroom.erooja.features.membergoal.service.MemberGoalService;
 import com.eroom.erooja.features.todo.dto.TodoDTO;
-import com.eroom.erooja.features.todo.service.TodoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
@@ -25,6 +27,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -40,6 +43,7 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.headerWit
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -53,26 +57,28 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @AutoConfigureMockMvc(addFilters = false)
 @SpringBootTest
-public class TodoControllerTest {
+public class MemberGoalTodoListControllerTest {
     @MockBean
-    private TodoService todoService;
+    MemberGoalService memberGoalService;
     private final MockMvc mockMvc;
 
-
     @Test
-    @DisplayName("특정회원 할일리스트 조회 (성공)")
-    public void todo_search_success() throws Exception {
+    @DisplayName("목표 참여리스트(+할일리스트) 조회 (성공)")
+    public void joinGoal_todo_list_success() throws Exception {
         //given
         LocalDateTime startDt = LocalDateTime.now();
-        String mockUid = "KAKAO@testId";
+        LocalDateTime endDt = startDt.plusHours(2);
 
         Goal goal = Goal.builder()
-                .id(0L)
-                .isEnd(false).build();
+                .id(0L).build();
 
         MemberGoal memberGoal = MemberGoal.builder()
                 .goalId(goal.getId())
-                .uid(mockUid)
+                .uid("onwerUid")
+                .isEnd(false)
+                .copyCount(0)
+                .startDt(startDt)
+                .endDt(endDt)
                 .role(GoalRole.OWNER).build();
 
         List<Todo> todoList = new ArrayList();
@@ -98,13 +104,20 @@ public class TodoControllerTest {
                 .createDt(startDt)
                 .updateDt(startDt).build());
 
-        Page<Todo> todoPage = new PageImpl(todoList);
+        GoalJoinTodoDto goalJoinTodoDto = new GoalJoinTodoDto(
+                memberGoal,
+                todoList,
+                "hyeonsu");
 
-        given(todoService.getTodoListByGoalIdAndUid(any(PageRequest.class), anyLong(), anyString()))
-                .willReturn(todoPage);
+        List<GoalJoinTodoDto> goalJoinTodoList = new ArrayList();
+        goalJoinTodoList.add(goalJoinTodoDto);
+        Page<GoalJoinTodoDto> goalJoinTodoPage = new PageImpl(goalJoinTodoList);
+
+        given(memberGoalService.getJoinTodoListByGoalId(anyLong(), any(PageRequest.class)))
+                .willReturn(goalJoinTodoPage);
 
         ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders
-                .get("/api/v1/todo/member/{uid}/goal/{goalId}",mockUid,goal.getId())
+                .get("/api/v1/membergoal/{goalId}/todo", goal.getId())
                 .param("page", "0")
                 .param("size", "3"))
                 .andDo(print())
@@ -112,23 +125,24 @@ public class TodoControllerTest {
 
         //Documentation
         resultActions.andDo(
-                document("todo-search",
+                document("join-todo-list",
                         pathParameters(
-                                parameterWithName("goalId").description("상세정보 대상 goalId"),
-                                parameterWithName("uid").description("상세정보 대상 uId")
+                                parameterWithName("goalId").description("조회하고자 하는 대상 goalId")
                         ),
                         requestParameters(
                                 parameterWithName("page").description("페이지 위치"),
                                 parameterWithName("size").description("한 페이지당 조회할 크기")
                         ),
                         relaxedResponseFields(
-                                fieldWithPath("content[]").description("할일 리스트"),
-                                fieldWithPath("content[].createDt").description("할일 생성일"),
-                                fieldWithPath("content[].updateDt").description("할일 수정일"),
-                                fieldWithPath("content[].id").description("할일 구분값"),
-                                fieldWithPath("content[].content").description("할일 내용"),
-                                fieldWithPath("content[].isEnd").description("할일 종료여부"),
-                                fieldWithPath("content[].priority").description("할일 우선순위")
+                                fieldWithPath("content[]").description("목표 참여자리스트"),
+                                fieldWithPath("content[].goalId").description("목표 구분값"),
+                                fieldWithPath("content[].uid").description("사용자 구분값"),
+                                fieldWithPath("content[].startDt").description("목표 시작일"),
+                                fieldWithPath("content[].endDt").description("목표 종료일"),
+                                fieldWithPath("content[].isEnd").description("목표 종료여부"),
+                                fieldWithPath("content[].copyCount").description("사용자들이 담아간 횟수"),
+                                fieldWithPath("content[].isEnd").description("목표 종료여부"),
+                                fieldWithPath("content[].todoList[]").description("달성할리스트")
                         )
                 ));
     }

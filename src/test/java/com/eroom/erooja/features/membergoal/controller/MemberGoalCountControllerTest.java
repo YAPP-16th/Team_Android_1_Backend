@@ -70,7 +70,7 @@ public class MemberGoalCountControllerTest {
         given(memberGoalService.countGoalJoinByGoalId(goal.getId())).willReturn(2);
 
         ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders
-                .get("/api/v1/membergoal/{goalId}/count",goal.getId()))
+                .get("/api/v1/membergoal/{goalId}/count", goal.getId()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isNumber());
