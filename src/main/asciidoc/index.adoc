@@ -49,7 +49,7 @@
 
 == 목표 API
 
-=== 목표 생성
+=== 목표 생성 [POST]
 
 ==== Resquest
 include::{snippets}/create-goal/curl-request.adoc[]
@@ -66,7 +66,7 @@ Response fields:
 include::{snippets}/create-goal/response-fields.adoc[]
 
 
-=== 목표 상세조회
+=== 목표 상세조회 [GET]
 
 ==== Resquest
 include::{snippets}/goal-detail/curl-request.adoc[]
@@ -81,7 +81,7 @@ include::{snippets}/goal-detail/response-fields.adoc[]
 
 
 
-=== 목표리스트조회 (관심직무별)
+=== 목표리스트조회 (관심직무별) [GET]
 
 ==== Resquest
 include::{snippets}/goal-list-interest/curl-request.adoc[]
@@ -107,7 +107,7 @@ include::{snippets}/goal-list-interest/response-fields.adoc[]
 
 == 목표담기 API
 
-=== 기존 목표담기
+=== 기존 목표담기 [POST]
 
 TIP: - 기존 회원 리스트 담기는 ownerUid에 해당 회원uid 기입후 전송 +
 - 만약, 목표 직접추가면 기입 안하고 보내면된다.
@@ -125,7 +125,7 @@ include::{snippets}/member-goal-join/http-response.adoc[]
 Response fields:
 include::{snippets}/member-goal-join/response-fields.adoc[]
 
-=== 목표 참여자수 조회
+=== 목표 참여자수 조회 [GET]
 
 ==== Resquest
 include::{snippets}/member-goal-count/curl-request.adoc[]
@@ -136,7 +136,7 @@ include::{snippets}/member-goal-count/path-parameters.adoc[]
 ==== Response
 include::{snippets}/member-goal-count/http-response.adoc[]
 
-=== 목표 참여자 리스트 조회 (할일리스트 포함)
+=== 목표 참여자 리스트 조회 (할일리스트 포함) [GET]
 
 ==== Resquest
 include::{snippets}/join-todo-list/curl-request.adoc[]
@@ -151,7 +151,7 @@ include::{snippets}/join-todo-list/response-fields.adoc[]
 
 == 할일리스트 API
 
-=== 특정회원 할일조회
+=== 특정회원 할일조회 [GET]
 
 ==== Resquest
 include::{snippets}/todo-search/curl-request.adoc[]
