@@ -1,6 +1,5 @@
 package com.eroom.erooja.features.goal.controller;
 
-import com.eroom.erooja.domain.model.QMemberGoal;
 import com.eroom.erooja.features.goal.exception.GoalNotFoundException;
 import com.eroom.erooja.domain.enums.GoalRole;
 import com.eroom.erooja.features.auth.jwt.JwtTokenProvider;
@@ -98,7 +97,7 @@ public class GoalController {
                 newGoal.getEndDt(),
                 GoalRole.OWNER);
 
-        todoService.addTodo(uid, newGoal.getId(), createGoalRequest.getTodoList());
+        todoService.addTodo(uid, newGoal.getId(), createGoalRequest.getTodoDTOList());
 
         return new ResponseEntity(newGoal, HttpStatus.CREATED);
     }

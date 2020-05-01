@@ -47,10 +47,8 @@
 | 요청한 리소스가 없음.
 |===
 
-[[Memo]]
 == 목표 API
 
-[[Goal-create]]
 === 목표 생성
 
 ==== Resquest
@@ -68,7 +66,20 @@ Response fields:
 include::{snippets}/create-goal/response-fields.adoc[]
 
 
-[[Goal-detail]]
+=== 목표 상세조회
+
+==== Resquest
+include::{snippets}/goal-detail/curl-request.adoc[]
+include::{snippets}/goal-detail/http-request.adoc[]
+Path Parmeters:
+include::{snippets}/goal-detail/path-parameters.adoc[]
+
+==== Response
+include::{snippets}/goal-detail/http-response.adoc[]
+Response fields:
+include::{snippets}/goal-detail/response-fields.adoc[]
+
+
 === 목표 상세조회
 
 ==== Resquest
@@ -84,23 +95,6 @@ include::{snippets}/goal-detail/response-fields.adoc[]
 
 
 
-[[Goal-detail]]
-=== 목표 상세조회
-
-==== Resquest
-include::{snippets}/goal-detail/curl-request.adoc[]
-include::{snippets}/goal-detail/http-request.adoc[]
-Path Parmeters:
-include::{snippets}/goal-detail/path-parameters.adoc[]
-
-==== Response
-include::{snippets}/goal-detail/http-response.adoc[]
-Response fields:
-include::{snippets}/goal-detail/response-fields.adoc[]
-
-
-
-[[Goal-list-serarch]]
 === 목표리스트조회 (관심직무별)
 
 ==== Resquest
@@ -125,9 +119,12 @@ include::{snippets}/goal-list-interest/http-response.adoc[]
 Response fields:
 include::{snippets}/goal-list-interest/response-fields.adoc[]
 
+== 목표담기 API
 
-[[Goal-member-join]]
 === 기존 목표담기
+
+TIP: - 기존 회원 리스트 담기는 ownerUid에 해당 회원uid 기입후 전송 +
+- 만약, 목표 직접추가면 기입 안하고 보내면된다.
 
 ==== Resquest
 include::{snippets}/member-goal-join/curl-request.adoc[]

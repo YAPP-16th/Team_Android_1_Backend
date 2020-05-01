@@ -26,7 +26,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.FieldDescriptor;
-import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -41,7 +40,6 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
-import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -80,8 +78,8 @@ public class GoalCreateControllerTest {
         LocalDateTime endDt = startDt.plusHours(2);
         String mockUid = "KAKAO@testId";
 
-        List<TodoDTO> todoDTOList = new ArrayList();
-        todoDTOList.add(TodoDTO.builder()
+        List<TodoDTO> todoDTODTOList = new ArrayList();
+        todoDTODTOList.add(TodoDTO.builder()
                 .content("fisrt")
                 .priority(0).build());
 
@@ -91,7 +89,7 @@ public class GoalCreateControllerTest {
                 .description("description")
                 .isDateFixed(false)
                 .interestIdList(Arrays.asList(0L))
-                .todoList(todoDTOList).build();
+                .todoDTOList(todoDTODTOList).build();
 
         Goal newGoal = Goal.builder()
                 .id(0L)
