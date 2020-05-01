@@ -139,3 +139,20 @@ include::{snippets}/member-goal-join/http-response.adoc[]
 Response fields:
 include::{snippets}/member-goal-join/response-fields.adoc[]
 
+== 할일리스트 API
+
+=== 특정회원 할일조회
+
+==== Resquest
+include::{snippets}/todo-search/curl-request.adoc[]
+include::{snippets}/todo-search/http-request.adoc[]
+Path Parmeters:
+include::{snippets}/goal-list-interest/path-parameters.adoc[]
+Request parameters:
+include::{snippets}/goal-list-interest/request-parameters.adoc[]
+
+==== Response
+include::{snippets}/todo-search/http-response.adoc[]
+Response fields:
+include::{snippets}/todo-search/response-fields.adoc[]
+

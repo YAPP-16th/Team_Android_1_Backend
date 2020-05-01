@@ -158,9 +158,9 @@ public class GoalCreateControllerTest {
                                 fieldWithPath("isDateFixed").description("기간고정여부"),
                                 fieldWithPath("endDt").description("종료일자"),
                                 fieldWithPath("interestIdList[]").description("관련직무"),
-                                fieldWithPath("todoList[]").description("달성할리스트"),
-                                fieldWithPath("todoList[].content").description("달성할리스트 내용"),
-                                fieldWithPath("todoList[].priority").description("달성할리스트 우선순위")
+                                fieldWithPath("todoDTOList[]").description("달성할리스트"),
+                                fieldWithPath("todoDTOList[].content").description("달성할리스트 내용"),
+                                fieldWithPath("todoDTOList[].priority").description("달성할리스트 우선순위")
                         ),
                         relaxedResponseFields(
                                 fieldWithPath("id").description("목표 구분값"),

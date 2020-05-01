@@ -4,6 +4,7 @@ import com.eroom.erooja.documentation.v1.RestDocsConfiguration;
 import com.eroom.erooja.domain.enums.GoalRole;
 import com.eroom.erooja.domain.model.Goal;
 import com.eroom.erooja.domain.model.MemberGoal;
+import com.eroom.erooja.domain.model.Todo;
 import com.eroom.erooja.features.auth.jwt.JwtTokenProvider;
 import com.eroom.erooja.features.todo.dto.TodoDTO;
 import com.eroom.erooja.features.todo.service.TodoService;
@@ -20,6 +21,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
@@ -55,9 +58,7 @@ public class TodoControllerTest {
     @MockBean
     private TodoService todoService;
     @MockBean
-    private JwtTokenProvider jwtTokenProvider;
     private final MockMvc mockMvc;
-    private final ObjectMapper objectMapper;
 
 
     @Test
@@ -68,56 +69,40 @@ public class TodoControllerTest {
         LocalDateTime endDt = startDt.plusHours(2);
         String mockUid = "KAKAO@testId";
 
-        List<TodoDTO> todoDTOList = new ArrayList();
-        todoDTOList.add(TodoDTO.builder()
-                .content("fisrt")
-                .priority(0).build());
-        todoDTOList.add(TodoDTO.builder()
-                .content("two")
-                .priority(1).build());
-        todoDTOList.add(TodoDTO.builder()
-                .content("three")
-                .priority(2).build());
-
-        //Page todoPage = new PageImpl(todoList);
-
         Goal goal = Goal.builder()
                 .id(0L)
-                .startDt(startDt)
-                .endDt(endDt)
-                .title("title")
-                .joinCount(1)
-                .description("description")
-                .isDateFixed(false)
                 .isEnd(false).build();
 
         MemberGoal memberGoal = MemberGoal.builder()
                 .goalId(goal.getId())
                 .uid(mockUid)
-                .isEnd(false)
-                .copyCount(0)
-                .startDt(startDt)
-                .endDt(endDt)
                 .role(GoalRole.OWNER).build();
 
-        given(jwtTokenProvider.getUidFromHeader("Bearer [TOKEN]"))
-                .willReturn(mockUid);
+        List<Todo> todoList = new ArrayList();
+        todoList.add(Todo.builder()
+                .content("fisrt")
+                .priority(0).build());
+        todoList.add(Todo.builder()
+                .content("two")
+                .priority(1).build());
+        todoList.add(Todo.builder()
+                .content("three")
+                .priority(2).build());
+
+        Page<Todo> todoPage = new PageImpl(todoList);
+
         given(todoService.getTodoListByGoalIdAndUid(any(PageRequest.class), anyLong(), anyString()))
                 .willReturn(todoPage);
 
-
         ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders
-                .post("/api/v1//member/{uid}/goal/{goalId}",mockUid,goal.getId())
+                .get("/api/v1/todo/member/{uid}/goal/{goalId}",mockUid,goal.getId())
                 .param("page", "0")
-                .param("size", "1")
-                .header(HttpHeaders.AUTHORIZATION, "Bearer [TOKEN]"))
+                .param("size", "3"))
                 .andDo(print())
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("goalId").isNumber());
+                .andExpect(status().isOk());
 
         resultActions.andDo(
-                document("member-goal-join",
-                        requestHeaders(headerWithName("Authorization").description("jwt 토큰 Bearer type")),
+                document("todo-search",
                         requestParameters(
                                 parameterWithName("page").description("페이지 위치"),
                                 parameterWithName("size").description("한 페이지당 조회할 크기")
