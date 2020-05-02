@@ -4,6 +4,8 @@ import com.eroom.erooja.domain.common.AuditProperties;
 import com.eroom.erooja.domain.enums.GoalRole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import lombok.*;
 
 import javax.persistence.*;
@@ -12,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.Builder.Default;
 
 @EqualsAndHashCode(of = {"id"})
 @NoArgsConstructor
@@ -41,6 +44,10 @@ public class MemberGoal extends AuditProperties {
 
     private LocalDateTime endDt;
 
+    @Min(0) @Max(1)
+    @Default
+    private Double checkedTodoRate = .0;
+
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "goal_id", updatable = false, insertable = false)
@@ -57,16 +64,17 @@ public class MemberGoal extends AuditProperties {
 
     @Builder
     public MemberGoal(LocalDateTime createDt, LocalDateTime updateDt, String uid,
-                      Long goalId, GoalRole role, Boolean isEnd, int copyCount,
+                      Long goalId, GoalRole role, Boolean isEnd, int copyCount, Double checkedTodoRate,
                       LocalDateTime startDt, LocalDateTime endDt) {
         super(createDt, updateDt);
         this.uid = uid;
-        this.goalId=goalId;
-        this.role=role;
-        this.isEnd=isEnd;
-        this.copyCount=copyCount;
-        this.startDt=startDt;
-        this.endDt=endDt;
+        this.goalId = goalId;
+        this.role = role;
+        this.isEnd = isEnd;
+        this.copyCount = copyCount;
+        this.checkedTodoRate = checkedTodoRate;
+        this.startDt = startDt;
+        this.endDt = endDt;
     }
 
     public int increaseCopyCount(){
