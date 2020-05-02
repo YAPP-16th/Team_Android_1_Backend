@@ -1,0 +1,190 @@
+= Erooja REST API Guide
+:doctype: book
+:icons: font
+:source-highlighter: highlight.js
+:toc: left
+:toclevels: 5
+:sectlinks: request-body
+
+[[overview]]
+= 개요
+
+[[overview-http-verbs]]
+== HTTP 동사
+
+본 REST API에서 사용하는 HTTP 동사(verbs)는 가능한한 표준 HTTP와 REST 규약을 따릅니다.
+
+|===
+| 동사 | 용례
+| `GET`
+| 리소스를 가져올 때 사용
+| `POST`
+| 새 리소스를 만들 때 사용
+| `PUT`
+| 기존 리소스를 수정할 때 사용
+| `PATCH`
+| 기존 리소스의 일부를 수정할 때 사용
+| `DELETE`
+| 기존 리소스를 삭제할 떄 사용
+|===
+
+[[overview-http-status-codes]]
+== HTTP 상태 코드
+
+본 REST API에서 사용하는 HTTP 상태 코드는 가능한한 표준 HTTP와 REST 규약을 따릅니다.
+
+|===
+| 상태 코드 | 용례
+| `200 OK`
+| 요청을 성공적으로 처리함
+| `201 Created`
+| 새 리소스를 성공적으로 생성함. 응답의 `Location` 헤더에 해당 리소스의 URI가 담겨있다.
+| `204 No Content`
+| 기존 리소스를 성공적으로 수정함.
+| `400 Bad Request`
+| 잘못된 요청을 보낸 경우. 응답 본문에 더 오류에 대한 정보가 담겨있다.
+| `404 Not Found`
+| 요청한 리소스가 없음.
+|===
+
+== 목표 API
+
+=== 목표 생성 [POST]
+
+==== Resquest
+include::{snippets}/create-goal/curl-request.adoc[]
+Request body:
+include::{snippets}/create-goal/request-body.adoc[]
+Request headers:
+include::{snippets}/create-goal/request-headers.adoc[]
+Request fields:
+include::{snippets}/create-goal/request-fields.adoc[]
+
+==== Response
+include::{snippets}/create-goal/http-response.adoc[]
+Response fields:
+include::{snippets}/create-goal/response-fields.adoc[]
+
+==== 응답코드
+HttpStatus.CREATED +
+HttpStatus.BAD_REQUEST, "목표명을 최소 5자 이상 입력해주세요." +
+HttpStatus.BAD_REQUEST, "목표명은 50자 이내만 입력해주세요" +
+HttpStatus.BAD_REQUEST, "기간 고정을 선택해야합니다." +
+HttpStatus.BAD_REQUEST, "반드시 미래 날짜여야 합니다." +
+HttpStatus.BAD_REQUEST, "종료 날짜를 선택해야 합니다." +
+HttpStatus.BAD_REQUEST, "관련직무를 1개 이상 선택해주세요." +
+HttpStatus.BAD_REQUEST, "1개 이상의 리스트를 추가해주세요"
+
+
+=== 목표 상세조회 [GET]
+
+==== Resquest
+include::{snippets}/goal-detail/curl-request.adoc[]
+include::{snippets}/goal-detail/http-request.adoc[]
+Path Parmeters:
+include::{snippets}/goal-detail/path-parameters.adoc[]
+
+==== Response
+include::{snippets}/goal-detail/http-response.adoc[]
+Response fields:
+include::{snippets}/goal-detail/response-fields.adoc[]
+
+==== 응답코드
+HttpStatus.OK +
+HttpStatus.NOT_FOUND, "해당 목표가 존재하지 않습니다."
+
+=== 목표리스트조회 (관심직무별) [GET]
+
+==== Resquest
+include::{snippets}/goal-list-interest/curl-request.adoc[]
+include::{snippets}/goal-list-interest/http-request.adoc[]
+Path Parmeters:
+include::{snippets}/goal-list-interest/path-parameters.adoc[]
+Request parameters:
+include::{snippets}/goal-list-interest/request-parameters.adoc[]
+
+TIP: 정렬방식(sort) 요청값
+
+- createDt,desc    // 생성날짜기준 내림차순 (최근올린순)
+- createDt,asc // 생성날짜기준 오름차순 (오래전 올린순)
+- joinCount,desc  // 참여자수기준 내림차순
+- joinCount,asc // (많은순) 참여자수기준 오름차순
+- endDt,asc  // 마감임박순
+- endDt,desc  // 마감 많이남은순
+
+==== Response
+include::{snippets}/goal-list-interest/http-response.adoc[]
+Response fields:
+include::{snippets}/goal-list-interest/response-fields.adoc[]
+
+== 목표담기 API
+
+=== 기존 목표담기 [POST]
+
+TIP: - 기존 회원 리스트 담기는 ownerUid에 해당 회원uid 기입후 전송 +
+- 만약, 목표 직접추가면 기입 안하고 보내면된다.
+
+==== Resquest
+include::{snippets}/member-goal-join/curl-request.adoc[]
+include::{snippets}/member-goal-join/http-request.adoc[]
+Request headers:
+include::{snippets}/member-goal-join/request-headers.adoc[]
+Request fields:
+include::{snippets}/member-goal-join/request-fields.adoc[]
+
+==== Response
+include::{snippets}/member-goal-join/http-response.adoc[]
+Response fields:
+include::{snippets}/member-goal-join/response-fields.adoc[]
+
+==== 응답코드
+HttpStatus.OK +
+HttpStatus.BAD_REQUEST, "1개 이상의 리스트를 추가해주세요" +
+HttpStatus.BAD_REQUEST, "반드시 미래 날짜여야 합니다." +
+HttpStatus.BAD_REQUEST, "종료 날짜를 선택해야 합니다." +
+HttpStatus.BAD_REQUEST, "할일 우선순위는 0부터 1씩 차례대로 존재해야합니다."
+
+=== 목표 참여자수 조회 [GET]
+
+==== Resquest
+include::{snippets}/member-goal-count/curl-request.adoc[]
+include::{snippets}/member-goal-count/http-request.adoc[]
+Path Parmeters:
+include::{snippets}/member-goal-count/path-parameters.adoc[]
+
+==== Response
+include::{snippets}/member-goal-count/http-response.adoc[]
+
+=== 목표 참여자 리스트 조회 (할일리스트 포함) [GET]
+
+==== Resquest
+include::{snippets}/join-todo-list/curl-request.adoc[]
+include::{snippets}/join-todo-list/http-request.adoc[]
+Path Parmeters:
+include::{snippets}/join-todo-list/path-parameters.adoc[]
+
+==== Response
+include::{snippets}/join-todo-list/http-response.adoc[]
+Response fields:
+include::{snippets}/join-todo-list/response-fields.adoc[]
+
+== 할일리스트 API
+
+=== 특정회원 할일조회 [GET]
+
+==== Resquest
+include::{snippets}/todo-search/curl-request.adoc[]
+include::{snippets}/todo-search/http-request.adoc[]
+Path Parmeters:
+include::{snippets}/todo-search/path-parameters.adoc[]
+Request parameters:
+include::{snippets}/todo-search/request-parameters.adoc[]
+
+==== Response
+include::{snippets}/todo-search/http-response.adoc[]
+Response fields:
+
+include::{snippets}/todo-search/response-fields.adoc[]
+
+
+

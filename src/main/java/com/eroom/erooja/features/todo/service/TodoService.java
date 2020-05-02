@@ -2,7 +2,6 @@ package com.eroom.erooja.features.todo.service;
 
 import com.eroom.erooja.common.exception.EroojaException;
 import com.eroom.erooja.domain.model.MemberGoal;
-import com.eroom.erooja.domain.model.Todo;
 import com.eroom.erooja.features.todo.dto.TodoDTO;
 import com.eroom.erooja.features.todo.repository.TodoRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +21,8 @@ public class TodoService {
     private final TodoRepository todoRepository;
     private final ModelMapper modelMapper;
 
-    public List<Todo> addTodo(String uid, Long goalId, List<TodoDTO> todoDTOList) {
-        List<Todo> todoList = mapDTOtoTodo(uid, goalId, todoDTOList);
+    public List<com.eroom.erooja.domain.model.Todo> addTodo(String uid, Long goalId, List<TodoDTO> todoDTODTOList) {
+        List<com.eroom.erooja.domain.model.Todo> todoList = mapDTOtoTodo(uid, goalId, todoDTODTOList);
 
         if (checkPriorityIsNotCorrect(todoList))
             throw new EroojaException(TODO_PRIORITY_NOT_CORRECT);
@@ -31,23 +30,23 @@ public class TodoService {
         return todoRepository.saveAll(todoList);
     }
 
-    public Boolean checkPriorityIsNotCorrect(List<Todo> todoList) {
+    public Boolean checkPriorityIsNotCorrect(List<com.eroom.erooja.domain.model.Todo> todoList) {
         int checkCount = 0;
-        for (Todo todo : todoList) {
+        for (com.eroom.erooja.domain.model.Todo todo : todoList) {
             if (todo.getPriority() != checkCount++)
                 return true;
         }
         return false;
     }
 
-    public Page<Todo> getTodoListByGoalIdAndUid(Pageable pageable, Long goalId, String uid){
+    public Page<com.eroom.erooja.domain.model.Todo> getTodoListByGoalIdAndUid(Pageable pageable, Long goalId, String uid){
         return todoRepository.getTodoListByGoalIdAndUid(pageable, goalId, uid);
     }
 
-    public List<Todo> mapDTOtoTodo(String uid, Long goalId, List<TodoDTO> todoDTOList) {
-        return todoDTOList.stream()
+    public List<com.eroom.erooja.domain.model.Todo> mapDTOtoTodo(String uid, Long goalId, List<TodoDTO> todoDTODTOList) {
+        return todoDTODTOList.stream()
                 .map(todoDTO -> {
-                    Todo todo = modelMapper.map(todoDTO, Todo.class);
+                    com.eroom.erooja.domain.model.Todo todo = modelMapper.map(todoDTO, com.eroom.erooja.domain.model.Todo.class);
                     todo.setMemberGoal(MemberGoal.builder().uid(uid).goalId(goalId).build());
                     return todo;
                 }).collect(Collectors.toList());

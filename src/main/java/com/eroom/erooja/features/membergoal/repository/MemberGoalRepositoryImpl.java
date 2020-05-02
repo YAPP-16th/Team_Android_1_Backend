@@ -37,18 +37,13 @@ public class MemberGoalRepositoryImpl implements MemberGoalRepositoryCustom {
 
         List<MemberGoal> memberGoalList = results.getResults();
 
-        List<GoalJoinTodoDto> goalJoinTodoDtoList = memberGoalList.stream().map(join ->{
-                Hibernate.initialize(join.getTodoList());
-                return new GoalJoinTodoDto(
-                        join.getUid(),
-                        join.getGoalId(),
-                        join.getRole(),
-                        join.getIsEnd(),
-                        join.getCopyCount(),
-                        join.getStartDt(),
-                        join.getEndDt(),
-                        join.getTodoList(),
-                        join.getMember().getNickname());}
+        List<GoalJoinTodoDto> goalJoinTodoDtoList = memberGoalList.stream().map(join -> {
+                    Hibernate.initialize(join.getTodoList());
+                    return new GoalJoinTodoDto(
+                            join,
+                            join.getTodoList(),
+                            join.getMember().getNickname());
+                }
         )
                 .collect(Collectors.toList());
 
