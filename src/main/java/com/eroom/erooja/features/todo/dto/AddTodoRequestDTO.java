@@ -1,6 +1,5 @@
 package com.eroom.erooja.features.todo.dto;
 
-import com.eroom.erooja.domain.model.Todo;
 import lombok.*;
 
 import java.util.List;
@@ -12,5 +11,5 @@ import java.util.List;
 @Setter
 public class AddTodoRequestDTO {
     public Long goalId;
-    public List<TodoDTO> todoList;
+    public List<TodoDTO> todoDTOList;
 }

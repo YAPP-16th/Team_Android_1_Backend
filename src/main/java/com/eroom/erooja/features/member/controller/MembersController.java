@@ -61,7 +61,7 @@ public class MembersController {
         }
     }
 
-    @PutMapping(value = "/image", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    @PostMapping(value = "/image", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity uploadAndUpdateImage(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String header,
                                                @RequestBody MultipartFile multipartImageFile) {
         String uid = jwtTokenProvider.getUidFromHeader(header);

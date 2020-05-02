@@ -1,7 +1,5 @@
 package com.eroom.erooja.features.membergoal.service;
 
-import com.eroom.erooja.common.constants.ErrorEnum;
-import com.eroom.erooja.common.exception.EroojaException;
 import com.eroom.erooja.common.exception.MemberGoalNotFoundException;
 import com.eroom.erooja.domain.enums.GoalRole;
 import com.eroom.erooja.domain.model.Goal;
@@ -19,14 +17,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static com.eroom.erooja.common.constants.ErrorEnum.GOAL_JOIN_ALREADY_EXIST;
 
 @RequiredArgsConstructor
 @Service
@@ -51,7 +46,7 @@ public class MemberGoalService {
         else
             memberGoal = addMemberGoal(uid, goal.getId(), goalJoinRequest.getEndDt(), GoalRole.PARTICIPANT);
 
-        todoService.addTodo(uid, goal.getId(), goalJoinRequest.getTodoList());
+        todoService.addTodo(uid, goal.getId(), goalJoinRequest.getTodoDTOList());
         return memberGoal;
     }
 
