@@ -23,6 +23,8 @@ public class GoalJoinMemberDTO {
 
     private int copyCount;
 
+    private int checkedTodoRate;
+
     private LocalDateTime startDt;
 
     private LocalDateTime endDt;
@@ -35,6 +37,7 @@ public class GoalJoinMemberDTO {
                     .role(memberGoal.getRole())
                     .isEnd(memberGoal.getIsEnd())
                     .copyCount(memberGoal.getCopyCount())
+                    .checkedTodoRate((int) (memberGoal.getCheckedTodoRate() * 100))
                     .startDt(memberGoal.getStartDt())
                     .endDt(memberGoal.getEndDt())
                     .minimalGoalDetail(MinimalGoalDetailDTO.of(goal))

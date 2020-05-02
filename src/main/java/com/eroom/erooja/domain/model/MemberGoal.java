@@ -3,18 +3,26 @@ package com.eroom.erooja.domain.model;
 import com.eroom.erooja.domain.common.AuditProperties;
 import com.eroom.erooja.domain.enums.GoalRole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import lombok.*;
-
-import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
-import lombok.Builder.Default;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @EqualsAndHashCode(of = {"id"})
 @NoArgsConstructor
@@ -44,9 +52,8 @@ public class MemberGoal extends AuditProperties {
 
     private LocalDateTime endDt;
 
-    @Min(0) @Max(1)
-    @Default
-    private Double checkedTodoRate = .0;
+    // 0.0 ~ 1.0, (체크한 투두 수) / (전체 할 일 수) 비율
+    private Double checkedTodoRate;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
