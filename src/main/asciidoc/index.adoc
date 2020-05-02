@@ -65,6 +65,16 @@ include::{snippets}/create-goal/http-response.adoc[]
 Response fields:
 include::{snippets}/create-goal/response-fields.adoc[]
 
+==== 응답코드
+HttpStatus.CREATED +
+HttpStatus.BAD_REQUEST, "목표명을 최소 5자 이상 입력해주세요." +
+HttpStatus.BAD_REQUEST, "목표명은 50자 이내만 입력해주세요" +
+HttpStatus.BAD_REQUEST, "기간 고정을 선택해야합니다." +
+HttpStatus.BAD_REQUEST, "반드시 미래 날짜여야 합니다." +
+HttpStatus.BAD_REQUEST, "종료 날짜를 선택해야 합니다." +
+HttpStatus.BAD_REQUEST, "관련직무를 1개 이상 선택해주세요." +
+HttpStatusBAD_REQUEST, "1개 이상의 리스트를 추가해주세요"
+
 
 === 목표 상세조회 [GET]
 
@@ -79,7 +89,9 @@ include::{snippets}/goal-detail/http-response.adoc[]
 Response fields:
 include::{snippets}/goal-detail/response-fields.adoc[]
 
-
+==== 응답코드
+HttpStatus.OK +
+HttpStatus.NOT_FOUND, "해당 목표가 존재하지 않습니다."
 
 === 목표리스트조회 (관심직무별) [GET]
 
@@ -124,6 +136,13 @@ include::{snippets}/member-goal-join/request-fields.adoc[]
 include::{snippets}/member-goal-join/http-response.adoc[]
 Response fields:
 include::{snippets}/member-goal-join/response-fields.adoc[]
+
+==== 응답코드
+HttpStatus.OK +
+HttpStatusBAD_REQUEST, "1개 이상의 리스트를 추가해주세요" +
+HttpStatus.BAD_REQUEST, "반드시 미래 날짜여야 합니다." +
+HttpStatus.BAD_REQUEST, "종료 날짜를 선택해야 합니다." +
+HttpStatus.BAD_REQUEST, "할일 우선순위는 0부터 1씩 차례대로 존재해야합니다."
 
 === 목표 참여자수 조회 [GET]
 
