@@ -8,6 +8,7 @@ import com.eroom.erooja.domain.model.MemberGoalPK;
 import com.eroom.erooja.domain.model.Members;
 import com.eroom.erooja.features.goal.repository.GoalRepository;
 import com.eroom.erooja.features.goal.service.GoalService;
+import com.eroom.erooja.features.membergoal.dto.GoalJoinMemberDTO;
 import com.eroom.erooja.features.membergoal.dto.GoalJoinRequestDTO;
 import com.eroom.erooja.features.membergoal.dto.GoalJoinTodoDto;
 import com.eroom.erooja.features.membergoal.repository.MemberGoalRepository;
@@ -22,6 +23,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -76,12 +78,24 @@ public class MemberGoalService {
                 .isEnd(false).build());
     }
 
-    public Page<MemberGoal> getGoalJoinPageByUidAndEndDtBeforeNow(String uid, Pageable pageable) {
-        return memberGoalRepository.findAllByUidAndEndDtIsBefore(uid, pageable, LocalDateTime.now());
+    @Transactional
+    public Page<GoalJoinMemberDTO> getEndedGoalJoinPageByUid(String uid, Pageable pageable) {
+        Page<MemberGoal> memberGoals = memberGoalRepository.findAllByUidAndEndDtIsBeforeAndIsEndFalse(uid, pageable, LocalDateTime.now());
+        return convertPage2DTO(memberGoals);
     }
 
-    public Page<MemberGoal> getGoalJoinPageByUidAndEndDtAfterNow(String uid, Pageable pageable) {
-        return memberGoalRepository.findAllByUidAndEndDtIsAfter(uid, pageable, LocalDateTime.now());
+    @Transactional
+    public Page<GoalJoinMemberDTO> getGoalJoinPageByUid(String uid, Pageable pageable) {
+        Page<MemberGoal> memberGoals = memberGoalRepository.findAllByUidAndEndDtIsAfterOrIsEndTrue(uid, pageable, LocalDateTime.now());
+        return convertPage2DTO(memberGoals);
+    }
+
+    private Page<GoalJoinMemberDTO> convertPage2DTO(Page<MemberGoal> origin) {
+        return new PageImpl<>(
+            origin.getContent().stream()
+                .map(mg -> GoalJoinMemberDTO.of(mg, goalService.findGoalById(mg.getGoalId())))
+                .collect(Collectors.toList()),
+            origin.getPageable(), origin.getTotalElements());
     }
 
     public Page<Members> getMembersAllByGoalId(Long goalId, Pageable pageable) {

@@ -24,7 +24,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@EqualsAndHashCode(of = {"id"})
+@EqualsAndHashCode(of = {"uid"}, callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -52,9 +52,6 @@ public class MemberGoal extends AuditProperties {
 
     private LocalDateTime endDt;
 
-    // 0.0 ~ 1.0, (체크한 투두 수) / (전체 할 일 수) 비율
-    private Double checkedTodoRate;
-
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "goal_id", updatable = false, insertable = false)
@@ -71,7 +68,7 @@ public class MemberGoal extends AuditProperties {
 
     @Builder
     public MemberGoal(LocalDateTime createDt, LocalDateTime updateDt, String uid,
-                      Long goalId, GoalRole role, Boolean isEnd, int copyCount, Double checkedTodoRate,
+                      Long goalId, GoalRole role, Boolean isEnd, int copyCount,
                       LocalDateTime startDt, LocalDateTime endDt) {
         super(createDt, updateDt);
         this.uid = uid;
@@ -79,7 +76,6 @@ public class MemberGoal extends AuditProperties {
         this.role = role;
         this.isEnd = isEnd;
         this.copyCount = copyCount;
-        this.checkedTodoRate = checkedTodoRate;
         this.startDt = startDt;
         this.endDt = endDt;
     }

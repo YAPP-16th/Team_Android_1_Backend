@@ -20,9 +20,10 @@ public interface MemberGoalRepository extends JpaRepository<MemberGoal, MemberGo
     int countMemberGoalByGoalId(Long goalId);
 
     Page<GoalJoinTodoDto> getJoinTodoListByGoalId(Long goalId, Pageable pageable);
+
     Page<MemberGoal> findAllByGoalId(Long goalId, Pageable pageable);
 
-    Page<MemberGoal> findAllByUidAndEndDtIsAfter(String uid, Pageable pageable, LocalDateTime now);
+    Page<MemberGoal> findAllByUidAndEndDtIsAfterOrIsEndTrue(String uid, Pageable pageable, LocalDateTime now);
 
-    Page<MemberGoal> findAllByUidAndEndDtIsBefore(String uid, Pageable pageable, LocalDateTime now);
+    Page<MemberGoal> findAllByUidAndEndDtIsBeforeAndIsEndFalse(String uid, Pageable pageable, LocalDateTime now);
 }
