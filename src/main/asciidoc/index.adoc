@@ -47,11 +47,136 @@
 | 요청한 리소스가 없음.
 |===
 
+== 멤버 API
+
+
+=== 포함된 토큰의 유저 기본 정보 얻기 [GET]
+
+==== Request
+include::{snippets}/member-api-documentation/member-get/http-request.adoc[]
+
+==== Response
+include::{snippets}/member-api-documentation/member-get/http-response.adoc[]
+
+
+=== 유저정보 업데이트 [PUT]
+
+==== Request
+include::{snippets}/member-api-documentation/member-update/http-request.adoc[]
+
+==== Response
+include::{snippets}/member-api-documentation/member-update/http-response.adoc[]
+
+
+=== 닉네임 중복 확인 [POST]
+
+==== Request
+include::{snippets}/member-api-documentation/nickname-duplicity/http-request.adoc[]
+
+==== Response
+include::{snippets}/member-api-documentation/nickname-duplicity/http-response.adoc[]
+
+
+=== 닉네임 업데이트 [PUT]
+
+==== Request
+include::{snippets}/member-api-documentation/nickname-update/http-request.adoc[]
+
+==== Response
+include::{snippets}/member-api-documentation/nickname-update/http-response.adoc[]
+
+
+=== 프로필 사진 업데이트 [POST]
+
+==== Request
+include::{snippets}/member-api-documentation/image-upload-or-update/http-request.adoc[]
+
+==== Response
+include::{snippets}/member-api-documentation/image-upload-or-update/http-response.adoc[]
+
+
+=== 저장된 (현재 + 이전) 프로필 사진 경로들 불러오기 [GET]
+
+==== Request
+include::{snippets}/member-api-documentation/images-get/http-request.adoc[]
+
+==== Response
+include::{snippets}/member-api-documentation/images-get/http-response.adoc[]
+
+
+=== 저장된 프로필 사진 삭제하기 [DELETE]
+
+==== Request
+include::{snippets}/member-api-documentation/images-delete/http-request.adoc[]
+
+==== Response
+include::{snippets}/member-api-documentation/images-delete/http-response.adoc[]
+
+
+=== 사용자의 직군/직무 불러오기 [GET]
+
+==== Request
+include::{snippets}/member-api-documentation/job-interests-get/http-request.adoc[]
+
+==== Response
+include::{snippets}/member-api-documentation/job-interests-get/http-response.adoc[]
+
+
+=== 사용자의 직군/직무 추가하기 [PUT]
+
+==== Request
+include::{snippets}/member-api-documentation/job-interest-add/http-request.adoc[]
+
+==== Response
+include::{snippets}/member-api-documentation/job-interest-add/http-response.adoc[]
+
+
+=== 사용자의 직군/직무 리스트 추가하기 [GET]
+
+==== Request
+include::{snippets}/member-api-documentation/job-interests-add/http-request.adoc[]
+
+==== Response
+include::{snippets}/member-api-documentation/job-interests-add/http-response.adoc[]
+
+
+
+== 직군/직무 API
+
+
+=== 직군 불러오기
+
+==== Request
+include::{snippets}/job-interest-api-documentation/job-groups-get/http-request.adoc[]
+
+==== Response
+include::{snippets}/job-interest-api-documentation/job-groups-get/http-response.adoc[]
+
+
+=== 직군과 직무 함께 불러오기
+
+==== Request
+include::{snippets}/job-interest-api-documentation/job-group-get/http-request.adoc[]
+
+==== Response
+include::{snippets}/job-interest-api-documentation/job-group-get/http-response.adoc[]
+
+
+=== 직군/직무 단일 조회
+
+==== Request
+include::{snippets}/job-interest-api-documentation/job-interest-get/http-request.adoc[]
+
+==== Response
+include::{snippets}/job-interest-api-documentation/job-interest-get/http-response.adoc[]
+
+
+
 == 목표 API
 
 === 목표 생성 [POST]
 
-==== Resquest
+==== Request
 include::{snippets}/create-goal/curl-request.adoc[]
 Request body:
 include::{snippets}/create-goal/request-body.adoc[]
@@ -78,10 +203,10 @@ HttpStatus.BAD_REQUEST, "1개 이상의 리스트를 추가해주세요"
 
 === 목표 상세조회 [GET]
 
-==== Resquest
+==== Request
 include::{snippets}/goal-detail/curl-request.adoc[]
 include::{snippets}/goal-detail/http-request.adoc[]
-Path Parmeters:
+Path Parameters:
 include::{snippets}/goal-detail/path-parameters.adoc[]
 
 ==== Response
@@ -95,10 +220,10 @@ HttpStatus.NOT_FOUND, "해당 목표가 존재하지 않습니다."
 
 === 목표리스트조회 (관심직무별) [GET]
 
-==== Resquest
+==== Request
 include::{snippets}/goal-list-interest/curl-request.adoc[]
 include::{snippets}/goal-list-interest/http-request.adoc[]
-Path Parmeters:
+Path Parameters:
 include::{snippets}/goal-list-interest/path-parameters.adoc[]
 Request parameters:
 include::{snippets}/goal-list-interest/request-parameters.adoc[]
@@ -124,7 +249,7 @@ include::{snippets}/goal-list-interest/response-fields.adoc[]
 TIP: - 기존 회원 리스트 담기는 ownerUid에 해당 회원uid 기입후 전송 +
 - 만약, 목표 직접추가면 기입 안하고 보내면된다.
 
-==== Resquest
+==== Request
 include::{snippets}/member-goal-join/curl-request.adoc[]
 include::{snippets}/member-goal-join/http-request.adoc[]
 Request headers:
@@ -146,10 +271,10 @@ HttpStatus.BAD_REQUEST, "할일 우선순위는 0부터 1씩 차례대로 존재
 
 === 목표 참여자수 조회 [GET]
 
-==== Resquest
+==== Request
 include::{snippets}/member-goal-count/curl-request.adoc[]
 include::{snippets}/member-goal-count/http-request.adoc[]
-Path Parmeters:
+Path Parameters:
 include::{snippets}/member-goal-count/path-parameters.adoc[]
 
 ==== Response
@@ -157,10 +282,10 @@ include::{snippets}/member-goal-count/http-response.adoc[]
 
 === 목표 참여자 리스트 조회 (할일리스트 포함) [GET]
 
-==== Resquest
+==== Request
 include::{snippets}/join-todo-list/curl-request.adoc[]
 include::{snippets}/join-todo-list/http-request.adoc[]
-Path Parmeters:
+Path Parameters:
 include::{snippets}/join-todo-list/path-parameters.adoc[]
 
 ==== Response
@@ -172,10 +297,10 @@ include::{snippets}/join-todo-list/response-fields.adoc[]
 
 === 특정회원 할일조회 [GET]
 
-==== Resquest
+==== Request
 include::{snippets}/todo-search/curl-request.adoc[]
 include::{snippets}/todo-search/http-request.adoc[]
-Path Parmeters:
+Path Parameters:
 include::{snippets}/todo-search/path-parameters.adoc[]
 Request parameters:
 include::{snippets}/todo-search/request-parameters.adoc[]
