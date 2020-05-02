@@ -1,11 +1,13 @@
 package com.eroom.erooja.features.member.dto;
 
 import com.eroom.erooja.domain.model.Members;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 @NoArgsConstructor
 @Getter
 @ToString
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class MemberDTO {
     @Setter
     private String uid;

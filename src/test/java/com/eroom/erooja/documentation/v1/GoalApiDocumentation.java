@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -21,6 +22,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
 @AutoConfigureRestDocs(uriHost = "erooja.eroom.com")
+@ActiveProfiles({"documentation"})
 public class GoalApiDocumentation {
     private MockMvc mockMvc;
 
@@ -29,8 +31,8 @@ public class GoalApiDocumentation {
     public void setUp(WebApplicationContext context, RestDocumentationContextProvider restDocumentation) {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
                 .apply(documentationConfiguration(restDocumentation))
-                .alwaysDo(document("{method-name}",
-                        preprocessRequest(prettyPrint()),
+                .alwaysDo(document("{class-name}/{method-name}",
+                        preprocessRequest(modifyUris().host("erooja.eroom.com").port(20000), prettyPrint()),
                         preprocessResponse(prettyPrint())))
                 .build();
     }
