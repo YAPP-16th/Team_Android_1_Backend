@@ -3,7 +3,6 @@ package com.eroom.erooja.features.membergoal.controller;
 import com.eroom.erooja.common.exception.EroojaException;
 import com.eroom.erooja.domain.model.JobInterest;
 import com.eroom.erooja.domain.model.MemberGoal;
-import com.eroom.erooja.domain.model.MemberJobInterest;
 import com.eroom.erooja.domain.model.Members;
 import com.eroom.erooja.features.auth.jwt.JwtTokenProvider;
 import com.eroom.erooja.features.goal.service.GoalService;
@@ -19,7 +18,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
@@ -77,27 +75,17 @@ public class MemberGoalContoller {
 
     @GetMapping
     public ResponseEntity getGoalJoinListByUid(GoalJoinListRequestDTO goalJoinListRequestDTO) {
-        Page<MemberGoal> goalJoinPageByUid
+        Page<GoalJoinMemberDTO> memberGoalDTOPage
                 = (goalJoinListRequestDTO.isEndDtIsBeforeNow()) ?
-                memberGoalService.getGoalJoinPageByUidAndEndDtBeforeNow(
+                memberGoalService.getEndedGoalJoinPageByUid(
                         goalJoinListRequestDTO.getUid(),
                         goalJoinListRequestDTO.getPageable())
                 :
-                memberGoalService.getGoalJoinPageByUidAndEndDtAfterNow(
+                memberGoalService.getGoalJoinPageByUid(
                         goalJoinListRequestDTO.getUid(),
                         goalJoinListRequestDTO.getPageable());
 
-        Page<GoalJoinMemberDTO> memberGoalPage = convertPage2DTO(goalJoinPageByUid);
-
-        return ResponseEntity.ok(memberGoalPage);
-    }
-
-    private Page<GoalJoinMemberDTO> convertPage2DTO(Page<MemberGoal> origin) {
-        return new PageImpl<>(
-                origin.getContent().stream()
-                        .map(mg -> GoalJoinMemberDTO.of(mg, goalService.findGoalById(mg.getGoalId())))
-                        .collect(Collectors.toList()),
-                origin.getPageable(), origin.getTotalElements());
+        return ResponseEntity.ok(memberGoalDTOPage);
     }
 
     @GetMapping("/{goalId}/todo")
