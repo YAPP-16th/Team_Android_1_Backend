@@ -4,6 +4,8 @@ import com.eroom.erooja.domain.common.AuditProperties;
 import com.eroom.erooja.domain.enums.GoalRole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import lombok.*;
 
 import javax.persistence.*;
@@ -40,6 +42,9 @@ public class MemberGoal extends AuditProperties {
     private LocalDateTime startDt;
 
     private LocalDateTime endDt;
+
+    @Min(0) @Max(1)
+    private Double checkedTodoRate = .0;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
