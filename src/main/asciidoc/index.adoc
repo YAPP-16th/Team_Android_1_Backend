@@ -73,7 +73,7 @@ HttpStatus.BAD_REQUEST, "기간 고정을 선택해야합니다." +
 HttpStatus.BAD_REQUEST, "반드시 미래 날짜여야 합니다." +
 HttpStatus.BAD_REQUEST, "종료 날짜를 선택해야 합니다." +
 HttpStatus.BAD_REQUEST, "관련직무를 1개 이상 선택해주세요." +
-HttpStatusBAD_REQUEST, "1개 이상의 리스트를 추가해주세요"
+HttpStatus.BAD_REQUEST, "1개 이상의 리스트를 추가해주세요"
 
 
 === 목표 상세조회 [GET]
@@ -139,7 +139,7 @@ include::{snippets}/member-goal-join/response-fields.adoc[]
 
 ==== 응답코드
 HttpStatus.OK +
-HttpStatusBAD_REQUEST, "1개 이상의 리스트를 추가해주세요" +
+HttpStatus.BAD_REQUEST, "1개 이상의 리스트를 추가해주세요" +
 HttpStatus.BAD_REQUEST, "반드시 미래 날짜여야 합니다." +
 HttpStatus.BAD_REQUEST, "종료 날짜를 선택해야 합니다." +
 HttpStatus.BAD_REQUEST, "할일 우선순위는 0부터 1씩 차례대로 존재해야합니다."
