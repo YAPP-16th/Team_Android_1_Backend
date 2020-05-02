@@ -65,6 +65,16 @@ public class MemberJobInterestController {
         return ResponseEntity.ok(MemberJobInterestDTO.of(memberJobInterest));
     }
 
+    @DeleteMapping("/jobInterest/{jobInterestId}")
+    public ResponseEntity<?> deleteJobInterest(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String header,
+                                               @PathVariable Long jobInterestId) {
+        String uid = jwtTokenProvider.getUidFromHeader(header);
+
+        memberJobInterestService.deleteByUidAndJobInterestId(uid, jobInterestId);
+
+        return ResponseEntity.ok().build();
+    }
+
     @PutMapping("/jobInterests")
     public ResponseEntity addJobInterests(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String header,
                                           @RequestBody JobInterestIdDTO jobInterestIdDTO) {
