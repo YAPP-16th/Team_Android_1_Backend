@@ -112,7 +112,7 @@ public class MemberGoalJoinControllerTest {
                 .goalId(goal.getId())
                 .ownerUid(existMemberGoal.getUid())
                 .endDt(endDt)
-                .todoDTOList(todoDTODTOList).build();
+                .todoList(todoDTODTOList).build();
 
         given(jwtTokenProvider.getUidFromHeader("Bearer [TOKEN]"))
                 .willReturn(mockUid);
@@ -146,9 +146,9 @@ public class MemberGoalJoinControllerTest {
                                 fieldWithPath("goalId").description("새 목표명"),
                                 fieldWithPath("ownerUid").description("(nullable) 목표담기 복사한 대상 uid"),
                                 fieldWithPath("endDt").description("종료일자"),
-                                fieldWithPath("todoDTOList[]").description("달성할리스트"),
-                                fieldWithPath("todoDTOList[].content").description("달성할리스트 내용"),
-                                fieldWithPath("todoDTOList[].priority").description("달성할리스트 우선순위(0,1,2 ... 순서대로 요청한다)")
+                                fieldWithPath("todoList[]").description("달성할리스트"),
+                                fieldWithPath("todoList[].content").description("달성할리스트 내용"),
+                                fieldWithPath("todoList[].priority").description("달성할리스트 우선순위(0,1,2 ... 순서대로 요청한다)")
                         ),
                         relaxedResponseFields(
                                 fieldWithPath("goalId").description("목표 구분값"),
