@@ -2,7 +2,7 @@ package com.eroom.erooja.features.todo.service;
 
 import com.eroom.erooja.common.exception.EroojaException;
 import com.eroom.erooja.domain.model.MemberGoal;
-import com.eroom.erooja.features.todo.dto.TodoDTO;
+import com.eroom.erooja.features.todo.dto.AddTodoDTO;
 import com.eroom.erooja.features.todo.repository.TodoRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -21,7 +21,7 @@ public class TodoService {
     private final TodoRepository todoRepository;
     private final ModelMapper modelMapper;
 
-    public List<com.eroom.erooja.domain.model.Todo> addTodo(String uid, Long goalId, List<TodoDTO> todoDTODTOList) {
+    public List<com.eroom.erooja.domain.model.Todo> addTodo(String uid, Long goalId, List<AddTodoDTO> todoDTODTOList) {
         List<com.eroom.erooja.domain.model.Todo> todoList = mapDTOtoTodo(uid, goalId, todoDTODTOList);
 
         if (checkPriorityIsNotCorrect(todoList))
@@ -43,7 +43,7 @@ public class TodoService {
         return todoRepository.getTodoListByGoalIdAndUid(pageable, goalId, uid);
     }
 
-    public List<com.eroom.erooja.domain.model.Todo> mapDTOtoTodo(String uid, Long goalId, List<TodoDTO> todoDTODTOList) {
+    public List<com.eroom.erooja.domain.model.Todo> mapDTOtoTodo(String uid, Long goalId, List<AddTodoDTO> todoDTODTOList) {
         return todoDTODTOList.stream()
                 .map(todoDTO -> {
                     com.eroom.erooja.domain.model.Todo todo = modelMapper.map(todoDTO, com.eroom.erooja.domain.model.Todo.class);

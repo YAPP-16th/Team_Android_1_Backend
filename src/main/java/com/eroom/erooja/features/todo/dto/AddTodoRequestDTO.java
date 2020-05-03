@@ -11,5 +11,5 @@ import java.util.List;
 @Setter
 public class AddTodoRequestDTO {
     public Long goalId;
-    public List<TodoDTO> todoList;
+    public List<AddTodoDTO> todoList;
 }
