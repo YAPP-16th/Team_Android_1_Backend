@@ -70,11 +70,11 @@ public class MemberGoalJoinControllerTest {
         LocalDateTime endDt = startDt.plusHours(2);
         String mockUid = "KAKAO@testId";
 
-        List<AddTodoDTO> todoDTODTOList = new ArrayList();
-        todoDTODTOList.add(AddTodoDTO.builder()
+        List<AddTodoDTO> todoDTOList = new ArrayList();
+        todoDTOList.add(AddTodoDTO.builder()
                 .content("fisrt")
                 .priority(0).build());
-        todoDTODTOList.add(AddTodoDTO.builder()
+        todoDTOList.add(AddTodoDTO.builder()
                 .content("two")
                 .priority(1).build());
 
@@ -112,7 +112,7 @@ public class MemberGoalJoinControllerTest {
                 .goalId(goal.getId())
                 .ownerUid(existMemberGoal.getUid())
                 .endDt(endDt)
-                .todoList(todoDTODTOList).build();
+                .todoList(todoDTOList).build();
 
         given(jwtTokenProvider.getUidFromHeader("Bearer [TOKEN]"))
                 .willReturn(mockUid);

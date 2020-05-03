@@ -78,8 +78,8 @@ public class GoalCreateControllerTest {
         LocalDateTime endDt = startDt.plusHours(2);
         String mockUid = "KAKAO@testId";
 
-        List<AddTodoDTO> todoDTODTOList = new ArrayList();
-        todoDTODTOList.add(AddTodoDTO.builder()
+        List<AddTodoDTO> todoDTOList = new ArrayList();
+        todoDTOList.add(AddTodoDTO.builder()
                 .content("fisrt")
                 .priority(0).build());
 
@@ -89,7 +89,7 @@ public class GoalCreateControllerTest {
                 .description("description")
                 .isDateFixed(false)
                 .interestIdList(Arrays.asList(0L))
-                .todoList(todoDTODTOList).build();
+                .todoList(todoDTOList).build();
 
         Goal newGoal = Goal.builder()
                 .id(0L)

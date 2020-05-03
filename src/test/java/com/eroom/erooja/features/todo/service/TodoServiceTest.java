@@ -37,7 +37,7 @@ public class TodoServiceTest {
         todoList.add(Todo.builder()
                 .priority(3).build());
 
-        Boolean isNotCorrect = todoService.checkPriorityIsNotCorrect(todoList);
+        Boolean isNotCorrect = todoService.validPriority(todoList);
 
         //then
         assertThat(isNotCorrect).isEqualTo(false);
@@ -55,7 +55,7 @@ public class TodoServiceTest {
         todoList.add(Todo.builder()
                 .priority(3).build());
 
-        Boolean isNotCorrect = todoService.checkPriorityIsNotCorrect(todoList);
+        Boolean isNotCorrect = todoService.validPriority(todoList);
 
         //then
         assertThat(isNotCorrect).isEqualTo(true);
