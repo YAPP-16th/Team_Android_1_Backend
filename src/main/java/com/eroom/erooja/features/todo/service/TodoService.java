@@ -26,13 +26,13 @@ public class TodoService {
     public List<Todo> addTodo(String uid, Long goalId, List<AddTodoDTO> todoDTOList) {
         List<Todo> todoList = mapAddDTOtoTodo(uid, goalId, todoDTOList);
 
-        if (validPriority(todoList))
+        if (checkPriorityIsNotCorrect(todoList))
             throw new EroojaException(TODO_PRIORITY_NOT_CORRECT);
 
         return todoRepository.saveAll(todoList);
     }
 
-    public Boolean validPriority(List<Todo> todoList) {
+    public Boolean checkPriorityIsNotCorrect(List<Todo> todoList) {
         int checkCount = 0;
         for (Todo todo : todoList) {
             if (todo.getPriority() != checkCount++)
