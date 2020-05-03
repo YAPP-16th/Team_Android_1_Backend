@@ -53,5 +53,4 @@ public class TodoService {
                     return todo;
                 }).collect(Collectors.toList());
     }
-
 }
