@@ -27,7 +27,7 @@ public class GoalJoinRequestDTO {
 
     @NotNull(message = "1개 이상의 리스트를 추가해주세요")
     @Size(min = 1, message = "1개 이상의 리스트를 추가해주세요")
-    private List<TodoDTO> todoDTOList;
+    private List<TodoDTO> todoList;
 
     @JsonIgnore
     public Boolean isExistOwnerUid(){

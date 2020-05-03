@@ -48,7 +48,7 @@ public class MemberGoalService {
         else
             memberGoal = addMemberGoal(uid, goal.getId(), goalJoinRequest.getEndDt(), GoalRole.PARTICIPANT);
 
-        todoService.addTodo(uid, goal.getId(), goalJoinRequest.getTodoDTOList());
+        todoService.addTodo(uid, goal.getId(), goalJoinRequest.getTodoList());
         return memberGoal;
     }
 

@@ -97,7 +97,7 @@ public class GoalController {
                 newGoal.getEndDt(),
                 GoalRole.OWNER);
 
-        todoService.addTodo(uid, newGoal.getId(), createGoalRequest.getTodoDTOList());
+        todoService.addTodo(uid, newGoal.getId(), createGoalRequest.getTodoList());
 
         return new ResponseEntity(newGoal, HttpStatus.CREATED);
     }
