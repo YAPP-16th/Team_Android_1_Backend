@@ -135,13 +135,13 @@ public class MemberGoalTodoListControllerTest {
                         ),
                         relaxedResponseFields(
                                 fieldWithPath("content[]").description("목표 참여자리스트"),
-                                fieldWithPath("content[].goalId").description("목표 구분값"),
+                                fieldWithPath("content[].goalId").description("목표참여 구분값"),
                                 fieldWithPath("content[].uid").description("사용자 구분값"),
-                                fieldWithPath("content[].startDt").description("목표 시작일"),
-                                fieldWithPath("content[].endDt").description("목표 종료일"),
-                                fieldWithPath("content[].isEnd").description("목표 종료여부"),
+                                fieldWithPath("content[].startDt").description("목표참여 시작일"),
+                                fieldWithPath("content[].endDt").description("목표참여 종료일"),
+                                fieldWithPath("content[].isEnd").description("목표참여 종료여부"),
                                 fieldWithPath("content[].copyCount").description("사용자들이 담아간 횟수"),
-                                fieldWithPath("content[].isEnd").description("목표 종료여부"),
+                                fieldWithPath("content[].isEnd").description("목표참여 종료여부"),
                                 fieldWithPath("content[].todoList[]").description("달성할리스트")
                         )
                 ));

@@ -100,8 +100,8 @@ public class MemberGoalContoller {
     }
 
     @GetMapping("{goalId}/info")
-    public ResponseEntity getJoinInfo(@PathVariable Long goalId,
-                                        @RequestHeader(name = HttpHeaders.AUTHORIZATION) String header) {
+    public ResponseEntity getJoinOwnInfo(@PathVariable Long goalId,
+                                         @RequestHeader(name = HttpHeaders.AUTHORIZATION) String header) {
         String uid = jwtTokenProvider.getUidFromHeader(header);
         MemberGoal memberGoal = memberGoalService.getGoalJoinByUidAndGoalId(uid, goalId);
 

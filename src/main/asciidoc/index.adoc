@@ -242,7 +242,7 @@ include::{snippets}/goal-list-interest/http-response.adoc[]
 Response fields:
 include::{snippets}/goal-list-interest/response-fields.adoc[]
 
-== 목표담기 API
+== 목표참여 API
 
 === 기존 목표담기 [POST]
 
@@ -292,6 +292,23 @@ include::{snippets}/join-todo-list/path-parameters.adoc[]
 include::{snippets}/join-todo-list/http-response.adoc[]
 Response fields:
 include::{snippets}/join-todo-list/response-fields.adoc[]
+
+
+=== 특정목표 자신의 참여정보 조회 [GET]
+
+==== Request
+include::{snippets}/join-get-info/curl-request.adoc[]
+include::{snippets}/join-get-info/http-request.adoc[]
+Request headers:
+include::{snippets}/join-get-info/request-headers.adoc[]
+Path Parameters:
+include::{snippets}/member-goal-count/path-parameters.adoc[]
+
+==== Response
+include::{snippets}/join-get-info/http-response.adoc[]
+Response fields:
+include::{snippets}/join-get-info/response-fields.adoc[]
+
 
 == 할일리스트 API
 

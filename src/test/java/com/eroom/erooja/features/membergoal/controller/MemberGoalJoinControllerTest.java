@@ -153,10 +153,10 @@ public class MemberGoalJoinControllerTest {
                         relaxedResponseFields(
                                 fieldWithPath("goalId").description("목표 구분값"),
                                 fieldWithPath("uid").description("사용자 구분값"),
-                                fieldWithPath("startDt").description("목표 시작일"),
-                                fieldWithPath("endDt").description("목표 종료일"),
+                                fieldWithPath("startDt").description("목표참여 시작일"),
+                                fieldWithPath("endDt").description("목표참여 종료일"),
                                 fieldWithPath("copyCount").description("사용자들이 담아간 횟수"),
-                                fieldWithPath("isEnd").description("목표 종료여부")
+                                fieldWithPath("isEnd").description("목표참여 종료여부")
                         )
                 ));
     }
