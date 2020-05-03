@@ -310,6 +310,24 @@ Response fields:
 include::{snippets}/join-get-info/response-fields.adoc[]
 
 
+
+
+=== 목표참여 상태변경(종료) api [PUT]
+
+==== Request
+include::{snippets}/join-change-end/curl-request.adoc[]
+include::{snippets}/join-change-end/http-request.adoc[]
+Request headers:
+include::{snippets}/join-change-end/request-headers.adoc[]
+Path Parameters:
+include::{snippets}/join-change-end/path-parameters.adoc[]
+
+==== Response
+include::{snippets}/join-change-end/http-response.adoc[]
+Response fields:
+include::{snippets}/join-change-end/response-fields.adoc[]
+
+
 == 할일리스트 API
 
 === 특정회원 할일조회 [GET]
