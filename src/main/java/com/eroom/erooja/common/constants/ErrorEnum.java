@@ -50,7 +50,8 @@ public enum ErrorEnum {
     /* 할일 CRUD 오류 메세지 정의 끝 */
 
     /* 목표참여 CRUD 오류 메세지 정의 */
-    GOAL_JOIN_ALREADY_EXIST(HttpStatus.NOT_FOUND, "TOD_001", "이미 목표담기를 했습니다. 중복담기 불가능합니다."),
+    GOAL_JOIN_ALREADY_EXIST(HttpStatus.NOT_FOUND, "GOJ_001", "이미 목표담기를 했습니다. 중복담기 불가능합니다."),
+    GOAL_JOIN_NOT_FOUND(HttpStatus.NOT_FOUND, "GOJ_002", "참여하고 있지 않는 목표입니다."),
     /* 목표참여 CRUD 오류 메세지 정의 끝 */
 
 

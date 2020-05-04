@@ -3,17 +3,28 @@ package com.eroom.erooja.domain.model;
 import com.eroom.erooja.domain.common.AuditProperties;
 import com.eroom.erooja.domain.enums.GoalRole;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
-
-import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@EqualsAndHashCode(of = {"id"})
+@EqualsAndHashCode(of = {"uid"}, callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -61,12 +72,12 @@ public class MemberGoal extends AuditProperties {
                       LocalDateTime startDt, LocalDateTime endDt) {
         super(createDt, updateDt);
         this.uid = uid;
-        this.goalId=goalId;
-        this.role=role;
-        this.isEnd=isEnd;
-        this.copyCount=copyCount;
-        this.startDt=startDt;
-        this.endDt=endDt;
+        this.goalId = goalId;
+        this.role = role;
+        this.isEnd = isEnd;
+        this.copyCount = copyCount;
+        this.startDt = startDt;
+        this.endDt = endDt;
     }
 
     public int increaseCopyCount(){

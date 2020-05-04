@@ -75,6 +75,7 @@ public class MemberJobInterestService {
         int savedCount = 0;
         for(Long id : ids) {
             if (!jobInterestRepository.existsById(id)) continue;
+            if (memberJobInterestRepository.existsByMember_UidAndJobInterest_Id(uid, id)) continue;
             if (this.addJobInterestForUid(uid, id) != null) savedCount += 1;
         }
 
@@ -90,5 +91,15 @@ public class MemberJobInterestService {
         });
 
         return jobInterestsByUid;
+    }
+
+    public void deleteByUidAndJobInterestId(String uid, Long jobInterestId) {
+        MemberJobInterest memberJobInterest = memberJobInterestRepository.getByMember_UidAndJobInterest_Id(uid, jobInterestId);
+
+        if (memberJobInterest == null) {
+            throw new EroojaException(ErrorEnum.JOB_INTEREST_NOT_EXISTS);
+        }
+
+        memberJobInterestRepository.delete(memberJobInterest);
     }
 }

@@ -1,6 +1,7 @@
 package com.eroom.erooja.features.membergoal.dto;
 
 import com.eroom.erooja.features.todo.dto.TodoDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.validation.constraints.Future;
@@ -28,6 +29,7 @@ public class GoalJoinRequestDTO {
     @Size(min = 1, message = "1개 이상의 리스트를 추가해주세요")
     private List<TodoDTO> todoList;
 
+    @JsonIgnore
     public Boolean isExistOwnerUid(){
         if(ownerUid == null) return false;
         return true;

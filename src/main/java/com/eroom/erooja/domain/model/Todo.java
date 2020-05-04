@@ -8,8 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@EqualsAndHashCode(of = {"id"})
-@Builder
+@EqualsAndHashCode(of = {"id"}, callSuper = false)
 @NoArgsConstructor @AllArgsConstructor
 @Getter @Setter
 @Entity
@@ -25,6 +24,15 @@ public class Todo extends AuditProperties {
 
     @Column(nullable = false)
     private int priority;
+
+    @Builder
+    public Todo(Long id, String content, Boolean isEnd, int priority, LocalDateTime createDt, LocalDateTime updateDt) {
+        super(createDt, updateDt);
+        this.id=id;
+        this.content=content;
+        this.isEnd=isEnd;
+        this.priority=priority;
+    }
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)

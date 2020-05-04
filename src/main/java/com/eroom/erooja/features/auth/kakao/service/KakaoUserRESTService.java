@@ -5,6 +5,7 @@ import com.eroom.erooja.features.auth.kakao.exception.KakaoNotRegisteredUserExce
 import com.eroom.erooja.features.auth.kakao.exception.KakaoRESTException;
 import com.eroom.erooja.features.auth.kakao.json.KakaoIdsJSON;
 import com.eroom.erooja.features.auth.kakao.json.KakaoUserJSON;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -13,15 +14,17 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.PostConstruct;
+
 @Service
 public class KakaoUserRESTService {
     private RestTemplate restTemplate = new RestTemplate();
 
-    @Value("${KAKAO_ADMIN_KEY}")
-    private String ADMIN_KEY;
+    @Value("${thirdPartyProperties.kakaoAdminKey}")
+    private String adminKey;
 
-    @Value("${KAKAO_REST_API_KEY}")
-    private String REST_API_KEY;
+    @Value("${thirdPartyProperties.kakaoRestKey}")
+    private String restKey;
 
     public KakaoUserJSON findUserById(Long targetId) throws KakaoRESTException {
         try {
@@ -87,7 +90,7 @@ public class KakaoUserRESTService {
     private HttpHeaders buildHeader() {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        httpHeaders.add(HttpHeaders.AUTHORIZATION, "KakaoAK " + ADMIN_KEY);
+        httpHeaders.add(HttpHeaders.AUTHORIZATION, "KakaoAK " + adminKey);
 
         return httpHeaders;
     }

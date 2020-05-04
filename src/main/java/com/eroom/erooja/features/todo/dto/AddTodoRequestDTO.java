@@ -1,6 +1,5 @@
 package com.eroom.erooja.features.todo.dto;
 
-import com.eroom.erooja.domain.model.Todo;
 import lombok.*;
 
 import java.util.List;

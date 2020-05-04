@@ -3,7 +3,6 @@ package com.eroom.erooja.features.membergoal.controller;
 import com.eroom.erooja.common.exception.EroojaException;
 import com.eroom.erooja.domain.model.JobInterest;
 import com.eroom.erooja.domain.model.MemberGoal;
-import com.eroom.erooja.domain.model.MemberJobInterest;
 import com.eroom.erooja.domain.model.Members;
 import com.eroom.erooja.features.auth.jwt.JwtTokenProvider;
 import com.eroom.erooja.features.goal.service.GoalService;
@@ -19,7 +18,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
@@ -29,6 +27,7 @@ import javax.validation.Valid;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.eroom.erooja.common.constants.ErrorEnum.GOAL_JOIN_ALREADY_EXIST;
@@ -59,9 +58,7 @@ public class MemberGoalContoller {
         if (memberGoalService.isAlreadyExistJoin(uid, goalJoinRequest.getGoalId()))
             throw new EroojaException(GOAL_JOIN_ALREADY_EXIST);
 
-        MemberGoal memberGoal = memberGoalService.joinExistGoal(
-                uid,
-                goalJoinRequest);
+        MemberGoal memberGoal = memberGoalService.joinExistGoal(uid, goalJoinRequest);
 
         return new ResponseEntity(memberGoal, HttpStatus.CREATED);
     }
@@ -77,27 +74,17 @@ public class MemberGoalContoller {
 
     @GetMapping
     public ResponseEntity getGoalJoinListByUid(GoalJoinListRequestDTO goalJoinListRequestDTO) {
-        Page<MemberGoal> goalJoinPageByUid
-                = (goalJoinListRequestDTO.isEndDtIsBeforeNow())?
-                    memberGoalService.getGoalJoinPageByUidAndEndDtBeforeNow(
+        Page<GoalJoinMemberDTO> memberGoalDTOPage
+                = (goalJoinListRequestDTO.isEndDtIsBeforeNow()) ?
+                memberGoalService.getEndedGoalJoinPageByUid(
                         goalJoinListRequestDTO.getUid(),
                         goalJoinListRequestDTO.getPageable())
-                        :
-                    memberGoalService.getGoalJoinPageByUidAndEndDtAfterNow(
-                            goalJoinListRequestDTO.getUid(),
-                            goalJoinListRequestDTO.getPageable());
+                :
+                memberGoalService.getGoalJoinPageByUid(
+                        goalJoinListRequestDTO.getUid(),
+                        goalJoinListRequestDTO.getPageable());
 
-        Page<GoalJoinMemberDTO> memberGoalPage = convertPage2DTO(goalJoinPageByUid);
-
-        return ResponseEntity.ok(memberGoalPage);
-    }
-
-    private Page<GoalJoinMemberDTO> convertPage2DTO(Page<MemberGoal> origin) {
-        return new PageImpl<>(
-                origin.getContent().stream()
-                        .map(mg -> GoalJoinMemberDTO.of(mg, goalService.findGoalById(mg.getGoalId())))
-                        .collect(Collectors.toList()),
-                origin.getPageable(), origin.getTotalElements());
+        return ResponseEntity.ok(memberGoalDTOPage);
     }
 
     @GetMapping("/{goalId}/todo")
@@ -110,5 +97,23 @@ public class MemberGoalContoller {
     public ResponseEntity countGoalJoinByGoalId(@PathVariable Long goalId) {
         int count = memberGoalService.countGoalJoinByGoalId(goalId);
         return ResponseEntity.status(HttpStatus.OK).body(count);
+    }
+
+    @GetMapping("{goalId}/info")
+    public ResponseEntity getJoinOwnInfo(@PathVariable Long goalId,
+                                         @RequestHeader(name = HttpHeaders.AUTHORIZATION) String header) {
+        String uid = jwtTokenProvider.getUidFromHeader(header);
+        MemberGoal memberGoal = memberGoalService.getGoalJoinByUidAndGoalId(uid, goalId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(memberGoal);
+    }
+
+    @PutMapping("/{goalId}")
+    public ResponseEntity changeGoalJoinToEnd(@PathVariable Long goalId,
+                                        @RequestHeader(name = HttpHeaders.AUTHORIZATION) String header) {
+        String uid = jwtTokenProvider.getUidFromHeader(header);
+
+        MemberGoal changedMemberGoal = memberGoalService.changeGoalJoinToEnd(uid,goalId);
+        return ResponseEntity.status(HttpStatus.OK).body(changedMemberGoal);
     }
 }
