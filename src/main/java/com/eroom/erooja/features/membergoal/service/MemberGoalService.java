@@ -1,11 +1,14 @@
 package com.eroom.erooja.features.membergoal.service;
 
+import com.eroom.erooja.common.constants.ErrorEnum;
+import com.eroom.erooja.common.exception.EroojaException;
 import com.eroom.erooja.common.exception.MemberGoalNotFoundException;
 import com.eroom.erooja.domain.enums.GoalRole;
 import com.eroom.erooja.domain.model.Goal;
 import com.eroom.erooja.domain.model.MemberGoal;
 import com.eroom.erooja.domain.model.MemberGoalPK;
 import com.eroom.erooja.domain.model.Members;
+import com.eroom.erooja.features.goal.exception.GoalNotFoundException;
 import com.eroom.erooja.features.goal.repository.GoalRepository;
 import com.eroom.erooja.features.goal.service.GoalService;
 import com.eroom.erooja.features.membergoal.dto.GoalJoinMemberDTO;
@@ -25,6 +28,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.eroom.erooja.common.constants.ErrorEnum.GOAL_JOIN_NOT_FOUND;
+
 @RequiredArgsConstructor
 @Service
 public class MemberGoalService {
@@ -37,7 +42,7 @@ public class MemberGoalService {
         Goal goal = goalRepository.findById(goalJoinRequest.getGoalId())
                 .orElseThrow(MemberGoalNotFoundException::new);
 
-        if(goalJoinRequest.isExistOwnerUid())
+        if (goalJoinRequest.isExistOwnerUid())
             increaseCopyCount(goalJoinRequest.getOwnerUid(), goalJoinRequest.getGoalId());
 
         goalService.increaseJoinCount(goal.getId());
@@ -59,11 +64,12 @@ public class MemberGoalService {
         memberGoalRepository.save(memberGoal);
     }
 
-    public Boolean isAlreadyExistJoin(String uid, Long goalId){
+    public Boolean isAlreadyExistJoin(String uid, Long goalId) {
         Optional<MemberGoal> memberGoal = memberGoalRepository.findById(new MemberGoalPK(uid, goalId));
-        if(memberGoal.isPresent()){
+
+        if (memberGoal.isPresent())
             return true;
-        }
+
         return false;
     }
 
@@ -107,12 +113,16 @@ public class MemberGoalService {
         return new PageImpl<>(members, memberGoalPage.getPageable(), memberGoalPage.getTotalElements());
     }
 
-    public int countGoalJoinByGoalId(Long goalId){
+    public int countGoalJoinByGoalId(Long goalId) {
         return memberGoalRepository.countMemberGoalByGoalId(goalId);
     }
 
-    public Page<GoalJoinTodoDto> getJoinTodoListByGoalId(Long goalId, Pageable pageable){
+    public Page<GoalJoinTodoDto> getJoinTodoListByGoalId(Long goalId, Pageable pageable) {
         return memberGoalRepository.getJoinTodoListByGoalId(goalId, pageable);
     }
 
+    public MemberGoal getGoalJoinByUidAndGoalId(String uid, Long goalId) {
+        return memberGoalRepository.findById(new MemberGoalPK(uid, goalId))
+                .orElseThrow(() -> new GoalNotFoundException(ErrorEnum.GOAL_JOIN_NOT_FOUND));
+    }
 }

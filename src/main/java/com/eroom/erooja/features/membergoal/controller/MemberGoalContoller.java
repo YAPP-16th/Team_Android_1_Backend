@@ -27,6 +27,7 @@ import javax.validation.Valid;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.eroom.erooja.common.constants.ErrorEnum.GOAL_JOIN_ALREADY_EXIST;
@@ -57,9 +58,7 @@ public class MemberGoalContoller {
         if (memberGoalService.isAlreadyExistJoin(uid, goalJoinRequest.getGoalId()))
             throw new EroojaException(GOAL_JOIN_ALREADY_EXIST);
 
-        MemberGoal memberGoal = memberGoalService.joinExistGoal(
-                uid,
-                goalJoinRequest);
+        MemberGoal memberGoal = memberGoalService.joinExistGoal(uid, goalJoinRequest);
 
         return new ResponseEntity(memberGoal, HttpStatus.CREATED);
     }
@@ -98,5 +97,14 @@ public class MemberGoalContoller {
     public ResponseEntity countGoalJoinByGoalId(@PathVariable Long goalId) {
         int count = memberGoalService.countGoalJoinByGoalId(goalId);
         return ResponseEntity.status(HttpStatus.OK).body(count);
+    }
+
+    @GetMapping("{goalId}/info")
+    public ResponseEntity getJoinOwnInfo(@PathVariable Long goalId,
+                                         @RequestHeader(name = HttpHeaders.AUTHORIZATION) String header) {
+        String uid = jwtTokenProvider.getUidFromHeader(header);
+        MemberGoal memberGoal = memberGoalService.getGoalJoinByUidAndGoalId(uid, goalId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(memberGoal);
     }
 }
