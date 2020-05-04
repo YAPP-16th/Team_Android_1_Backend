@@ -121,6 +121,13 @@ public class MemberGoalService {
         return memberGoalRepository.getJoinTodoListByGoalId(goalId, pageable);
     }
 
+    public MemberGoal changeGoalJoinToEnd(String uid, Long goalId){
+        MemberGoal memberGoal = memberGoalRepository.findById(new MemberGoalPK(uid, goalId))
+                .orElseThrow(MemberGoalNotFoundException::new);
+        memberGoal.setIsEnd(true);
+        return memberGoalRepository.save(memberGoal);
+    }
+
     public MemberGoal getGoalJoinByUidAndGoalId(String uid, Long goalId) {
         return memberGoalRepository.findById(new MemberGoalPK(uid, goalId))
                 .orElseThrow(() -> new GoalNotFoundException(ErrorEnum.GOAL_JOIN_NOT_FOUND));

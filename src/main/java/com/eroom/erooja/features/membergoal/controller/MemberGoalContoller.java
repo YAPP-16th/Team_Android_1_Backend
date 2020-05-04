@@ -107,4 +107,13 @@ public class MemberGoalContoller {
 
         return ResponseEntity.status(HttpStatus.OK).body(memberGoal);
     }
+
+    @PutMapping("/{goalId}")
+    public ResponseEntity changeGoalJoinToEnd(@PathVariable Long goalId,
+                                        @RequestHeader(name = HttpHeaders.AUTHORIZATION) String header) {
+        String uid = jwtTokenProvider.getUidFromHeader(header);
+
+        MemberGoal changedMemberGoal = memberGoalService.changeGoalJoinToEnd(uid,goalId);
+        return ResponseEntity.status(HttpStatus.OK).body(changedMemberGoal);
+    }
 }
