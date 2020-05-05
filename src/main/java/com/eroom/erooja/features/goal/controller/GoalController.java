@@ -104,12 +104,18 @@ public class GoalController {
     }
 
     @PutMapping("/{goalId}")
-    ResponseEntity updateGoal(@RequestBody UpdateGoalRequestDTO updateGoalRequest,
+    ResponseEntity updateGoal(@RequestBody @Valid UpdateGoalRequestDTO updateGoalRequest,
                               @PathVariable Long goalId,
-                              @RequestHeader(name = HttpHeaders.AUTHORIZATION) String header){
+                              @RequestHeader(name = HttpHeaders.AUTHORIZATION) String header,
+                              Errors errors){
+        if (errors.hasErrors()) {
+            logger.error("error : {}", errors.getFieldError().getDefaultMessage());
+            return new ResponseEntity(errors.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST);
+        }
+
         String uid = jwtTokenProvider.getUidFromHeader(header);
 
-        if(!(memberGoalService.getGoalRole(uid, goalId).equals(GoalRole.OWNER)))
+        if((memberGoalService.getGoalRole(uid, goalId).equals(GoalRole.PARTICIPANT)))
             throw new EroojaException(ErrorEnum.GOAL_AUTH_NOT_ALLOWED);
 
         Goal goal = goalService.updateGoal(goalId, updateGoalRequest);
