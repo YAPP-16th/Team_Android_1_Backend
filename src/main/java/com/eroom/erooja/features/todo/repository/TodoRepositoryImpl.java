@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.eroom.erooja.domain.model.QMemberGoal.memberGoal;
+import static com.eroom.erooja.domain.model.QTodo.todo;
 
 
 public class TodoRepositoryImpl implements TodoRepositoryCustom {
@@ -29,9 +30,9 @@ public class TodoRepositoryImpl implements TodoRepositoryCustom {
 
     public Page<Todo> getTodoListByGoalIdAndUid(Pageable pageable, Long goalId, String uid){
         QueryResults<Todo> results = queryFactory
-                .selectFrom(QTodo.todo)
-                .where(QTodo.todo.memberGoal.goalId.eq(goalId),
-                        QTodo.todo.memberGoal.uid.eq(uid))
+                .selectFrom(todo)
+                .where(todo.memberGoal.goalId.eq(goalId),
+                        todo.memberGoal.uid.eq(uid))
                 .fetchResults();
 
         return new PageImpl<>(results.getResults(), pageable, results.getTotal());

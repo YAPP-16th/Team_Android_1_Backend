@@ -50,6 +50,7 @@ public class Todo extends AuditProperties {
         return false;
     }
 
+    @JsonIgnore
     public String getUid() {
         return this.memberGoal.getUid();
     }
