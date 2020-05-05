@@ -1,16 +1,20 @@
 package com.eroom.erooja.features.todo.service;
 
+import com.eroom.erooja.common.constants.ErrorEnum;
 import com.eroom.erooja.common.exception.EroojaException;
 import com.eroom.erooja.domain.model.MemberGoal;
 import com.eroom.erooja.domain.model.Todo;
+import com.eroom.erooja.features.membergoal.controller.MemberGoalContoller;
 import com.eroom.erooja.features.todo.dto.AddTodoDTO;
-import com.eroom.erooja.features.todo.dto.UpdateTodoDTO;
 import com.eroom.erooja.features.todo.repository.TodoRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,6 +24,7 @@ import static com.eroom.erooja.common.constants.ErrorEnum.TODO_PRIORITY_NOT_CORR
 @RequiredArgsConstructor
 @Service
 public class TodoService {
+    private static final Logger logger = LoggerFactory.getLogger(TodoService.class);
     private final TodoRepository todoRepository;
     private final ModelMapper modelMapper;
 
@@ -52,5 +57,19 @@ public class TodoService {
                     todo.setMemberGoal(MemberGoal.builder().uid(uid).goalId(goalId).build());
                     return todo;
                 }).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public Todo changeEndState(String uid, Long todoId, Boolean changedIsEnd) {
+        Todo todo = todoRepository.findById(todoId)
+                .orElseThrow(() -> new EroojaException(ErrorEnum.TODO_NOT_FOUND));
+
+        if(!(todo.validTodoIsOwn(uid))) {
+            logger.error("할일이 자신의 것이 아닙니다 / 요청uid : {} / 주인uid : {}",uid,todo.getUid());
+            throw new EroojaException(ErrorEnum.TODO_NOT_OWNER);
+        }
+
+        todo.setIsEnd(changedIsEnd);
+        return todoRepository.save(todo);
     }
 }
