@@ -132,4 +132,11 @@ public class MemberGoalService {
         return memberGoalRepository.findById(new MemberGoalPK(uid, goalId))
                 .orElseThrow(() -> new GoalNotFoundException(ErrorEnum.GOAL_JOIN_NOT_FOUND));
     }
+
+    public GoalRole getGoalRole(String uid, Long goalId){
+        MemberGoal memberGoal = memberGoalRepository.findById(new MemberGoalPK(uid, goalId))
+                .orElseThrow(() -> new GoalNotFoundException(ErrorEnum.GOAL_JOIN_NOT_FOUND));
+
+        return memberGoal.getRole();
+    }
 }
