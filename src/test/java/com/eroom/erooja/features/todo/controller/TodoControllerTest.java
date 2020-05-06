@@ -99,7 +99,9 @@ public class TodoControllerTest {
                 .willReturn(todoPage);
 
         ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders
-                .get("/api/v1/todo/member/{uid}/goal/{goalId}",mockUid,goal.getId())
+                .get("/api/v1/todo/")
+                .param("uid", mockUid)
+                .param("goalId", String.valueOf(goal.getId()))
                 .param("page", "0")
                 .param("size", "3"))
                 .andDo(print())
@@ -108,11 +110,9 @@ public class TodoControllerTest {
         //Documentation
         resultActions.andDo(
                 document("todo-search",
-                        pathParameters(
-                                parameterWithName("goalId").description("상세정보 대상 goalId"),
-                                parameterWithName("uid").description("상세정보 대상 uId")
-                        ),
                         requestParameters(
+                                parameterWithName("goalId").description("상세정보 대상 goalId"),
+                                parameterWithName("uid").description("상세정보 대상 uId"),
                                 parameterWithName("page").description("페이지 위치"),
                                 parameterWithName("size").description("한 페이지당 조회할 크기")
                         ),
