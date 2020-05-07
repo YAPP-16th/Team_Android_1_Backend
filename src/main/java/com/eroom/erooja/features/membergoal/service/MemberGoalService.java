@@ -123,7 +123,7 @@ public class MemberGoalService {
 
     public MemberGoal changeGoalJoinToEnd(String uid, Long goalId){
         MemberGoal memberGoal = memberGoalRepository.findById(new MemberGoalPK(uid, goalId))
-                .orElseThrow(MemberGoalNotFoundException::new);
+                .orElseThrow(() -> new GoalNotFoundException(ErrorEnum.GOAL_JOIN_NOT_FOUND));
         memberGoal.setIsEnd(true);
         return memberGoalRepository.save(memberGoal);
     }

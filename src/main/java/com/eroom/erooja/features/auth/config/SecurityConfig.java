@@ -34,7 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 /* GENERAL MEMBERS */
                 .antMatchers("/api/v1/**")
                     .hasAuthority(MemberRole.ROLE_USER.getAuthority())
-                .antMatchers(HttpMethod.PUT, "/api/v1/membergoal/**")
+                .antMatchers(HttpMethod.PUT, "/api/v1/membergoal/**, /api/v1/goal/**")
                     .hasAuthority(MemberRole.ROLE_USER.getAuthority())
                 /* DEVELOPER */
                 .antMatchers("/api/**")
