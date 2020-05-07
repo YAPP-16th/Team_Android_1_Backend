@@ -43,6 +43,7 @@ public enum ErrorEnum {
     GOAL_UNKNOWN_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "GOL_000", "알 수 없는 목표(Goal) 관련 오류입니다."),
     GOAL_NOT_FOUND(HttpStatus.NOT_FOUND, "GOL_001", "해당 목표가 존재하지 않습니다."),
     GOAL_INVALID_ARGS(HttpStatus.BAD_REQUEST, "GOL_002", "올바르지 않은 파라미터, 혹은 요청 바디입니다."),
+    GOAL_AUTH_NOT_ALLOWED(HttpStatus.UNAUTHORIZED, "GOL_002", "목표에 대한 권한이없습니다."),
     /* 목표 관련 오류 메세지 정의 끝 */
 
     /* 할일 CRUD 오류 메세지 정의 */

@@ -1,6 +1,7 @@
 package com.eroom.erooja.features.goal.service;
 
 import com.eroom.erooja.common.constants.ErrorEnum;
+import com.eroom.erooja.features.goal.dto.UpdateGoalRequestDTO;
 import com.eroom.erooja.features.goal.exception.GoalNotFoundException;
 import com.eroom.erooja.domain.model.Goal;
 import com.eroom.erooja.features.goal.repository.GoalRepository;
@@ -20,7 +21,6 @@ import java.time.LocalDateTime;
 @Service
 public class GoalService {
     private final GoalRepository goalRepository;
-    private final TodoService todoService;
 
     public Goal createGoal(CreateGoalRequestDTO createGoalDTO) {
         return goalRepository.save(Goal.builder()
@@ -55,5 +55,18 @@ public class GoalService {
                 .orElseThrow(() -> new GoalNotFoundException(ErrorEnum.GOAL_NOT_FOUND));
         goal.increaseJoinCount(1);
         goalRepository.save(goal);
+    }
+
+    public Goal updateGoal(Long goalId, UpdateGoalRequestDTO updateGoalRequest){
+        Goal goal = goalRepository.findById(goalId)
+                .orElseThrow(() -> new GoalNotFoundException(ErrorEnum.GOAL_NOT_FOUND));
+
+        if(updateGoalRequest.isTitleChanged())
+            goal.setTitle(updateGoalRequest.getTitle());
+
+        if(updateGoalRequest.isDescriptionChanged())
+            goal.setDescription(updateGoalRequest.getDescription());
+
+        return goalRepository.save(goal);
     }
 }

@@ -1,5 +1,6 @@
 package com.eroom.erooja.features.goal.controller;
 
+import com.eroom.erooja.features.goal.dto.UpdateGoalRequestDTO;
 import com.eroom.erooja.features.goal.exception.GoalNotFoundException;
 import com.eroom.erooja.domain.enums.GoalRole;
 import com.eroom.erooja.features.auth.jwt.JwtTokenProvider;
@@ -102,4 +103,22 @@ public class GoalController {
         return new ResponseEntity(newGoal, HttpStatus.CREATED);
     }
 
+    @PutMapping("/{goalId}")
+    ResponseEntity updateGoal(@RequestBody @Valid UpdateGoalRequestDTO updateGoalRequest,
+                              @PathVariable Long goalId,
+                              @RequestHeader(name = HttpHeaders.AUTHORIZATION) String header,
+                              Errors errors){
+        if (errors.hasErrors()) {
+            logger.error("error : {}", errors.getFieldError().getDefaultMessage());
+            return new ResponseEntity(errors.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST);
+        }
+
+        String uid = jwtTokenProvider.getUidFromHeader(header);
+
+        if((memberGoalService.getGoalRole(uid, goalId).equals(GoalRole.PARTICIPANT)))
+            throw new EroojaException(ErrorEnum.GOAL_AUTH_NOT_ALLOWED);
+
+        Goal goal = goalService.updateGoal(goalId, updateGoalRequest);
+        return ResponseEntity.status(HttpStatus.OK).body(goal);
+    }
 }
