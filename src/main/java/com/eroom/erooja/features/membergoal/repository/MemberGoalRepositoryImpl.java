@@ -4,16 +4,11 @@ import com.eroom.erooja.domain.model.MemberGoal;
 import com.eroom.erooja.domain.model.QMembers;
 import com.eroom.erooja.features.membergoal.dto.GoalJoinTodoDto;
 import com.querydsl.core.QueryResults;
-import com.querydsl.core.types.Order;
-import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.dsl.PathBuilder;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -34,32 +29,24 @@ public class MemberGoalRepositoryImpl implements MemberGoalRepositoryCustom {
 
     @Transactional
     public Page<GoalJoinTodoDto> getJoinTodoListByGoalId(Long goalID, Pageable pageable) {
-        JPAQuery<MemberGoal> query = queryFactory
+        QueryResults<MemberGoal> results = queryFactory
                 .selectFrom(memberGoal)
-                .join(memberGoal.member, QMembers.members)
+                .join(memberGoal.member, QMembers.members).fetchJoin()
                 .where(memberGoal.goalId.eq(goalID))
-                .fetchJoin().offset(pageable.getOffset())
-                .limit(pageable.getPageSize());
+                .fetchResults();
 
-        for (Sort.Order o : pageable.getSort()) {
-            PathBuilder pathBuilder = new PathBuilder(memberGoal.getType(),
-                    memberGoal.getMetadata());
-            query.orderBy(new OrderSpecifier(o.isAscending() ? Order.ASC : Order.DESC,
-                    pathBuilder.get(o.getProperty())));
-        }
+        List<MemberGoal> memberGoalList = results.getResults();
 
-        QueryResults<MemberGoal> memberGoalList = query.fetchResults();
-        List<GoalJoinTodoDto> goalJoinTodoDtoList = memberGoalList.getResults().stream()
-                .map(join -> {
-                            Hibernate.initialize(join.getTodoList());
-                            return new GoalJoinTodoDto(
-                                    join,
-                                    join.getTodoList(),
-                                    join.getMember().getNickname());
-                        }
-                )
+        List<GoalJoinTodoDto> goalJoinTodoDtoList = memberGoalList.stream().map(join -> {
+                    Hibernate.initialize(join.getTodoList());
+                    return new GoalJoinTodoDto(
+                            join,
+                            join.getTodoList(),
+                            join.getMember().getNickname());
+                }
+        )
                 .collect(Collectors.toList());
 
-        return new PageImpl<>(goalJoinTodoDtoList, pageable, query.fetchResults().getTotal());
+        return new PageImpl<>(goalJoinTodoDtoList, pageable, results.getTotal());
     }
 }
