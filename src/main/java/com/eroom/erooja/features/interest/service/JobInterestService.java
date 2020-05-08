@@ -67,12 +67,12 @@ public class JobInterestService {
         Long primeJobInterestId = 1L;
         String[] jobInterests_develop = {
                 "서버", "프론트엔드", "안드로이드", "iOS", "Data Engineer", "Data Scientist",
-                "DevOps", "머신 러닝", "게임, 애니메이션"
+                "DevOps", "머신 러닝", "게임/애니메이션"
         };
 
         String[] jobInterests_design = {
-                "UX 디자인", "UI, GUI 디자인", "영상, 모션 디자인", "모바일 디자인", "편집 디자인",
-                "그래픽 디자인", "웹 디자인", "BX 디자인", "제품 디자인"
+                "UX 디자인", "UI/GUI 디자인", "웹 디자인", "그래픽 디자인",
+                "편집 디자인", "영상/모션 디자인", "BX 디자인"
         };
 
         JobInterest jobGroup_develop = JobInterest.builder()
