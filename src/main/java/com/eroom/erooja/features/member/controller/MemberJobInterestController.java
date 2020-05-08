@@ -83,4 +83,13 @@ public class MemberJobInterestController {
         Integer savedCount = memberJobInterestService.addJobInterestListForUid(uid, jobInterestIdDTO.getIds());
         return ResponseEntity.ok(savedCount);
     }
+
+    @DeleteMapping("/jobInterests")
+    public ResponseEntity deleteJobInterests(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String header,
+                                          @RequestBody JobInterestIdDTO jobInterestIdDTO) {
+        String uid = jwtTokenProvider.getUidFromHeader(header);
+
+        Integer savedCount = memberJobInterestService.deleteJobInterestListForUid(uid, jobInterestIdDTO.getIds());
+        return ResponseEntity.ok(savedCount);
+    }
 }
