@@ -72,7 +72,7 @@ public class JobInterestService {
 
         String[] jobInterests_design = {
                 "UX 디자인", "UI/GUI 디자인", "웹 디자인", "그래픽 디자인",
-                "편집 디자인", "영상/모션 디자인", "BX 디자인"
+                "산업 디자인", "편집 디자인", "영상/모션 디자인", "BX 디자인"
         };
 
         JobInterest jobGroup_develop = JobInterest.builder()
