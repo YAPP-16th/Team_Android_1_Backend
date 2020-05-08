@@ -89,7 +89,7 @@ public class MemberJobInterestController {
                                           @RequestBody JobInterestIdDTO jobInterestIdDTO) {
         String uid = jwtTokenProvider.getUidFromHeader(header);
 
-        Integer savedCount = memberJobInterestService.deleteJobInterestListForUid(uid, jobInterestIdDTO.getIds());
-        return ResponseEntity.ok(savedCount);
+        Integer deletedCount = memberJobInterestService.deleteJobInterestListForUid(uid, jobInterestIdDTO.getIds());
+        return ResponseEntity.ok(deletedCount);
     }
 }
