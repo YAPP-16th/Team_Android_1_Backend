@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 public class UpdateJoinRequestDTO {
     @NotNull(message="종료 여부를 전송해야합니다.")
     private Boolean changedIsEnd;
-    @NotNull(message="종료날짜를 전송해야합니다.")
     @FutureOrPresent(message="반드시 미래날짜를 전송해야합니다.")
     private LocalDateTime endDt;
 }

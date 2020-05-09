@@ -108,10 +108,15 @@ public class MemberGoalContoller {
 
     @PutMapping("/{goalId}")
     public ResponseEntity updateGoalJoin(@PathVariable Long goalId,
-                                         @RequestBody UpdateJoinRequestDTO updateGoalJoinRequest,
-                                         @RequestHeader(name = HttpHeaders.AUTHORIZATION) String header) {
-        String uid = jwtTokenProvider.getUidFromHeader(header);
+                                         @RequestBody @Valid UpdateJoinRequestDTO updateGoalJoinRequest,
+                                         @RequestHeader(name = HttpHeaders.AUTHORIZATION) String header,
+                                         Errors errors) {
+        if (errors.hasErrors()) {
+            logger.info("error : {}", errors.getFieldError().getDefaultMessage());
+            return new ResponseEntity(errors.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST);
+        }
 
+        String uid = jwtTokenProvider.getUidFromHeader(header);
         MemberGoal changedMemberGoal = null;
 
         if (updateGoalJoinRequest.getChangedIsEnd())
