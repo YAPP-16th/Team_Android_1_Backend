@@ -7,6 +7,7 @@ import com.eroom.erooja.domain.model.MemberGoal;
 import com.eroom.erooja.features.auth.jwt.JwtTokenProvider;
 import com.eroom.erooja.features.membergoal.dto.UpdateJoinRequestDTO;
 import com.eroom.erooja.features.membergoal.service.MemberGoalService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -52,6 +54,7 @@ public class MemberGoalToEndControllerTest {
     MemberGoalService memberGoalService;
     @MockBean
     private JwtTokenProvider jwtTokenProvider;
+    private final ObjectMapper objectMapper;
     private final MockMvc mockMvc;
 
     @Test
@@ -64,6 +67,10 @@ public class MemberGoalToEndControllerTest {
 
         Goal goal = Goal.builder()
                 .id(0L).build();
+
+        UpdateJoinRequestDTO updateJoinRequest = UpdateJoinRequestDTO.builder()
+                .changedIsEnd(false)
+                .endDt(endDt).build();
 
         MemberGoal memberGoal = MemberGoal.builder()
                 .goalId(goal.getId())
@@ -83,6 +90,9 @@ public class MemberGoalToEndControllerTest {
 
         ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders
                 .put("/api/v1/membergoal/{goalId}", goal.getId())
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(updateJoinRequest))
                 .header(HttpHeaders.AUTHORIZATION, "Bearer [TOKEN]"))
                 .andDo(print())
                 .andExpect(status().isOk());
