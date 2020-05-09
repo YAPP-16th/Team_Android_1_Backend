@@ -1,6 +1,8 @@
 package com.eroom.erooja.domain.model;
 
 import com.eroom.erooja.domain.common.AuditProperties;
+import com.eroom.erooja.features.todo.dto.UpdateTodoDTO;
+import com.eroom.erooja.features.todo.dto.UpdateTodoRequestDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -53,5 +55,12 @@ public class Todo extends AuditProperties {
     @JsonIgnore
     public String getUid() {
         return this.memberGoal.getUid();
+    }
+
+    public static Todo of(UpdateTodoDTO updateTodoDTO){
+        return Todo.builder()
+                .priority(updateTodoDTO.getPriority())
+                .isEnd(updateTodoDTO.getIsEnd())
+                .content(updateTodoDTO.getContent()).build();
     }
 }
