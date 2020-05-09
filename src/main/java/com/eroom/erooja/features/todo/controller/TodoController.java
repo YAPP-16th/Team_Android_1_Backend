@@ -3,6 +3,8 @@ package com.eroom.erooja.features.todo.controller;
 import com.eroom.erooja.domain.model.Todo;
 import com.eroom.erooja.features.auth.jwt.JwtTokenProvider;
 import com.eroom.erooja.features.todo.dto.ChangedTodoRequestDTO;
+import com.eroom.erooja.features.todo.dto.UpdateTodoDTO;
+import com.eroom.erooja.features.todo.dto.UpdateTodoRequestDTO;
 import com.eroom.erooja.features.todo.service.TodoService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -17,6 +19,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 
 @RequiredArgsConstructor
@@ -48,6 +51,21 @@ public class TodoController {
         String uid = jwtTokenProvider.getUidFromHeader(header);
         Todo changedTodo = todoService.changeEndState(uid, todoId, endTodoRequest.getChangedIsEnd());
         return new ResponseEntity(changedTodo, HttpStatus.OK);
+    }
+
+    @PutMapping
+    public ResponseEntity updateTodoList(@RequestBody @Valid UpdateTodoRequestDTO updateTodoRequest,
+                                         @RequestHeader(name = HttpHeaders.AUTHORIZATION) String header,
+                                         Errors errors) {
+        if (errors.hasErrors()) {
+            logger.error("error : {}", errors.getFieldError().getDefaultMessage());
+            return new ResponseEntity(errors.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST);
+        }
+
+        String uid = jwtTokenProvider.getUidFromHeader(header);
+
+        List<Todo> todoList = todoService.updateTodoList(uid, updateTodoRequest);
+        return new ResponseEntity(todoList, HttpStatus.OK);
     }
 }
 

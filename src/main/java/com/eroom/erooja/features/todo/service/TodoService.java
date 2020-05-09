@@ -4,8 +4,9 @@ import com.eroom.erooja.common.constants.ErrorEnum;
 import com.eroom.erooja.common.exception.EroojaException;
 import com.eroom.erooja.domain.model.MemberGoal;
 import com.eroom.erooja.domain.model.Todo;
-import com.eroom.erooja.features.membergoal.controller.MemberGoalContoller;
 import com.eroom.erooja.features.todo.dto.AddTodoDTO;
+import com.eroom.erooja.features.todo.dto.UpdateTodoDTO;
+import com.eroom.erooja.features.todo.dto.UpdateTodoRequestDTO;
 import com.eroom.erooja.features.todo.repository.TodoRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -29,7 +30,7 @@ public class TodoService {
     private final ModelMapper modelMapper;
 
     public List<Todo> addTodo(String uid, Long goalId, List<AddTodoDTO> todoDTOList) {
-        List<Todo> todoList = mapAddDTOtoTodo(uid, goalId, todoDTOList);
+        List<Todo> todoList = convertAddDTO2Todo(uid, goalId, todoDTOList);
 
         if (checkPriorityIsNotCorrect(todoList))
             throw new EroojaException(TODO_PRIORITY_NOT_CORRECT);
@@ -46,11 +47,11 @@ public class TodoService {
         return false;
     }
 
-    public Page<Todo> getTodoListByGoalIdAndUid(Pageable pageable, Long goalId, String uid){
+    public Page<Todo> getTodoListByGoalIdAndUid(Pageable pageable, Long goalId, String uid) {
         return todoRepository.getTodoListByGoalIdAndUid(pageable, goalId, uid);
     }
 
-    public List<Todo> mapAddDTOtoTodo(String uid, Long goalId, List<AddTodoDTO> todoDTOList) {
+    public List<Todo> convertAddDTO2Todo(String uid, Long goalId, List<AddTodoDTO> todoDTOList) {
         return todoDTOList.stream()
                 .map(todoDTO -> {
                     Todo todo = modelMapper.map(todoDTO, Todo.class);
@@ -64,12 +65,33 @@ public class TodoService {
         Todo todo = todoRepository.findById(todoId)
                 .orElseThrow(() -> new EroojaException(ErrorEnum.TODO_NOT_FOUND));
 
-        if(!(todo.validTodoIsOwn(uid))) {
-            logger.error("할일이 자신의 것이 아닙니다 / 요청uid : {} / 주인uid : {}",uid,todo.getUid());
+        if (!(todo.validTodoIsOwn(uid))) {
+            logger.error("할일이 자신의 것이 아닙니다 / 요청uid : {} / 주인uid : {}", uid, todo.getUid());
             throw new EroojaException(ErrorEnum.TODO_NOT_OWNER);
         }
 
         todo.setIsEnd(changedIsEnd);
         return todoRepository.save(todo);
+    }
+
+    @Transactional
+    public List<Todo> updateTodoList(String uid, UpdateTodoRequestDTO updateTodoRequest) {
+        List<Todo> todoList = convertUpdateDTO2Todo(uid, updateTodoRequest.getGoalId(), updateTodoRequest.getTodoList());
+        if (checkPriorityIsNotCorrect(todoList))
+            throw new EroojaException(TODO_PRIORITY_NOT_CORRECT);
+
+        todoRepository.deleteAllByMemberGoal_GoalIdAndMemberGoal_Uid(updateTodoRequest.getGoalId(), uid);
+
+        return todoRepository.saveAll(todoList);
+    }
+
+    public List<Todo> convertUpdateDTO2Todo(String uid, Long goalId, List<UpdateTodoDTO> updateTodoDTOList) {
+        return updateTodoDTOList.stream()
+                .map(updateTodoDTO -> {
+                            Todo todo = Todo.of(updateTodoDTO);
+                            todo.setMemberGoal(MemberGoal.builder().uid(uid).goalId(goalId).build());
+                            return todo;
+                        }
+                ).collect(Collectors.toList());
     }
 }
