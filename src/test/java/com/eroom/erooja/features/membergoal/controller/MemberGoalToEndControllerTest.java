@@ -4,10 +4,10 @@ import com.eroom.erooja.documentation.v1.RestDocsConfiguration;
 import com.eroom.erooja.domain.enums.GoalRole;
 import com.eroom.erooja.domain.model.Goal;
 import com.eroom.erooja.domain.model.MemberGoal;
-import com.eroom.erooja.domain.model.Todo;
 import com.eroom.erooja.features.auth.jwt.JwtTokenProvider;
-import com.eroom.erooja.features.membergoal.dto.GoalJoinTodoDto;
+import com.eroom.erooja.features.membergoal.dto.UpdateJoinRequestDTO;
 import com.eroom.erooja.features.membergoal.service.MemberGoalService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,18 +20,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
@@ -58,6 +54,7 @@ public class MemberGoalToEndControllerTest {
     MemberGoalService memberGoalService;
     @MockBean
     private JwtTokenProvider jwtTokenProvider;
+    private final ObjectMapper objectMapper;
     private final MockMvc mockMvc;
 
     @Test
@@ -70,6 +67,10 @@ public class MemberGoalToEndControllerTest {
 
         Goal goal = Goal.builder()
                 .id(0L).build();
+
+        UpdateJoinRequestDTO updateJoinRequest = UpdateJoinRequestDTO.builder()
+                .changedIsEnd(false)
+                .endDt(endDt).build();
 
         MemberGoal memberGoal = MemberGoal.builder()
                 .goalId(goal.getId())
@@ -84,11 +85,14 @@ public class MemberGoalToEndControllerTest {
 
         given(jwtTokenProvider.getUidFromHeader("Bearer [TOKEN]"))
                 .willReturn(mockUid);
-        given(memberGoalService.changeGoalJoinToEnd(anyString(), anyLong()))
+        given(memberGoalService.againJoin(any(UpdateJoinRequestDTO.class),anyString(), anyLong()))
                 .willReturn(memberGoal);
 
         ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders
                 .put("/api/v1/membergoal/{goalId}", goal.getId())
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(updateJoinRequest))
                 .header(HttpHeaders.AUTHORIZATION, "Bearer [TOKEN]"))
                 .andDo(print())
                 .andExpect(status().isOk());

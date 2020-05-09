@@ -4,6 +4,7 @@ import com.eroom.erooja.domain.common.AuditProperties;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import org.apache.tomcat.jni.Local;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -71,8 +72,11 @@ public class Goal extends AuditProperties {
         this.goalJobInterests = goalJobInterests;
     }
 
-    public int increaseJoinCount(int count){
+    public int increaseJoinCount(int count) {
         return this.joinCount += count;
     }
 
+    public Boolean isExpire() {
+        return this.endDt.isAfter(LocalDateTime.now());
+    }
 }
