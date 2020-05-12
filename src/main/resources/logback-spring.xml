@@ -20,16 +20,9 @@
             <layout class="ch.qos.logback.classic.PatternLayout">
                 <pattern>%d{HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
             </layout>
-            <webhookUri>https://hooks.slack.com/services/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</webhookUri>
+            <webhookUri>https://hooks.slack.com/services/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</webhookUri>
             <channel>#team_eroom_error_alram</channel>
             <colorCoding>true</colorCoding>
-        </appender>
-
-        <appender name="ASYNC_SLACK" class="ch.qos.logback.classic.AsyncAppender">
-            <appender-ref ref="SLACK"/>
-            <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-                <level>WARN</level>
-            </filter>
         </appender>
 
         <appender name="FILE-ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -49,7 +42,7 @@
 
 
         <root level="WARN">
-            <appender-ref ref="ASYNC_SLACK"/>
+            <appender-ref ref="SLACK"/>
         </root>
 
         <root level="INFO">
