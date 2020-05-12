@@ -7,7 +7,6 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @ToString
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class MemberDTO {
     @Setter
     private String uid;

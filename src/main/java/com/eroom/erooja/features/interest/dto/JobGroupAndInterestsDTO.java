@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class JobGroupAndInterestsDTO {
     private Long id;
     private String name;
