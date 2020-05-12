@@ -16,11 +16,16 @@
     </springProfile>
 
     <springProfile name="production">
+        <property resource="application-production.yml"/>
+
         <appender name="SLACK" class="com.github.maricn.logback.SlackAppender">
+            <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+                <level>WARN</level>
+            </filter>
             <layout class="ch.qos.logback.classic.PatternLayout">
                 <pattern>%d{HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
             </layout>
-            <webhookUri>https://hooks.slack.com/services/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</webhookUri>
+            <webhookUri>${SLACK_ERROR_ALARM_WEB_HOOK}</webhookUri>
             <channel>#team_eroom_error_alram</channel>
             <colorCoding>true</colorCoding>
         </appender>
@@ -41,11 +46,11 @@
         </appender>
 
 
-        <root level="WARN">
-            <appender-ref ref="SLACK"/>
+        <root>
         </root>
 
-        <root level="INFO">
+        <root>
+            <appender-ref ref="SLACK"/>
             <appender-ref ref="CONSOLE"/>
             <appender-ref ref="FILE-ROLLING"/>
         </root>
