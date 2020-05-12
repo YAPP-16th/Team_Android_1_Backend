@@ -6,6 +6,7 @@ import com.eroom.erooja.domain.model.MemberAuth;
 import com.eroom.erooja.features.auth.jwt.JwtResponse;
 import com.eroom.erooja.features.auth.jwt.JwtTokenProvider;
 import com.eroom.erooja.features.auth.service.MemberAuthService;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +37,17 @@ public class AuthController {
             throw new JwtException("JWT 헤더가 비었습니다.");
         }
 
-        jwtTokenProvider.getUidFromHeader(authorizationHeader);
+        try {
+            String uidFromHeader = jwtTokenProvider.getUidFromHeader(authorizationHeader);
+            logger.error("토큰 에러가 발생한 UID : {}", uidFromHeader);
+        } catch (MalformedJwtException mje) {
+            throw new EroojaException(ErrorEnum.JWT_MALFORMED_TOKEN);
+        }
+
+        if (jwtTokenProvider.isTokenExpired(authorizationHeader)) {
+            throw new EroojaException(ErrorEnum.JWT_EXPIRED);
+        }
+
         throw new JwtException("알 수 없는 JWT 오류입니다.");
     }
 

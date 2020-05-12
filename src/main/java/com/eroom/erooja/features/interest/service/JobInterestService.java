@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,10 +63,10 @@ public class JobInterestService {
         );
     }
 
+    @Transactional
     public List<JobInterest> setUpDefaultJobInterests() {
         jobInterestRepository.deleteAll();
 
-        Long primeJobInterestId = 1L;
         String[] jobInterests_develop = {
                 "서버", "프론트엔드", "안드로이드", "iOS", "Data Engineer", "Data Scientist",
                 "DevOps", "머신 러닝", "게임/애니메이션"
@@ -77,14 +78,12 @@ public class JobInterestService {
         };
 
         JobInterest jobGroup_develop = JobInterest.builder()
-                .id(primeJobInterestId++)
                 .name("개발")
                 .jobGroup(null)
                 .jobInterestType(JobInterestType.JOB_GROUP)
                 .build();
 
         JobInterest jobGroup_design = JobInterest.builder()
-                .id(primeJobInterestId++)
                 .name("디자인")
                 .jobGroup(null)
                 .jobInterestType(JobInterestType.JOB_GROUP)
@@ -95,18 +94,17 @@ public class JobInterestService {
 
         List<JobInterest> jobInterests = new ArrayList<>();
 
-        jobInterests.addAll(saveAllJobInterests(primeJobInterestId, jobGroup_develop, jobInterests_develop));
-        jobInterests.addAll(saveAllJobInterests(primeJobInterestId, jobGroup_design, jobInterests_design));
+        jobInterests.addAll(saveAllJobInterests(jobGroup_develop, jobInterests_develop));
+        jobInterests.addAll(saveAllJobInterests(jobGroup_design, jobInterests_design));
 
         return jobInterests;
     }
 
-    private List<JobInterest> saveAllJobInterests(long primeJobInterestId, JobInterest jobGroup, String[] jobInterests) {
+    private List<JobInterest> saveAllJobInterests(JobInterest jobGroup, String[] jobInterests) {
         List<JobInterest> jobInterestsList = new ArrayList<>();
 
         for(String name : jobInterests) {
             JobInterest interest = JobInterest.builder()
-                    .id(primeJobInterestId++)
                     .name(name)
                     .jobGroup(jobGroup)
                     .jobInterestType(JobInterestType.JOB_INTEREST)
