@@ -3,6 +3,7 @@ package com.eroom.erooja.features.admin.controller;
 import com.eroom.erooja.common.constants.ErrorEnum;
 import com.eroom.erooja.common.exception.EroojaException;
 import com.eroom.erooja.domain.enums.AuthProvider;
+import com.eroom.erooja.domain.model.JobInterest;
 import com.eroom.erooja.features.interest.service.JobInterestService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin")
@@ -85,8 +87,10 @@ public class AdminController {
 
     @PutMapping("/setJobInterests")
     public ResponseEntity setJobInterests() {
-        logger.error("[주의] 기본 관심직무/직군을 셋업합니다.");
-        jobInterestService.setUpDefaultJobInterests();
+        logger.warn("[주의] 기본 관심직무/직군을 셋업합니다.");
+        List<JobInterest> jobInterests = jobInterestService.setUpDefaultJobInterests();
+
+        logger.warn("[주의] 기본 관심직무/직군 셋업 완료. {}", jobInterests);
         return ResponseEntity.ok(true);
     }
 

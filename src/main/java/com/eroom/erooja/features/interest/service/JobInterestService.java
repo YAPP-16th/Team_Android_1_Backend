@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -61,7 +62,7 @@ public class JobInterestService {
         );
     }
 
-    public void setUpDefaultJobInterests() {
+    public List<JobInterest> setUpDefaultJobInterests() {
         jobInterestRepository.deleteAll();
 
         Long primeJobInterestId = 1L;
@@ -92,13 +93,17 @@ public class JobInterestService {
         jobGroup_develop = jobInterestRepository.save(jobGroup_develop);
         jobGroup_design = jobInterestRepository.save(jobGroup_design);
 
-        primeJobInterestId = saveAllJobInterests(primeJobInterestId, jobGroup_develop, jobInterests_develop);
-        primeJobInterestId = saveAllJobInterests(primeJobInterestId, jobGroup_design, jobInterests_design);
+        List<JobInterest> jobInterests = new ArrayList<>();
 
-        logger.info("기본 직군/직무 셋업 완료 - cnt : {}", primeJobInterestId);
+        jobInterests.addAll(saveAllJobInterests(primeJobInterestId, jobGroup_develop, jobInterests_develop));
+        jobInterests.addAll(saveAllJobInterests(primeJobInterestId, jobGroup_design, jobInterests_design));
+
+        return jobInterests;
     }
 
-    private Long saveAllJobInterests(long primeJobInterestId, JobInterest jobGroup, String[] jobInterests) {
+    private List<JobInterest> saveAllJobInterests(long primeJobInterestId, JobInterest jobGroup, String[] jobInterests) {
+        List<JobInterest> jobInterestsList = new ArrayList<>();
+
         for(String name : jobInterests) {
             JobInterest interest = JobInterest.builder()
                     .id(primeJobInterestId++)
@@ -110,6 +115,6 @@ public class JobInterestService {
             jobInterestRepository.save(interest);
         }
 
-        return primeJobInterestId;
+        return jobInterestsList;
     }
 }
