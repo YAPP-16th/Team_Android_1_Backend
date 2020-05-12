@@ -15,7 +15,7 @@ public class KakaoIdsJSON {
 
     Integer totalCount;
 
-    Integer beforeUrl;
+    String beforeUrl;
 
-    Integer afterUrl;
+    String afterUrl;
 }
