@@ -4,7 +4,6 @@ files:
   - source:  /
     destination: /home/ec2-user/erooja/travis/build
 
-
 #hooks:
 #  AfterInstall:
 #    - location: run-server.sh
