@@ -20,7 +20,7 @@
             <layout class="ch.qos.logback.classic.PatternLayout">
                 <pattern>%d{HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
             </layout>
-            <webhookUri>https://hooks.slack.com/services/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</webhookUri>
+            <webhookUri>https://hooks.slack.com/services/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</webhookUri>
             <channel>#team_eroom_error_alram</channel>
             <colorCoding>true</colorCoding>
         </appender>
