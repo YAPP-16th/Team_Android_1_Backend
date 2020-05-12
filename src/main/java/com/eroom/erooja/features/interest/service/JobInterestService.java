@@ -112,7 +112,7 @@ public class JobInterestService {
                     .jobInterestType(JobInterestType.JOB_INTEREST)
                     .build();
 
-            jobInterestRepository.save(interest);
+            jobInterestsList.add(jobInterestRepository.save(interest));
         }
 
         return jobInterestsList;
