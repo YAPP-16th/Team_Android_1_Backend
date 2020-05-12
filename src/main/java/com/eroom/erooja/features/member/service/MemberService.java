@@ -35,9 +35,16 @@ public class MemberService {
     }
 
     @Transactional
-    public Members updateNotNullPropsOf(Members member) {
-        Members updated = memberRepository.save(member);
-        MemberAuth memberAuth = memberAuthRepository.getOne(member.getUid());
+    public Members updateNotNullPropsOf(Members toBe) {
+        Members origin = memberRepository.getOne(toBe.getUid());
+
+        Members updated = memberRepository.save(Members.builder()
+                .uid(toBe.getUid())
+                .nickname(toBe.getNickname() == null ? origin.getNickname() : toBe.getNickname())
+                .imagePath(toBe.getImagePath() == null ? origin.getImagePath() : toBe.getImagePath())
+            .build()
+        );
+        MemberAuth memberAuth = memberAuthRepository.getOne(toBe.getUid());
 
         if (memberAuth.isAdditionalInfoNeeded()) {
             memberAuth.setAdditionalInfoNeeded(updated.isAdditionalInfoNeeded());
