@@ -38,8 +38,8 @@ public class GoalService {
                 .orElseThrow(() -> new GoalNotFoundException(ErrorEnum.GOAL_NOT_FOUND));
     }
 
-    public Page<Goal> findGoalListByInterestId(Long interestId, Pageable pageable) {
-        return goalRepository.findGoalByInterestId(interestId, pageable);
+    public Page<Goal> findGoalListByInterestId(String uid, Long interestId, Pageable pageable) {
+        return goalRepository.findGoalByInterestId(interestId, uid, pageable);
     }
 
     public Page<Goal> search(GoalCriteria goalCriteria) {

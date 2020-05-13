@@ -75,7 +75,7 @@ public class GoalListControllerTest {
 
         Page<Goal> goalPage = new PageImpl(goalList);
 
-        given(goalService.findGoalListByInterestId(anyLong(), any(PageRequest.class)))
+        given(goalService.findGoalListByInterestId(anyString(), anyLong(), any(PageRequest.class)))
                 .willReturn(goalPage);
 
         //when, then

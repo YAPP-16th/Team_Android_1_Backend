@@ -28,9 +28,7 @@ import static com.eroom.erooja.domain.model.QMemberGoal.memberGoal;
 public class MemberGoalRepositoryImpl implements MemberGoalRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
-    public MemberGoalRepositoryImpl(EntityManager em) {
-        this.queryFactory = new JPAQueryFactory(em);
-    }
+    public MemberGoalRepositoryImpl(EntityManager em) { this.queryFactory = new JPAQueryFactory(em); }
 
     @Transactional
     public Page<GoalJoinTodoDto> getJoinTodoListByGoalId(Long goalID, Pageable pageable) {

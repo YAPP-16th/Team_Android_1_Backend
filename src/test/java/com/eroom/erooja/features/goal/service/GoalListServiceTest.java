@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
 @ActiveProfiles("test")
@@ -68,10 +70,10 @@ public class GoalListServiceTest {
 
         Page<Goal> goalPage = new PageImpl(goalList);
 
-        given(goalRepository.findGoalByInterestId(interestId,PageRequest.of(0,2))).willReturn(goalPage);
+        given(goalRepository.findGoalByInterestId(anyLong(), anyString(), PageRequest.of(0,2))).willReturn(goalPage);
 
         //when
-        Page<Goal> findGoalPage = goalService.findGoalListByInterestId(interestId, PageRequest.of(0,2));
+        Page<Goal> findGoalPage = goalService.findGoalListByInterestId("mockuid", interestId, PageRequest.of(0,2));
 
         //then
         assertAll(
