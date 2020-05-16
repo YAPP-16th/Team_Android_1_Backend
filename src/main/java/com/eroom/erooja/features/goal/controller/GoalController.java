@@ -1,5 +1,6 @@
 package com.eroom.erooja.features.goal.controller;
 
+import com.eroom.erooja.features.goal.dto.GoalListResponse;
 import com.eroom.erooja.features.goal.dto.UpdateGoalRequestDTO;
 import com.eroom.erooja.features.goal.exception.GoalNotFoundException;
 import com.eroom.erooja.domain.enums.GoalRole;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 
 @RequiredArgsConstructor
@@ -57,7 +59,7 @@ public class GoalController {
     @GetMapping(value = "/interest/{interestId}")
     ResponseEntity getGoalList(@PathVariable("interestId") Long interestId, Pageable pageable,
                                @RequestParam(required = false) String uid) {
-        Page<Goal> goalList = goalService.findGoalListByInterestId(uid, interestId, pageable);
+        List<GoalListResponse> goalList = goalService.findGoalListByInterestId(uid, interestId, pageable);
         return new ResponseEntity(goalList, HttpStatus.OK);
     }
 
