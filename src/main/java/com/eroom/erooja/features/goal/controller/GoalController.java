@@ -1,5 +1,6 @@
 package com.eroom.erooja.features.goal.controller;
 
+import com.eroom.erooja.features.goal.dto.GoalListResponse;
 import com.eroom.erooja.features.goal.dto.UpdateGoalRequestDTO;
 import com.eroom.erooja.features.goal.exception.GoalNotFoundException;
 import com.eroom.erooja.domain.enums.GoalRole;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 
 @RequiredArgsConstructor
@@ -55,8 +57,9 @@ public class GoalController {
     }
 
     @GetMapping(value = "/interest/{interestId}")
-    ResponseEntity getGoalList(@PathVariable("interestId") Long interestId, Pageable pageable) {
-        Page<Goal> goalList = goalService.findGoalListByInterestId(interestId, pageable);
+    ResponseEntity getGoalList(@PathVariable("interestId") Long interestId, Pageable pageable,
+                               @RequestParam(required = false) String uid) {
+        List<GoalListResponse> goalList = goalService.findGoalListByInterestId(uid, interestId, pageable);
         return new ResponseEntity(goalList, HttpStatus.OK);
     }
 
@@ -81,7 +84,7 @@ public class GoalController {
     @PostMapping(produces = "application/json; charset=utf-8")
     ResponseEntity createGoal(@RequestBody @Valid CreateGoalRequestDTO createGoalRequest,
                               @RequestHeader(name = HttpHeaders.AUTHORIZATION) String header
-                              ,Errors errors) {
+            , Errors errors) {
         if (errors.hasErrors()) {
             logger.error("error : {}", errors.getFieldError().getDefaultMessage());
             return new ResponseEntity(errors.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST);
@@ -107,7 +110,7 @@ public class GoalController {
     ResponseEntity updateGoal(@RequestBody @Valid UpdateGoalRequestDTO updateGoalRequest,
                               @PathVariable Long goalId,
                               @RequestHeader(name = HttpHeaders.AUTHORIZATION) String header,
-                              Errors errors){
+                              Errors errors) {
         if (errors.hasErrors()) {
             logger.error("error : {}", errors.getFieldError().getDefaultMessage());
             return new ResponseEntity(errors.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST);
@@ -115,7 +118,7 @@ public class GoalController {
 
         String uid = jwtTokenProvider.getUidFromHeader(header);
 
-        if((memberGoalService.getGoalRole(uid, goalId).equals(GoalRole.PARTICIPANT)))
+        if ((memberGoalService.getGoalRole(uid, goalId).equals(GoalRole.PARTICIPANT)))
             throw new EroojaException(ErrorEnum.GOAL_AUTH_NOT_ALLOWED);
 
         Goal goal = goalService.updateGoal(goalId, updateGoalRequest);
