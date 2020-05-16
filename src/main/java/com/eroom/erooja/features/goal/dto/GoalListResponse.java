@@ -1,11 +1,9 @@
 package com.eroom.erooja.features.goal.dto;
 
 import com.eroom.erooja.domain.model.Goal;
-import com.eroom.erooja.domain.model.GoalJobInterest;
 import com.eroom.erooja.domain.model.JobInterest;
 import lombok.*;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -23,7 +21,9 @@ public class GoalListResponse {
     private Boolean isDateFixed;
     private LocalDateTime startDt;
     private LocalDateTime endDt;
-    private List<JobInterest> goalJobInterests;
+    private LocalDateTime createDt;
+    private LocalDateTime updateDt;
+    private List<JobInterest> jobInterests;
     private List<String> userImages;
 
     public GoalListResponse(Goal goal, List<String> userImages){
@@ -35,7 +35,9 @@ public class GoalListResponse {
         this.isDateFixed = goal.getIsDateFixed();
         this.startDt = goal.getStartDt();
         this.endDt = goal.getEndDt();
-        this.goalJobInterests = goal.jobInterests();
+        this.createDt = goal.getCreateDt();
+        this.updateDt = goal.getUpdateDt();
+        this.jobInterests = goal.jobInterests();
         this.userImages = userImages;
     }
 }
