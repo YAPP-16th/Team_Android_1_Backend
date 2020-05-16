@@ -43,28 +43,28 @@ public class GoalController {
     private static final Logger logger = LoggerFactory.getLogger(GoalController.class);
 
     @GetMapping("/{goalId}")
-    ResponseEntity getGoalDetail(@PathVariable("goalId") Long goalId) {
+    public ResponseEntity getGoalDetail(@PathVariable("goalId") Long goalId) {
         Goal findGoal;
 
         try {
             findGoal = goalService.findGoalById(goalId);
         } catch (GoalNotFoundException e) {
             logger.error("error : {}", e.getMessage());
-            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
 
-        return new ResponseEntity(findGoal, HttpStatus.OK);
+        return ResponseEntity.ok(findGoal);
     }
 
     @GetMapping(value = "/interest/{interestId}")
-    ResponseEntity getGoalList(@PathVariable("interestId") Long interestId, Pageable pageable,
+    public ResponseEntity getGoalList(@PathVariable("interestId") Long interestId, Pageable pageable,
                                @RequestParam(required = false) String uid) {
         List<GoalListResponse> goalList = goalService.findGoalListByInterestId(uid, interestId, pageable);
         return new ResponseEntity(goalList, HttpStatus.OK);
     }
 
     @GetMapping
-    ResponseEntity searchGoal(GoalSearchRequestDTO goalSearchRequestDTO,
+    public ResponseEntity searchGoal(GoalSearchRequestDTO goalSearchRequestDTO,
                               Errors errors) {
         if (errors.hasErrors()) {
             throw new EroojaException(ErrorEnum.GOAL_INVALID_ARGS);
@@ -82,7 +82,7 @@ public class GoalController {
     }
 
     @PostMapping(produces = "application/json; charset=utf-8")
-    ResponseEntity createGoal(@RequestBody @Valid CreateGoalRequestDTO createGoalRequest,
+    public ResponseEntity createGoal(@RequestBody @Valid CreateGoalRequestDTO createGoalRequest,
                               @RequestHeader(name = HttpHeaders.AUTHORIZATION) String header
             , Errors errors) {
         if (errors.hasErrors()) {
@@ -107,7 +107,7 @@ public class GoalController {
     }
 
     @PutMapping("/{goalId}")
-    ResponseEntity updateGoal(@RequestBody @Valid UpdateGoalRequestDTO updateGoalRequest,
+    public ResponseEntity updateGoal(@RequestBody @Valid UpdateGoalRequestDTO updateGoalRequest,
                               @PathVariable Long goalId,
                               @RequestHeader(name = HttpHeaders.AUTHORIZATION) String header,
                               Errors errors) {
@@ -124,4 +124,5 @@ public class GoalController {
         Goal goal = goalService.updateGoal(goalId, updateGoalRequest);
         return ResponseEntity.status(HttpStatus.OK).body(goal);
     }
+
 }
