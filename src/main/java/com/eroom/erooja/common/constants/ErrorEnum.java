@@ -43,15 +43,19 @@ public enum ErrorEnum {
     GOAL_UNKNOWN_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "GOL_000", "알 수 없는 목표(Goal) 관련 오류입니다."),
     GOAL_NOT_FOUND(HttpStatus.NOT_FOUND, "GOL_001", "해당 목표가 존재하지 않습니다."),
     GOAL_INVALID_ARGS(HttpStatus.BAD_REQUEST, "GOL_002", "올바르지 않은 파라미터, 혹은 요청 바디입니다."),
+    GOAL_AUTH_NOT_ALLOWED(HttpStatus.UNAUTHORIZED, "GOL_003", "목표에 대한 권한이없습니다."),
+    GOAL_TERMINATED(HttpStatus.CONFLICT, "GOL_004", "종료된 목표입니다."),
     /* 목표 관련 오류 메세지 정의 끝 */
 
     /* 할일 CRUD 오류 메세지 정의 */
-    TODO_PRIORITY_NOT_CORRECT(HttpStatus.NOT_FOUND, "TOD_001", "할일 우선순위는 0부터 1씩 차례대로 존재해야합니다."),
+    TODO_PRIORITY_NOT_CORRECT(HttpStatus.BAD_REQUEST, "TOD_001", "할일 우선순위는 0부터 1씩 차례대로 존재해야합니다."),
+    TODO_NOT_FOUND(HttpStatus.NOT_FOUND, "TOD_001", "존재하지 않은 할일입니다."),
+    TODO_NOT_OWNER(HttpStatus.CONFLICT, "TOD_001", "자신의 것이 아닌 할일입니다."),
     /* 할일 CRUD 오류 메세지 정의 끝 */
 
     /* 목표참여 CRUD 오류 메세지 정의 */
-    GOAL_JOIN_ALREADY_EXIST(HttpStatus.NOT_FOUND, "GOJ_001", "이미 목표담기를 했습니다. 중복담기 불가능합니다."),
-    GOAL_JOIN_NOT_FOUND(HttpStatus.NOT_FOUND, "GOJ_002", "참여하고 있지 않는 목표입니다."),
+    GOAL_JOIN_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "GOJ_001", "이미 목표담기를 했습니다. 중복담기 불가능합니다."),
+    GOAL_JOIN_NOT_FOUND(HttpStatus.BAD_REQUEST, "GOJ_002", "참여하고 있지 않는 목표입니다."),
     /* 목표참여 CRUD 오류 메세지 정의 끝 */
 
 

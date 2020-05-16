@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Setter
-public class TodoDTO {
+public class AddTodoDTO {
     private String content;
     private int priority;
 }

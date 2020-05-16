@@ -73,8 +73,8 @@ public class AwsClient {
         return bucketName + "/" + path;
     }
 
-    public String uploadFile(String rootFolder, MultipartFile multipartFile) {
-        String fileUrl = "";
+    public String uploadFile(String rootFolder, MultipartFile multipartFile) throws IOException {
+        String fileUrl;
 
         try {
             File file = convertMultiPartToFile(multipartFile);
@@ -85,7 +85,8 @@ public class AwsClient {
                 logger.warn("서버 내 업로드 임시 파일이 삭제되지 않았습니다.");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("S3 에 업로드 중 에러가 발생했습니다. {}", e);
+            throw e;
         }
 
         return fileUrl;

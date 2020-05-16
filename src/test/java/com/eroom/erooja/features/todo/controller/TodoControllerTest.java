@@ -5,10 +5,7 @@ import com.eroom.erooja.domain.enums.GoalRole;
 import com.eroom.erooja.domain.model.Goal;
 import com.eroom.erooja.domain.model.MemberGoal;
 import com.eroom.erooja.domain.model.Todo;
-import com.eroom.erooja.features.auth.jwt.JwtTokenProvider;
-import com.eroom.erooja.features.todo.dto.TodoDTO;
 import com.eroom.erooja.features.todo.service.TodoService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,7 +21,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpHeaders;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -36,7 +32,6 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -104,7 +99,9 @@ public class TodoControllerTest {
                 .willReturn(todoPage);
 
         ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders
-                .get("/api/v1/todo/member/{uid}/goal/{goalId}",mockUid,goal.getId())
+                .get("/api/v1/todo/")
+                .param("uid", mockUid)
+                .param("goalId", String.valueOf(goal.getId()))
                 .param("page", "0")
                 .param("size", "3"))
                 .andDo(print())
@@ -113,11 +110,9 @@ public class TodoControllerTest {
         //Documentation
         resultActions.andDo(
                 document("todo-search",
-                        pathParameters(
-                                parameterWithName("goalId").description("상세정보 대상 goalId"),
-                                parameterWithName("uid").description("상세정보 대상 uId")
-                        ),
                         requestParameters(
+                                parameterWithName("goalId").description("상세정보 대상 goalId"),
+                                parameterWithName("uid").description("상세정보 대상 uId"),
                                 parameterWithName("page").description("페이지 위치"),
                                 parameterWithName("size").description("한 페이지당 조회할 크기")
                         ),

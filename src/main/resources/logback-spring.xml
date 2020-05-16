@@ -3,26 +3,31 @@
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
     <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
 
-    <root level="INFO">
-        <appender-ref ref="CONSOLE"/>
-    </root>
+    <springProfile name="!development,!production">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="test">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
 
     <springProfile name="production">
+        <property resource="application-production.yml"/>
 
         <appender name="SLACK" class="com.github.maricn.logback.SlackAppender">
+            <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+                <level>WARN</level>
+            </filter>
             <layout class="ch.qos.logback.classic.PatternLayout">
                 <pattern>%d{HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
             </layout>
-            <webhookUri>https://hooks.slack.com/services/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</webhookUri>
+            <webhookUri>${SLACK_ERROR_ALARM_WEB_HOOK}</webhookUri>
             <channel>#team_eroom_error_alram</channel>
             <colorCoding>true</colorCoding>
-        </appender>
-
-        <appender name="ASYNC_SLACK" class="ch.qos.logback.classic.AsyncAppender">
-            <appender-ref ref="SLACK"/>
-            <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-                <level>ERROR</level>
-            </filter>
         </appender>
 
         <appender name="FILE-ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -40,11 +45,16 @@
             </encoder>
         </appender>
 
-        <root level="INFO">
+
+        <root>
+        </root>
+
+        <root>
+            <appender-ref ref="SLACK"/>
             <appender-ref ref="CONSOLE"/>
             <appender-ref ref="FILE-ROLLING"/>
-            <appender-ref ref="ASYNC_SLACK"/>
         </root>
     </springProfile>
+
 </configuration>
 

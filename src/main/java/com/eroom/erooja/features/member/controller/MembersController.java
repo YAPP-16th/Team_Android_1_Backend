@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -23,8 +24,14 @@ public class MembersController {
     private final MemberService memberService;
     private final JwtTokenProvider jwtTokenProvider;
 
+    @PostMapping("/info")
+    public ResponseEntity getMemberByUid(@RequestBody MemberDTO memberDTO) {
+        String uid = memberDTO.getUid();
+       return  ResponseEntity.ok(MemberDTO.of(memberService.findById(uid)));
+    }
+
     @GetMapping
-    public ResponseEntity getMemberByUid(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String header) {
+    public ResponseEntity getMemberByHeader(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String header) {
         String uid = jwtTokenProvider.getUidFromHeader(header);
         return ResponseEntity.ok(MemberDTO.of(memberService.findById(uid)));
     }
@@ -63,7 +70,7 @@ public class MembersController {
 
     @PostMapping(value = "/image", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity uploadAndUpdateImage(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String header,
-                                               @RequestBody MultipartFile multipartImageFile) {
+                                               @RequestBody MultipartFile multipartImageFile) throws IOException {
         String uid = jwtTokenProvider.getUidFromHeader(header);
 
         Members member = memberService.updateProfilePicture(uid, multipartImageFile);

@@ -7,7 +7,7 @@ import com.eroom.erooja.domain.model.MemberGoal;
 import com.eroom.erooja.features.auth.jwt.JwtTokenProvider;
 import com.eroom.erooja.features.membergoal.dto.GoalJoinRequestDTO;
 import com.eroom.erooja.features.membergoal.service.MemberGoalService;
-import com.eroom.erooja.features.todo.dto.TodoDTO;
+import com.eroom.erooja.features.todo.dto.AddTodoDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
@@ -70,11 +70,11 @@ public class MemberGoalJoinControllerTest {
         LocalDateTime endDt = startDt.plusHours(2);
         String mockUid = "KAKAO@testId";
 
-        List<TodoDTO> todoDTODTOList = new ArrayList();
-        todoDTODTOList.add(TodoDTO.builder()
+        List<AddTodoDTO> todoDTOList = new ArrayList();
+        todoDTOList.add(AddTodoDTO.builder()
                 .content("fisrt")
                 .priority(0).build());
-        todoDTODTOList.add(TodoDTO.builder()
+        todoDTOList.add(AddTodoDTO.builder()
                 .content("two")
                 .priority(1).build());
 
@@ -112,7 +112,7 @@ public class MemberGoalJoinControllerTest {
                 .goalId(goal.getId())
                 .ownerUid(existMemberGoal.getUid())
                 .endDt(endDt)
-                .todoList(todoDTODTOList).build();
+                .todoList(todoDTOList).build();
 
         given(jwtTokenProvider.getUidFromHeader("Bearer [TOKEN]"))
                 .willReturn(mockUid);

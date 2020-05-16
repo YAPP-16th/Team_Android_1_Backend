@@ -2,7 +2,6 @@ package com.eroom.erooja.features.membergoal.service;
 
 import com.eroom.erooja.common.constants.ErrorEnum;
 import com.eroom.erooja.common.exception.EroojaException;
-import com.eroom.erooja.common.exception.MemberGoalNotFoundException;
 import com.eroom.erooja.domain.enums.GoalRole;
 import com.eroom.erooja.domain.model.Goal;
 import com.eroom.erooja.domain.model.MemberGoal;
@@ -14,6 +13,7 @@ import com.eroom.erooja.features.goal.service.GoalService;
 import com.eroom.erooja.features.membergoal.dto.GoalJoinMemberDTO;
 import com.eroom.erooja.features.membergoal.dto.GoalJoinRequestDTO;
 import com.eroom.erooja.features.membergoal.dto.GoalJoinTodoDto;
+import com.eroom.erooja.features.membergoal.dto.UpdateJoinRequestDTO;
 import com.eroom.erooja.features.membergoal.repository.MemberGoalRepository;
 import com.eroom.erooja.features.todo.service.TodoService;
 import lombok.RequiredArgsConstructor;
@@ -22,13 +22,14 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import org.springframework.transaction.annotation.Transactional;
 
-import static com.eroom.erooja.common.constants.ErrorEnum.GOAL_JOIN_NOT_FOUND;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -40,7 +41,10 @@ public class MemberGoalService {
 
     public MemberGoal joinExistGoal(String uid, GoalJoinRequestDTO goalJoinRequest) {
         Goal goal = goalRepository.findById(goalJoinRequest.getGoalId())
-                .orElseThrow(MemberGoalNotFoundException::new);
+                .orElseThrow(() -> new EroojaException(ErrorEnum.GOAL_NOT_FOUND));
+
+        if (goal.getIsEnd())
+            throw new EroojaException(ErrorEnum.GOAL_TERMINATED);
 
         if (goalJoinRequest.isExistOwnerUid())
             increaseCopyCount(goalJoinRequest.getOwnerUid(), goalJoinRequest.getGoalId());
@@ -59,7 +63,8 @@ public class MemberGoalService {
 
     public void increaseCopyCount(String uid, Long goalId) {
         MemberGoal memberGoal = memberGoalRepository.findById(new MemberGoalPK(uid, goalId))
-                .orElseThrow(MemberGoalNotFoundException::new);
+                .orElseThrow(() -> new GoalNotFoundException(ErrorEnum.GOAL_NOT_FOUND));
+
         memberGoal.increaseCopyCount();
         memberGoalRepository.save(memberGoal);
     }
@@ -86,22 +91,22 @@ public class MemberGoalService {
 
     @Transactional
     public Page<GoalJoinMemberDTO> getEndedGoalJoinPageByUid(String uid, Pageable pageable) {
-        Page<MemberGoal> memberGoals = memberGoalRepository.findAllByUidAndEndDtIsBeforeAndIsEndFalse(uid, pageable, LocalDateTime.now());
+        Page<MemberGoal> memberGoals = memberGoalRepository.findAllByUidAndEndDtIsBeforeOrIsEndTrue(uid, LocalDateTime.now(), pageable);
         return convertPage2DTO(memberGoals);
     }
 
     @Transactional
     public Page<GoalJoinMemberDTO> getGoalJoinPageByUid(String uid, Pageable pageable) {
-        Page<MemberGoal> memberGoals = memberGoalRepository.findAllByUidAndEndDtIsAfterOrIsEndTrue(uid, pageable, LocalDateTime.now());
+        Page<MemberGoal> memberGoals = memberGoalRepository.findAllByUidAndEndDtIsAfterAndIsEndFalse(uid, LocalDateTime.now(), pageable);
         return convertPage2DTO(memberGoals);
     }
 
     private Page<GoalJoinMemberDTO> convertPage2DTO(Page<MemberGoal> origin) {
         return new PageImpl<>(
-            origin.getContent().stream()
-                .map(mg -> GoalJoinMemberDTO.of(mg, goalService.findGoalById(mg.getGoalId())))
-                .collect(Collectors.toList()),
-            origin.getPageable(), origin.getTotalElements());
+                origin.getContent().stream()
+                        .map(mg -> GoalJoinMemberDTO.of(mg, goalService.findGoalById(mg.getGoalId())))
+                        .collect(Collectors.toList()),
+                origin.getPageable(), origin.getTotalElements());
     }
 
     public Page<Members> getMembersAllByGoalId(Long goalId, Pageable pageable) {
@@ -121,15 +126,49 @@ public class MemberGoalService {
         return memberGoalRepository.getJoinTodoListByGoalId(goalId, pageable);
     }
 
-    public MemberGoal changeGoalJoinToEnd(String uid, Long goalId){
+    public MemberGoal againJoin(UpdateJoinRequestDTO updateGoalJoinRequest, String uid, Long goalId) {
         MemberGoal memberGoal = memberGoalRepository.findById(new MemberGoalPK(uid, goalId))
-                .orElseThrow(MemberGoalNotFoundException::new);
+                .orElseThrow(() -> new EroojaException(ErrorEnum.GOAL_JOIN_NOT_FOUND));
+        Goal goal = goalRepository.findById(goalId)
+                .orElseThrow(() -> new EroojaException(ErrorEnum.GOAL_NOT_FOUND));
+
+        memberGoal.setIsEnd(false);
+        memberGoal.setStartDt(LocalDateTime.now());
+
+        if (goal.getIsDateFixed()) {
+            if(goal.isExpire())
+                throw new EroojaException(ErrorEnum.GOAL_TERMINATED);
+            memberGoal.setEndDt(goal.getEndDt());
+        }else{
+            memberGoal.setEndDt(updateGoalJoinRequest.getEndDt());
+        }
+
+        return memberGoalRepository.save(memberGoal);
+    }
+
+    public MemberGoal changeJoinToEnd(String uid, Long goalId) {
+        MemberGoal memberGoal = memberGoalRepository.findById(new MemberGoalPK(uid, goalId))
+                .orElseThrow(() -> new EroojaException(ErrorEnum.GOAL_JOIN_NOT_FOUND));
+
         memberGoal.setIsEnd(true);
+
         return memberGoalRepository.save(memberGoal);
     }
 
     public MemberGoal getGoalJoinByUidAndGoalId(String uid, Long goalId) {
         return memberGoalRepository.findById(new MemberGoalPK(uid, goalId))
                 .orElseThrow(() -> new GoalNotFoundException(ErrorEnum.GOAL_JOIN_NOT_FOUND));
+    }
+
+    public GoalRole getGoalRole(String uid, Long goalId) {
+        MemberGoal memberGoal = memberGoalRepository.findById(new MemberGoalPK(uid, goalId))
+                .orElseThrow(() -> new GoalNotFoundException(ErrorEnum.GOAL_JOIN_NOT_FOUND));
+
+        return memberGoal.getRole();
+    }
+
+    public List<MemberGoal> getAllEndedYesterday() {
+        LocalDateTime targetTime = LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.MIN);
+        return memberGoalRepository.findAllByEndDtIsAfter(targetTime);
     }
 }

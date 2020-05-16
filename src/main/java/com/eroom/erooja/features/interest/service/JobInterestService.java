@@ -10,7 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -61,29 +63,27 @@ public class JobInterestService {
         );
     }
 
-    public void setUpDefaultJobInterests() {
+    @Transactional
+    public List<JobInterest> setUpDefaultJobInterests() {
         jobInterestRepository.deleteAll();
 
-        Long primeJobInterestId = 1L;
         String[] jobInterests_develop = {
                 "서버", "프론트엔드", "안드로이드", "iOS", "Data Engineer", "Data Scientist",
-                "DevOps", "머신 러닝", "게임, 애니메이션"
+                "DevOps", "머신 러닝", "게임/애니메이션"
         };
 
         String[] jobInterests_design = {
-                "UX 디자인", "UI, GUI 디자인", "영상, 모션 디자인", "모바일 디자인", "편집 디자인",
-                "그래픽 디자인", "웹 디자인", "BX 디자인", "제품 디자인"
+                "UX 디자인", "UI/GUI 디자인", "웹 디자인", "그래픽 디자인",
+                "산업 디자인", "편집 디자인", "영상/모션 디자인", "BX 디자인"
         };
 
         JobInterest jobGroup_develop = JobInterest.builder()
-                .id(primeJobInterestId++)
                 .name("개발")
                 .jobGroup(null)
                 .jobInterestType(JobInterestType.JOB_GROUP)
                 .build();
 
         JobInterest jobGroup_design = JobInterest.builder()
-                .id(primeJobInterestId++)
                 .name("디자인")
                 .jobGroup(null)
                 .jobInterestType(JobInterestType.JOB_GROUP)
@@ -92,24 +92,27 @@ public class JobInterestService {
         jobGroup_develop = jobInterestRepository.save(jobGroup_develop);
         jobGroup_design = jobInterestRepository.save(jobGroup_design);
 
-        primeJobInterestId = saveAllJobInterests(primeJobInterestId, jobGroup_develop, jobInterests_develop);
-        primeJobInterestId = saveAllJobInterests(primeJobInterestId, jobGroup_design, jobInterests_design);
+        List<JobInterest> jobInterests = new ArrayList<>();
 
-        logger.info("기본 직군/직무 셋업 완료 - cnt : {}", primeJobInterestId);
+        jobInterests.addAll(saveAllJobInterests(jobGroup_develop, jobInterests_develop));
+        jobInterests.addAll(saveAllJobInterests(jobGroup_design, jobInterests_design));
+
+        return jobInterests;
     }
 
-    private Long saveAllJobInterests(long primeJobInterestId, JobInterest jobGroup, String[] jobInterests) {
+    private List<JobInterest> saveAllJobInterests(JobInterest jobGroup, String[] jobInterests) {
+        List<JobInterest> jobInterestsList = new ArrayList<>();
+
         for(String name : jobInterests) {
             JobInterest interest = JobInterest.builder()
-                    .id(primeJobInterestId++)
                     .name(name)
                     .jobGroup(jobGroup)
                     .jobInterestType(JobInterestType.JOB_INTEREST)
                     .build();
 
-            jobInterestRepository.save(interest);
+            jobInterestsList.add(jobInterestRepository.save(interest));
         }
 
-        return primeJobInterestId;
+        return jobInterestsList;
     }
 }

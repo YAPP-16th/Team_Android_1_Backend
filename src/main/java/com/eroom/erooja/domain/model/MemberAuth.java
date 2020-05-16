@@ -20,6 +20,7 @@ public class MemberAuth extends AuditProperties implements UserDetails {
 
     private String password;
 
+    @Enumerated(EnumType.STRING)
     private AuthProvider authProvider;
 
     @Lob

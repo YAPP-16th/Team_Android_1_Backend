@@ -102,4 +102,16 @@ public class MemberJobInterestService {
 
         memberJobInterestRepository.delete(memberJobInterest);
     }
+
+    public Integer deleteJobInterestListForUid(String uid, List<Long> ids) {
+        int deletedCount = 0;
+        for(Long id : ids) {
+            if (!jobInterestRepository.existsById(id)) continue;
+            if (!memberJobInterestRepository.existsByMember_UidAndJobInterest_Id(uid, id)) continue;
+            this.deleteByUidAndJobInterestId(uid, id);
+            deletedCount++;
+        }
+
+        return deletedCount;
+    }
 }

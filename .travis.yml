@@ -23,8 +23,6 @@ notifications:
   email:
     recipients:
       - ad01.yapp@gmail.com
-      - siotman.yapp@gmail.com
-      - hyeonsu.yapp@gmail.com
 
 before_deploy:
   - zip -r erooja-server *

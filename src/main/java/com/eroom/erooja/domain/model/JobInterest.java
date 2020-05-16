@@ -11,6 +11,7 @@ import javax.persistence.*;
 @NoArgsConstructor @AllArgsConstructor
 @Getter
 @Entity
+@ToString(of = {"id", "name", "jobInterestType"})
 public class JobInterest {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

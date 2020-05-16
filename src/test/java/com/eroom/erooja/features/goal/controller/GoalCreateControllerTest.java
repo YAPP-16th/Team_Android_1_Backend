@@ -9,7 +9,7 @@ import com.eroom.erooja.features.goal.dto.CreateGoalRequestDTO;
 import com.eroom.erooja.features.goal.service.GoalService;
 import com.eroom.erooja.features.goaljobinterest.service.GoalJobInterestService;
 import com.eroom.erooja.features.membergoal.service.MemberGoalService;
-import com.eroom.erooja.features.todo.dto.TodoDTO;
+import com.eroom.erooja.features.todo.dto.AddTodoDTO;
 import com.eroom.erooja.features.todo.service.TodoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -78,8 +78,8 @@ public class GoalCreateControllerTest {
         LocalDateTime endDt = startDt.plusHours(2);
         String mockUid = "KAKAO@testId";
 
-        List<TodoDTO> todoDTODTOList = new ArrayList();
-        todoDTODTOList.add(TodoDTO.builder()
+        List<AddTodoDTO> todoDTOList = new ArrayList();
+        todoDTOList.add(AddTodoDTO.builder()
                 .content("fisrt")
                 .priority(0).build());
 
@@ -89,7 +89,7 @@ public class GoalCreateControllerTest {
                 .description("description")
                 .isDateFixed(false)
                 .interestIdList(Arrays.asList(0L))
-                .todoList(todoDTODTOList).build();
+                .todoList(todoDTOList).build();
 
         Goal newGoal = Goal.builder()
                 .id(0L)
