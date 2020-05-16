@@ -1,6 +1,7 @@
 package com.eroom.erooja.features.membergoal.dto;
 
 import com.eroom.erooja.domain.model.JobInterest;
+import com.eroom.erooja.domain.model.MemberGoal;
 import com.eroom.erooja.domain.model.Members;
 import com.eroom.erooja.features.member.dto.MemberDTO;
 import com.eroom.erooja.features.member.dto.MemberWithJobInterestsDTO;
@@ -25,7 +26,7 @@ public class MemberPageDTO {
     private int totalPages;
     private long totalElement;
 
-    public static MemberPageDTO of(Page<Members> memberPage, Map<String, List<JobInterest>> jobInterestByUid) {
+    public static MemberPageDTO of(Page<MemberGoal> memberPage, Map<String, List<JobInterest>> jobInterestByUid) {
         return MemberPageDTO.builder()
                     .members(
                             memberPage.stream()

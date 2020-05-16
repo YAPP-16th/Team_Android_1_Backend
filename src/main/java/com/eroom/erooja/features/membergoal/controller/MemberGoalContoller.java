@@ -64,10 +64,8 @@ public class MemberGoalContoller {
     @Transactional
     @GetMapping("/{goalId}")
     public ResponseEntity getMembers(@PathVariable Long goalId, Pageable pageable) {
-        Page<Members> members = memberGoalService.getMembersAllByGoalId(goalId, pageable);
-        List<String> uidList = members.stream().map(Members::getUid).collect(Collectors.toList());
-        Map<String, List<JobInterest>> jobInterestByUid = memberJobInterestService.getJobInterestsByUids(uidList);
-        return ResponseEntity.ok(MemberPageDTO.of(members, jobInterestByUid));
+        MemberPageDTO memberPageDTO = memberGoalService.getMembersAllByGoalId(goalId, pageable);
+        return ResponseEntity.ok(memberPageDTO);
     }
 
     @GetMapping
