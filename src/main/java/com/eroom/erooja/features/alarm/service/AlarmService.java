@@ -3,6 +3,7 @@ package com.eroom.erooja.features.alarm.service;
 import com.eroom.erooja.common.constants.ErrorEnum;
 import com.eroom.erooja.common.exception.EroojaException;
 import com.eroom.erooja.domain.model.Alarm;
+import com.eroom.erooja.features.alarm.dto.InsertMessageDTO;
 import com.eroom.erooja.features.alarm.repository.AlarmRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -31,6 +32,11 @@ public class AlarmService {
         if(!(message.checkMessageIsOwn(uid)))
             throw new EroojaException(ErrorEnum.ALARM_MESSAGE_NOT_ALLOWED);
 
+        return alarmRepository.save(message);
+    }
+
+    public Alarm insertMessage(InsertMessageDTO insertMessage){
+        Alarm message = Alarm.of(insertMessage);
         return alarmRepository.save(message);
     }
 }
