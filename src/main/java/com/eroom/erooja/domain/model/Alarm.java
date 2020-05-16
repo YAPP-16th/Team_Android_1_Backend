@@ -34,4 +34,8 @@ public class Alarm extends AuditProperties {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "uid", updatable = false, insertable = false)
     private Members recevier;
+
+    public Boolean checkMessageIsOwn(String uid){
+        return this.recevier.getUid().equals(uid);
+    }
 }

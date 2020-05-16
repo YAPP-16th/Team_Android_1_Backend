@@ -25,7 +25,12 @@ public class AlarmService {
     public Alarm changeStateToChecked(String uid, Long alarmId){
         Alarm message = alarmRepository.findById(alarmId)
                 .orElseThrow(() -> new EroojaException(ErrorEnum.ALARM_MESSAGE_NOT_FOUND));
+
         message.setIsChecked(true);
+
+        if(!(message.checkMessageIsOwn(uid)))
+            throw new EroojaException(ErrorEnum.ALARM_MESSAGE_NOT_ALLOWED);
+
         return alarmRepository.save(message);
     }
 }
