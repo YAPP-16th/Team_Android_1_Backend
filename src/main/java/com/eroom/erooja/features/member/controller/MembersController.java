@@ -31,7 +31,7 @@ public class MembersController {
     }
 
     @GetMapping
-    public ResponseEntity getMemberByUid(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String header) {
+    public ResponseEntity getMemberByHeader(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String header) {
         String uid = jwtTokenProvider.getUidFromHeader(header);
         return ResponseEntity.ok(MemberDTO.of(memberService.findById(uid)));
     }
