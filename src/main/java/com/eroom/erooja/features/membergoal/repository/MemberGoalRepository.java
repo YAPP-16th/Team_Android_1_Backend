@@ -23,7 +23,7 @@ public interface MemberGoalRepository extends JpaRepository<MemberGoal, MemberGo
 
     Page<MemberGoal> findAllByGoalId(Long goalId, Pageable pageable);
 
-    Page<MemberGoal> findAllByUidAndEndDtIsAfterOrIsEndTrue(String uid, Pageable pageable, LocalDateTime now);
+    Page<MemberGoal> findAllByUidAndEndDtIsBeforeOrIsEndTrue(String uid, Pageable pageable, LocalDateTime now);
 
-    Page<MemberGoal> findAllByUidAndEndDtIsBeforeAndIsEndFalse(String uid, Pageable pageable, LocalDateTime now);
+    Page<MemberGoal> findAllByUidAndEndDtIsAfterAndIsEndFalse(String uid, Pageable pageable, LocalDateTime now);
 }
