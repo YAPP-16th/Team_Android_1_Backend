@@ -24,7 +24,7 @@ public class MembersController {
     private final MemberService memberService;
     private final JwtTokenProvider jwtTokenProvider;
 
-    @PostMapping
+    @PostMapping("/byUid")
     public ResponseEntity getMemberByUid(@RequestBody MemberDTO memberDTO) {
         String uid = memberDTO.getUid();
        return  ResponseEntity.ok(MemberDTO.of(memberService.findById(uid)));
