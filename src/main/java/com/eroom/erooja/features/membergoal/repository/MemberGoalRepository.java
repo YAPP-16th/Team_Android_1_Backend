@@ -25,10 +25,10 @@ public interface MemberGoalRepository extends JpaRepository<MemberGoal, MemberGo
 
     Page<MemberGoal> findAllByGoalId(Long goalId, Pageable pageable);
 
-    @Query(value = "SELECT mg FROM MemberGoal mg WHERE mg.uid = :uid and (mg.endDt > :now OR mg.isEnd = true)")
-    Page<MemberGoal> findAllByUidAndEndDtIsAfterOrIsEndTrue(@Param("uid") String uid, @Param("now") LocalDateTime now, Pageable pageable);
+    @Query(value = "SELECT mg FROM MemberGoal mg WHERE mg.uid = :uid and (mg.endDt < :now OR mg.isEnd = true)")
+    Page<MemberGoal> findAllByUidAndEndDtIsBeforeOrIsEndTrue(@Param("uid") String uid, @Param("now") LocalDateTime now, Pageable pageable);
 
-    Page<MemberGoal> findAllByUidAndEndDtIsBeforeAndIsEndFalse(String uid, LocalDateTime now, Pageable pageable);
+    Page<MemberGoal> findAllByUidAndEndDtIsAfterAndIsEndFalse(String uid, LocalDateTime now, Pageable pageable);
 
     List<MemberGoal> findAllByEndDtIsAfter(LocalDateTime targetTime);
 }

@@ -91,13 +91,13 @@ public class MemberGoalService {
 
     @Transactional
     public Page<GoalJoinMemberDTO> getEndedGoalJoinPageByUid(String uid, Pageable pageable) {
-        Page<MemberGoal> memberGoals = memberGoalRepository.findAllByUidAndEndDtIsAfterOrIsEndTrue(uid, LocalDateTime.now(), pageable);
+        Page<MemberGoal> memberGoals = memberGoalRepository.findAllByUidAndEndDtIsBeforeOrIsEndTrue(uid, LocalDateTime.now(), pageable);
         return convertPage2DTO(memberGoals);
     }
 
     @Transactional
     public Page<GoalJoinMemberDTO> getGoalJoinPageByUid(String uid, Pageable pageable) {
-        Page<MemberGoal> memberGoals = memberGoalRepository.findAllByUidAndEndDtIsBeforeAndIsEndFalse(uid, LocalDateTime.now(), pageable);
+        Page<MemberGoal> memberGoals = memberGoalRepository.findAllByUidAndEndDtIsAfterAndIsEndFalse(uid, LocalDateTime.now(), pageable);
         return convertPage2DTO(memberGoals);
     }
 
