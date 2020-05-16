@@ -15,6 +15,7 @@ public interface MemberRepository extends JpaRepository<Members, String> {
     @Query("SELECT m.imagePath FROM Members m " +
             "JOIN MemberGoal g " +
             "ON m.uid = g.uid " +
-            "AND g.goalId = :goalId")
+            "AND g.goalId = :goalId " +
+            "AND m.imagePath IS NOT NULL ")
     List<String> getUserImageListByGoalId(Long goalId, Pageable pageable);
 }
