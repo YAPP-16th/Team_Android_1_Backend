@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AlarmRepository extends JpaRepository<Alarm, Long>{
-    Page<Alarm> findAllByRecevier_Uid(String uid, Pageable pageable);
-    Page<Alarm> findAllByRecevier_UidAndIsCheckedIsFalse(String uid, Pageable pageable);
+    Page<Alarm> findAllByReceiver_Uid(String uid, Pageable pageable);
+    Page<Alarm> findAllByReceiver_UidAndIsCheckedIsFalse(String uid, Pageable pageable);
 }
 

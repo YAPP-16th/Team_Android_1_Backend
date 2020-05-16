@@ -16,11 +16,11 @@ public class AlarmService {
     private final AlarmRepository alarmRepository;
 
     public Page<Alarm> getMessageAllByUid(String uid, Pageable pageable){
-        return alarmRepository.findAllByRecevier_Uid(uid, pageable);
+        return alarmRepository.findAllByReceiver_Uid(uid, pageable);
     }
 
     public Page<Alarm> getMessageUncheckedByUid(String uid, Pageable pageable){
-        return alarmRepository.findAllByRecevier_UidAndIsCheckedIsFalse(uid, pageable);
+        return alarmRepository.findAllByReceiver_UidAndIsCheckedIsFalse(uid, pageable);
     }
 
     public Alarm changeStateToChecked(String uid, Long alarmId){
