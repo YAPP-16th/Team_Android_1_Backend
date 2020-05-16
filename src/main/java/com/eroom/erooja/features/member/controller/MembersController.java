@@ -27,7 +27,7 @@ public class MembersController {
     @PostMapping
     public ResponseEntity getMemberByUid(@RequestBody MemberDTO memberDTO) {
         String uid = memberDTO.getUid();
-        ResponseEntity.ok(MemberDTO.of(memberService.findById(uid)));
+       return  ResponseEntity.ok(MemberDTO.of(memberService.findById(uid)));
     }
 
     @GetMapping
