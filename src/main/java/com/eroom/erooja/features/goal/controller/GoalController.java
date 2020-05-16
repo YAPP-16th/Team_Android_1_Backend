@@ -59,7 +59,7 @@ public class GoalController {
     @GetMapping(value = "/interest/{interestId}")
     public ResponseEntity getGoalList(@PathVariable("interestId") Long interestId, Pageable pageable,
                                @RequestParam(required = false) String uid) {
-        List<GoalListResponse> goalList = goalService.findGoalListByInterestId(uid, interestId, pageable);
+        Page<GoalListResponse> goalList = goalService.findGoalListByInterestId(uid, interestId, pageable);
         return new ResponseEntity(goalList, HttpStatus.OK);
     }
 
