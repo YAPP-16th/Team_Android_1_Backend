@@ -21,4 +21,11 @@ public class AlarmService {
     public Page<Alarm> getMessageUncheckedByUid(String uid, Pageable pageable){
         return alarmRepository.findAllByRecevier_UidAndIsCheckedIsFalse(uid, pageable);
     }
+
+    public Alarm changeStateToChecked(String uid, Long alarmId){
+        Alarm message = alarmRepository.findById(alarmId)
+                .orElseThrow(() -> new EroojaException(ErrorEnum.ALARM_MESSAGE_NOT_FOUND));
+        message.setIsChecked(true);
+        return alarmRepository.save(message);
+    }
 }

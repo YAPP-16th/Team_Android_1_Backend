@@ -38,6 +38,7 @@ public class AlarmController {
     public ResponseEntity changeStateToChecked(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String header,
                                                @PathVariable("alarmId") Long alarmId) {
         String uid = jwtTokenProvider.getUidFromHeader(header);
-        return ResponseEntity.ok(null);
+        Alarm message = alarmService.changeStateToChecked(uid, alarmId);
+        return ResponseEntity.ok(message);
     }
 }
