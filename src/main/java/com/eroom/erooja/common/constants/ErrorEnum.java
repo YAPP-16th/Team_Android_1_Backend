@@ -58,6 +58,10 @@ public enum ErrorEnum {
     GOAL_JOIN_NOT_FOUND(HttpStatus.BAD_REQUEST, "GOJ_002", "참여하고 있지 않는 목표입니다."),
     /* 목표참여 CRUD 오류 메세지 정의 끝 */
 
+    /* 알람 CRUD 오류 메세지 정의 */
+    ALARM_MESSAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "ALM_001", "존재하지 않는 알람 메시지입니다."),
+    ALARM_MESSAGE_NOT_ALLOWED(HttpStatus.UNAUTHORIZED, "ALM_001", "알림메시지에 대한 권한이 없습니다."),
+    /* 목표참여 CRUD 오류 메세지 정의 끝 */
 
     ETC(HttpStatus.INTERNAL_SERVER_ERROR, "ETC_000", "알 수 없는 오류입니다.");
 

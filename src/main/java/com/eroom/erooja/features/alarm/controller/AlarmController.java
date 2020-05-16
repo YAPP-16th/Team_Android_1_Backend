@@ -9,10 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/alarm")
@@ -30,13 +27,16 @@ public class AlarmController {
     }
 
     @GetMapping("/unchecked")
-    public ResponseEntity getMessageUnchecked(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String header) {
+    public ResponseEntity getMessageUnchecked(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String header,
+                                              Pageable pageable) {
         String uid = jwtTokenProvider.getUidFromHeader(header);
-        return ResponseEntity.ok(null);
+        Page<Alarm> messages = alarmService.getMessageUncheckedByUid(uid, pageable);
+        return ResponseEntity.ok(messages);
     }
 
-    @PutMapping
-    public ResponseEntity changeStateToChecked(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String header) {
+    @PutMapping("/{alarmId}")
+    public ResponseEntity changeStateToChecked(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String header,
+                                               @PathVariable("alarmId") Long alarmId) {
         String uid = jwtTokenProvider.getUidFromHeader(header);
         return ResponseEntity.ok(null);
     }
