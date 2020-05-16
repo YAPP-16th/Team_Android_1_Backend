@@ -22,7 +22,9 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -89,13 +91,13 @@ public class MemberGoalService {
 
     @Transactional
     public Page<GoalJoinMemberDTO> getEndedGoalJoinPageByUid(String uid, Pageable pageable) {
-        Page<MemberGoal> memberGoals = memberGoalRepository.findAllByUidAndEndDtIsBeforeOrIsEndTrue(uid, pageable, LocalDateTime.now());
+        Page<MemberGoal> memberGoals = memberGoalRepository.findAllByUidAndEndDtIsAfterOrIsEndTrue(uid, LocalDateTime.now(), pageable);
         return convertPage2DTO(memberGoals);
     }
 
     @Transactional
     public Page<GoalJoinMemberDTO> getGoalJoinPageByUid(String uid, Pageable pageable) {
-        Page<MemberGoal> memberGoals = memberGoalRepository.findAllByUidAndEndDtIsAfterAndIsEndFalse(uid, pageable, LocalDateTime.now());
+        Page<MemberGoal> memberGoals = memberGoalRepository.findAllByUidAndEndDtIsBeforeAndIsEndFalse(uid, LocalDateTime.now(), pageable);
         return convertPage2DTO(memberGoals);
     }
 
@@ -163,5 +165,10 @@ public class MemberGoalService {
                 .orElseThrow(() -> new GoalNotFoundException(ErrorEnum.GOAL_JOIN_NOT_FOUND));
 
         return memberGoal.getRole();
+    }
+
+    public List<MemberGoal> getAllEndedYesterday() {
+        LocalDateTime targetTime = LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.MIN);
+        return memberGoalRepository.findAllByEndDtIsAfter(targetTime);
     }
 }

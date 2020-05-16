@@ -29,6 +29,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 /* GUEST, PUBLIC */
                 .antMatchers(HttpMethod.GET, "/api/v1/**")
                     .permitAll()
+                .antMatchers(HttpMethod.POST, "/api/v1/member/info")
+                    .permitAll()
                 .antMatchers("/api/v1/auth/**")
                     .permitAll()
                 /* GENERAL MEMBERS */
