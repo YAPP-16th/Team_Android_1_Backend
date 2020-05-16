@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -45,17 +46,13 @@ public class GoalService {
                 .orElseThrow(() -> new GoalNotFoundException(ErrorEnum.GOAL_NOT_FOUND));
     }
 
-    public List<GoalListResponse> findGoalListByInterestId(String uid, Long interestId, Pageable pageable) {
-        List<GoalListResponse> goalListResponse = new ArrayList<>();
-
+    public Page<GoalListResponse> findGoalListByInterestId(String uid, Long interestId, Pageable pageable) {
         Page<Goal> goalPage = goalRepository.findGoalByInterestId(interestId, uid, pageable);
 
-        goalPage.getContent().stream().forEach((goal) -> {
+        return goalPage.map((goal) -> {
             List<String> userImages = memberRepository.getUserImageListByGoalId(goal.getId(), PageRequest.of(0, 3));
-            goalListResponse.add(new GoalListResponse(goal, userImages));
+            return new GoalListResponse(goal, userImages);
         });
-
-        return goalListResponse;
     }
 
     public Page<Goal> search(GoalCriteria goalCriteria) {
