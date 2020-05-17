@@ -1,7 +1,9 @@
 package com.eroom.erooja.features.member.dto;
 
+import com.eroom.erooja.domain.enums.GoalRole;
 import com.eroom.erooja.domain.enums.JobInterestType;
 import com.eroom.erooja.domain.model.JobInterest;
+import com.eroom.erooja.domain.model.MemberGoal;
 import com.eroom.erooja.domain.model.Members;
 import com.eroom.erooja.features.interest.dto.JobInterestDTO;
 import lombok.*;
@@ -17,13 +19,17 @@ public class MemberWithJobInterestsDTO {
     @Setter
     private String uid;
     private String nickname;
+    private GoalRole role;
     private String imagePath;
     private List<JobInterestDTO> jobInterests;
 
-    public static MemberWithJobInterestsDTO of(Members members, List<JobInterest> jobInterests) {
+    public static MemberWithJobInterestsDTO of(MemberGoal memberGoal, List<JobInterest> jobInterests) {
+        Members members = memberGoal.getMember();
+
         return MemberWithJobInterestsDTO.builder()
                     .uid(members.getUid())
                     .nickname(members.getNickname())
+                    .role(memberGoal.getRole())
                     .imagePath(members.getImagePath())
                     .jobInterests(
                             jobInterests.stream()

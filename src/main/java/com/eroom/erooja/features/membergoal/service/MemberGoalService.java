@@ -3,29 +3,26 @@ package com.eroom.erooja.features.membergoal.service;
 import com.eroom.erooja.common.constants.ErrorEnum;
 import com.eroom.erooja.common.exception.EroojaException;
 import com.eroom.erooja.domain.enums.GoalRole;
-import com.eroom.erooja.domain.model.Goal;
-import com.eroom.erooja.domain.model.MemberGoal;
-import com.eroom.erooja.domain.model.MemberGoalPK;
-import com.eroom.erooja.domain.model.Members;
+import com.eroom.erooja.domain.model.*;
 import com.eroom.erooja.features.goal.exception.GoalNotFoundException;
 import com.eroom.erooja.features.goal.repository.GoalRepository;
 import com.eroom.erooja.features.goal.service.GoalService;
-import com.eroom.erooja.features.membergoal.dto.GoalJoinMemberDTO;
-import com.eroom.erooja.features.membergoal.dto.GoalJoinRequestDTO;
-import com.eroom.erooja.features.membergoal.dto.GoalJoinTodoDto;
-import com.eroom.erooja.features.membergoal.dto.UpdateJoinRequestDTO;
+import com.eroom.erooja.features.member.service.MemberJobInterestService;
+import com.eroom.erooja.features.membergoal.dto.*;
 import com.eroom.erooja.features.membergoal.repository.MemberGoalRepository;
 import com.eroom.erooja.features.todo.service.TodoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -34,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Service
 public class MemberGoalService {
+    private final MemberJobInterestService memberJobInterestService;
     private final MemberGoalRepository memberGoalRepository;
     private final GoalRepository goalRepository;
     private final GoalService goalService;
@@ -109,13 +107,16 @@ public class MemberGoalService {
                 origin.getPageable(), origin.getTotalElements());
     }
 
-    public Page<Members> getMembersAllByGoalId(Long goalId, Pageable pageable) {
+    public MemberPageDTO getMembersAllByGoalId(Long goalId, Pageable pageable) {
         Page<MemberGoal> memberGoalPage = memberGoalRepository.findAllByGoal_Id(goalId, pageable);
         List<Members> members = memberGoalPage.getContent().stream()
                 .map(MemberGoal::getMember)
                 .collect(Collectors.toList());
 
-        return new PageImpl<>(members, memberGoalPage.getPageable(), memberGoalPage.getTotalElements());
+        List<String> uidList = members.stream().map(Members::getUid).collect(Collectors.toList());
+        Map<String, List<JobInterest>> jobInterestByUid = memberJobInterestService.getJobInterestsByUids(uidList);
+        MemberPageDTO pageDTO = MemberPageDTO.of(memberGoalPage, jobInterestByUid);
+        return pageDTO;
     }
 
     public int countGoalJoinByGoalId(Long goalId) {
