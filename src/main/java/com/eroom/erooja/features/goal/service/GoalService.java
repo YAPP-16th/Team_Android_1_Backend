@@ -55,12 +55,18 @@ public class GoalService {
         });
     }
 
-    public Page<Goal> search(GoalCriteria goalCriteria) {
+    public Page<GoalListResponse> search(GoalCriteria goalCriteria) {
+        Page<Goal> goalPage;
         if (goalCriteria.getField() == null) {
-            return goalRepository.findAll(goalCriteria.getPageRequest());
+            goalPage = goalRepository.findAll(goalCriteria.getPageRequest());
         } else {
-            return goalRepository.findAll(new GoalSpecifications(goalCriteria), goalCriteria.getPageRequest());
+            goalPage = goalRepository.findAll(new GoalSpecifications(goalCriteria), goalCriteria.getPageRequest());
         }
+
+        return goalPage.map((goal) -> {
+            List<String> userImages = memberRepository.getUserImageListByGoalId(goal.getId(), PageRequest.of(0, 3));
+            return new GoalListResponse(goal, userImages);
+        });
     }
 
     public void increaseJoinCount(Long goalId) throws GoalNotFoundException {
