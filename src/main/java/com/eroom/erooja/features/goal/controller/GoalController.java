@@ -72,7 +72,7 @@ public class GoalController {
 
         try {
             GoalCriteria criteria = GoalCriteria.of(goalSearchRequestDTO);
-            Page<Goal> goalPage = goalService.search(criteria);
+            Page<GoalListResponse> goalPage = goalService.search(criteria);
 
             return ResponseEntity.ok(goalPage);
         } catch (UnsupportedEncodingException e) {
