@@ -6,7 +6,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.criteria.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -18,6 +20,8 @@ public class GoalSpecifications implements Specification<Goal> {
     @Override
     public Predicate toPredicate(Root<Goal> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder cb) {
         List<Specification<Goal>> andSpec = new ArrayList<>();
+
+        andSpec.add(exceptFixedDateAndExpired());
 
         if (goalCriteria.getFromDt() != null) {
             andSpec.add(isEndDtGreaterThen(goalCriteria.getFromDt()));
@@ -38,6 +42,14 @@ public class GoalSpecifications implements Specification<Goal> {
         return cb.and(andSpec.stream()
                     .map(spec -> spec.toPredicate(root, criteriaQuery, cb))
                     .toArray(Predicate[]::new));
+    }
+
+    private Specification<Goal> exceptFixedDateAndExpired() {
+        return (root, query, cb) ->
+            cb.not(
+                    cb.and(
+                            cb.isTrue(root.get("isDateFixed")),
+                            cb.lessThan(root.get("endDt"), LocalDateTime.now())));
     }
 
     private Specification<Goal> like(String field, String keyword) {
