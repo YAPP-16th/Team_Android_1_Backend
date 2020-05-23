@@ -33,8 +33,7 @@ public class MemberGoalInspectTask {
 
     private void alarmEndedMemberGoal() {
         List<MemberGoal> memberGoals = memberGoalService.getAllEndedYesterday();
-        // TODO: 2020-05-16 알람 테이블에 인서트
-        memberGoals.stream().forEach((memberGoal) -> {
+        memberGoals.forEach((memberGoal) -> {
             alarmService.insertMessage(InsertMessageDTO.builder()
                     .messageType(AlarmType.GOAL_TERMINATED)
                     .receiverUid(memberGoal.getUid())
