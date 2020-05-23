@@ -118,6 +118,7 @@ public class MemberGoalJoinControllerTest {
                 .willReturn(mockUid);
 
         given(memberGoalService.joinExistGoal(eq(mockUid),
+                any(GoalRole.class),
                 any(GoalJoinRequestDTO.class)))
                 .willReturn(newMemberGoal);
 

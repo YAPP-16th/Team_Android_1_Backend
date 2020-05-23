@@ -80,9 +80,13 @@ public class TodoService {
         if (checkPriorityIsNotCorrect(todoList))
             throw new EroojaException(TODO_PRIORITY_NOT_CORRECT);
 
-        todoRepository.deleteAllByMemberGoal_GoalIdAndMemberGoal_Uid(updateTodoRequest.getGoalId(), uid);
+        deleteTodoAll(updateTodoRequest.getGoalId(), uid);
 
         return todoRepository.saveAll(todoList);
+    }
+
+    public void deleteTodoAll(Long goalId, String uid){
+        todoRepository.deleteAllByMemberGoal_GoalIdAndMemberGoal_Uid(goalId, uid);
     }
 
     public List<Todo> convertUpdateDTO2Todo(String uid, Long goalId, List<UpdateTodoDTO> updateTodoDTOList) {

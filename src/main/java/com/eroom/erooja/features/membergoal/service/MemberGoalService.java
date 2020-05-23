@@ -15,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -37,25 +36,33 @@ public class MemberGoalService {
     private final GoalService goalService;
     private final TodoService todoService;
 
-    public MemberGoal joinExistGoal(String uid, GoalJoinRequestDTO goalJoinRequest) {
+    @Transactional
+    public MemberGoal joinExistGoal(String uid, GoalRole goalRole, GoalJoinRequestDTO goalJoinRequest) {
         Goal goal = goalRepository.findById(goalJoinRequest.getGoalId())
                 .orElseThrow(() -> new EroojaException(ErrorEnum.GOAL_NOT_FOUND));
 
-        if (goal.getIsEnd())
+        if (goal.isTerminated())
             throw new EroojaException(ErrorEnum.GOAL_TERMINATED);
 
         if (goalJoinRequest.isExistOwnerUid())
             increaseCopyCount(goalJoinRequest.getOwnerUid(), goalJoinRequest.getGoalId());
 
-        goalService.increaseJoinCount(goal.getId());
+        if(!(isAlreadyExistJoin(uid, goal.getId())))
+            goalService.increaseJoinCount(goal.getId());
+
+        if(isAlreadyExistJoin(uid, goal.getId()))
+            todoService.deleteTodoAll(goal.getId(), uid);
 
         MemberGoal memberGoal = null;
-        if (goal.getIsDateFixed())
-            memberGoal = addMemberGoal(uid, goal.getId(), goal.getEndDt(), GoalRole.PARTICIPANT);
-        else
-            memberGoal = addMemberGoal(uid, goal.getId(), goalJoinRequest.getEndDt(), GoalRole.PARTICIPANT);
+        if (goal.getIsDateFixed()) {
+            memberGoal = addMemberGoal(uid, goal.getId(), goal.getEndDt(), goalRole);
+        }
+        else {
+            memberGoal = addMemberGoal(uid, goal.getId(), goalJoinRequest.getEndDt(), goalRole);
+        }
 
         todoService.addTodo(uid, goal.getId(), goalJoinRequest.getTodoList());
+
         return memberGoal;
     }
 
@@ -137,7 +144,7 @@ public class MemberGoalService {
         memberGoal.setStartDt(LocalDateTime.now());
 
         if (goal.getIsDateFixed()) {
-            if(goal.isExpire())
+            if(goal.isTimeAfterNow())
                 throw new EroojaException(ErrorEnum.GOAL_TERMINATED);
             memberGoal.setEndDt(goal.getEndDt());
         }else{
