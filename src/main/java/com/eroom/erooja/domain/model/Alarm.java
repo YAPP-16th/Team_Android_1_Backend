@@ -36,6 +36,11 @@ public class Alarm extends AuditProperties {
     @JoinColumn(name = "uid", updatable = false, insertable = false)
     private Members receiver;
 
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "goalId", updatable = false, insertable = false)
+    private Goal goal;
+
     public Boolean checkMessageIsOwn(String uid){
         return this.receiver.getUid().equals(uid);
     }
@@ -45,6 +50,7 @@ public class Alarm extends AuditProperties {
                 .content(insertMessage.getContent())
                 .title(insertMessage.getTitle())
                 .messageType(insertMessage.getMessageType())
-                .receiver(Members.builder().uid(insertMessage.getReceiverUid()).build()).build();
+                .receiver(Members.builder().uid(insertMessage.getReceiverUid()).build())
+                .goal(Goal.builder().id(insertMessage.getGoalId()).build()).build();
     }
 }
