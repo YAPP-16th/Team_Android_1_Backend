@@ -76,7 +76,14 @@ public class Goal extends AuditProperties {
         return this.joinCount += count;
     }
 
-    public Boolean isExpire() {
+    public Boolean isTerminated(){
+        if(!isDateFixed)
+            return false;
+
+        return isTimeAfterNow();
+    }
+
+    public Boolean isTimeAfterNow() {
         return this.endDt.isAfter(LocalDateTime.now());
     }
 }

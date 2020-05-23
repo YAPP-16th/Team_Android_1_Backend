@@ -37,6 +37,7 @@ public class MemberGoalInspectTask {
             alarmService.insertMessage(InsertMessageDTO.builder()
                     .messageType(AlarmType.GOAL_TERMINATED)
                     .receiverUid(memberGoal.getUid())
+                    .goalId(memberGoal.getGoalId())
                     .title(AlarmConstant.TITLE_GOAL_TERMINATED)
                     .content(memberGoal.getGoal().getTitle()).build()
             );

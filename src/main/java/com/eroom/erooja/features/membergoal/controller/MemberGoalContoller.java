@@ -1,6 +1,7 @@
 package com.eroom.erooja.features.membergoal.controller;
 
 import com.eroom.erooja.common.exception.EroojaException;
+import com.eroom.erooja.domain.enums.GoalRole;
 import com.eroom.erooja.domain.model.JobInterest;
 import com.eroom.erooja.domain.model.MemberGoal;
 import com.eroom.erooja.domain.model.Members;
@@ -54,10 +55,13 @@ public class MemberGoalContoller {
 
         String uid = jwtTokenProvider.getUidFromHeader(header);
 
-        if (memberGoalService.isAlreadyExistJoin(uid, goalJoinRequest.getGoalId()))
-            throw new EroojaException(GOAL_JOIN_ALREADY_EXIST);
-
-        MemberGoal memberGoal = memberGoalService.joinExistGoal(uid, goalJoinRequest);
+        MemberGoal memberGoal = null;
+        if(memberGoalService.isAlreadyExistJoin(uid, goalJoinRequest.getGoalId())){
+            GoalRole originRole = memberGoalService.getGoalRole(uid,goalJoinRequest.getGoalId());
+            memberGoal = memberGoalService.joinExistGoal(uid, originRole, goalJoinRequest);
+        }else{
+            memberGoal = memberGoalService.joinExistGoal(uid, GoalRole.PARTICIPANT, goalJoinRequest);
+        }
 
         return new ResponseEntity(memberGoal, HttpStatus.CREATED);
     }

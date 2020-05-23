@@ -13,4 +13,5 @@ public class InsertMessageDTO {
     private String content;
     private AlarmType messageType;
     private String receiverUid;
+    private Long goalId;
 }
