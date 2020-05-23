@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,7 +64,8 @@ public class MemberGoalContoller {
 
     @Transactional
     @GetMapping("/{goalId}")
-    public ResponseEntity getMembers(@PathVariable Long goalId, Pageable pageable) {
+    public ResponseEntity getMembers(@PathVariable Long goalId,
+                                     @PageableDefault(sort = {"createDt"}) Pageable pageable) {
         MemberPageDTO memberPageDTO = memberGoalService.getMembersAllByGoalId(goalId, pageable);
         return ResponseEntity.ok(memberPageDTO);
     }
