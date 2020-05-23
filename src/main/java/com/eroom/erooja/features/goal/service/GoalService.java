@@ -57,11 +57,8 @@ public class GoalService {
 
     public Page<GoalListResponse> search(GoalCriteria goalCriteria) {
         Page<Goal> goalPage;
-        if (goalCriteria.getField() == null) {
-            goalPage = goalRepository.findAll(goalCriteria.getPageRequest());
-        } else {
-            goalPage = goalRepository.findAll(new GoalSpecifications(goalCriteria), goalCriteria.getPageRequest());
-        }
+
+        goalPage = goalRepository.findAll(new GoalSpecifications(goalCriteria), goalCriteria.getPageRequest());
 
         return goalPage.map((goal) -> {
             List<String> userImages = memberRepository.getUserImageListByGoalId(goal.getId(), PageRequest.of(0, 3));
