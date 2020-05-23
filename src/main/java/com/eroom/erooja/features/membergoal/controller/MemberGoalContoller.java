@@ -106,6 +106,13 @@ public class MemberGoalContoller {
         return ResponseEntity.status(HttpStatus.OK).body(memberGoal);
     }
 
+    @GetMapping("/{goalId}/{uid}/info")
+    public ResponseEntity getJoinInfo(@PathVariable Long goalId, @PathVariable String uid) {
+        MemberGoal memberGoal = memberGoalService.getGoalJoinByUidAndGoalId(uid, goalId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(memberGoal);
+    }
+
     @PutMapping("/{goalId}")
     public ResponseEntity updateGoalJoin(@PathVariable Long goalId,
                                          @RequestBody @Valid UpdateJoinRequestDTO updateGoalJoinRequest,
