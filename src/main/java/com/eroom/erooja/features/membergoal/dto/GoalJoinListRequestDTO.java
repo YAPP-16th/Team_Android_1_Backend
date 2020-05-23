@@ -33,6 +33,13 @@ public class GoalJoinListRequestDTO {
             this.direction = Sort.Direction.ASC;
         }
 
-        return PageRequest.of(page, size, Sort.by(direction, "goal." + sortBy.getField()));
+        String prefix;
+        switch (sortBy) {
+            default:
+                prefix = "goal."; break;
+            case START_DT: case END_DT:
+                prefix = "";
+        }
+        return PageRequest.of(page, size, Sort.by(direction, prefix + sortBy.getField()));
     }
 }

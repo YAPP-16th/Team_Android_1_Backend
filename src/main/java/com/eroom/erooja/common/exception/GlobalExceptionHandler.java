@@ -29,7 +29,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     /* 외부 라이브러리 예외 처리 정의 */
     @ExceptionHandler({ JwtException.class })
     public void handleJwtException(HttpServletRequest request, HttpServletResponse response, JwtException ex) throws IOException {
-        logger.error("잘못된 JWT 감지. - message : {}, cause : {}", ex.getMessage(), ex.getCause());
+        logger.warn("잘못된 JWT 감지. - message : {}, cause : {}", ex.getMessage(), ex.getCause());
 
         if ((ex instanceof ExpiredJwtException)) {
             handleEroojaException(request, response, new EroojaException(ErrorEnum.JWT_EXPIRED));
