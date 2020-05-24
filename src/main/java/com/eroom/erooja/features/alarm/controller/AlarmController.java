@@ -1,6 +1,7 @@
 package com.eroom.erooja.features.alarm.controller;
 
 import com.eroom.erooja.domain.model.Alarm;
+import com.eroom.erooja.features.alarm.dto.MessageDTO;
 import com.eroom.erooja.features.alarm.service.AlarmService;
 import com.eroom.erooja.features.auth.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ public class AlarmController {
     public ResponseEntity getMessageAll(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String header,
                                         Pageable pageable) {
         String uid = jwtTokenProvider.getUidFromHeader(header);
-        Page<Alarm> messages = alarmService.getMessageAllByUid(uid, pageable);
+        Page<MessageDTO> messages = alarmService.getMessageAllByUid(uid, pageable);
         return ResponseEntity.ok(messages);
     }
 
@@ -30,7 +31,7 @@ public class AlarmController {
     public ResponseEntity getMessageUnchecked(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String header,
                                               Pageable pageable) {
         String uid = jwtTokenProvider.getUidFromHeader(header);
-        Page<Alarm> messages = alarmService.getMessageUncheckedByUid(uid, pageable);
+        Page<MessageDTO> messages = alarmService.getMessageUncheckedByUid(uid, pageable);
         return ResponseEntity.ok(messages);
     }
 
