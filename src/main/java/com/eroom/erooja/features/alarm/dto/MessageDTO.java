@@ -6,6 +6,8 @@ import com.eroom.erooja.domain.model.Goal;
 import com.eroom.erooja.domain.model.Members;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 
 @Builder
 @NoArgsConstructor
@@ -19,6 +21,8 @@ public class MessageDTO {
     private Boolean isChecked;
     private AlarmType messageType;
     private Long goalId;
+    private LocalDateTime createDt;
+    private LocalDateTime updateDt;
 
     public static MessageDTO of(Alarm alarm){
         return MessageDTO.builder()
@@ -27,6 +31,8 @@ public class MessageDTO {
                 .isChecked(alarm.getIsChecked())
                 .messageType(alarm.getMessageType())
                 .title(alarm.getTitle())
+                .createDt(alarm.getCreateDt())
+                .updateDt(alarm.getUpdateDt())
                 .goalId(alarm.getGoal().getId()).build();
     }
 }
