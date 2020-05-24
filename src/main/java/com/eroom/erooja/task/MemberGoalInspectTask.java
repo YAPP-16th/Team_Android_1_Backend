@@ -39,6 +39,7 @@ public class MemberGoalInspectTask {
                     .receiverUid(memberGoal.getUid())
                     .goalId(memberGoal.getGoalId())
                     .title(AlarmConstant.TITLE_GOAL_TERMINATED)
+                    .isChecked(false)
                     .content(memberGoal.getGoal().getTitle()).build()
             );
         });

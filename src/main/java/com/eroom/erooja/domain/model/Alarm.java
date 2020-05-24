@@ -33,12 +33,12 @@ public class Alarm extends AuditProperties {
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "uid", updatable = false, insertable = false)
+    @JoinColumn(name = "uid")
     private Members receiver;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "goalId", updatable = false, insertable = false)
+    @JoinColumn(name = "goalId")
     private Goal goal;
 
     public Boolean checkMessageIsOwn(String uid){
@@ -50,6 +50,7 @@ public class Alarm extends AuditProperties {
                 .content(insertMessage.getContent())
                 .title(insertMessage.getTitle())
                 .messageType(insertMessage.getMessageType())
+                .isChecked(insertMessage.getIsChecked())
                 .receiver(Members.builder().uid(insertMessage.getReceiverUid()).build())
                 .goal(Goal.builder().id(insertMessage.getGoalId()).build()).build();
     }
