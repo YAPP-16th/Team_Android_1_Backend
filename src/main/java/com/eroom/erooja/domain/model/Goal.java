@@ -84,6 +84,6 @@ public class Goal extends AuditProperties {
     }
 
     public Boolean isTimeAfterNow() {
-        return this.endDt.isAfter(LocalDateTime.now());
+        return this.endDt.isBefore(LocalDateTime.now());
     }
 }
