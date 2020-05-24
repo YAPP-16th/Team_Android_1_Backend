@@ -1,6 +1,5 @@
 package com.eroom.erooja.features.goal.service;
 
-import com.amazonaws.services.dynamodbv2.xspec.L;
 import com.eroom.erooja.common.constants.ErrorEnum;
 import com.eroom.erooja.domain.repos.MemberRepository;
 import com.eroom.erooja.features.goal.dto.GoalListResponse;
@@ -11,18 +10,14 @@ import com.eroom.erooja.features.goal.repository.GoalRepository;
 import com.eroom.erooja.domain.specification.GoalCriteria;
 import com.eroom.erooja.domain.specification.GoalSpecifications;
 import com.eroom.erooja.features.goal.dto.CreateGoalRequestDTO;
-import com.eroom.erooja.features.todo.service.TodoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
