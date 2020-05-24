@@ -27,6 +27,8 @@ import java.util.stream.Collectors;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+
 @RequiredArgsConstructor
 @Service
 public class MemberGoalService {
@@ -35,6 +37,7 @@ public class MemberGoalService {
     private final GoalRepository goalRepository;
     private final GoalService goalService;
     private final TodoService todoService;
+    private final EntityManager em;
 
     @Transactional
     public MemberGoal joinExistGoal(String uid, GoalRole goalRole, GoalJoinRequestDTO goalJoinRequest) {
@@ -61,6 +64,7 @@ public class MemberGoalService {
             memberGoal = addMemberGoal(uid, goal.getId(), goalJoinRequest.getEndDt(), goalRole);
         }
 
+        em.flush();
         todoService.addTodo(uid, goal.getId(), goalJoinRequest.getTodoList());
 
         return memberGoal;

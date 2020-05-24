@@ -14,4 +14,5 @@ public class InsertMessageDTO {
     private AlarmType messageType;
     private String receiverUid;
     private Long goalId;
+    private Boolean isChecked;
 }
