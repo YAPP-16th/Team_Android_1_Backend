@@ -2,9 +2,13 @@ package com.eroom.erooja.features.member.controller;
 
 import com.eroom.erooja.common.constants.ErrorEnum;
 import com.eroom.erooja.common.exception.EroojaException;
+import com.eroom.erooja.domain.model.JobInterest;
+import com.eroom.erooja.domain.model.MemberGoal;
 import com.eroom.erooja.domain.model.Members;
 import com.eroom.erooja.features.auth.jwt.JwtTokenProvider;
 import com.eroom.erooja.features.member.dto.MemberDTO;
+import com.eroom.erooja.features.member.dto.MemberWithJobInterestsDTO;
+import com.eroom.erooja.features.member.service.MemberJobInterestService;
 import com.eroom.erooja.features.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -22,12 +27,17 @@ import java.util.List;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class MembersController {
     private final MemberService memberService;
+    private final MemberJobInterestService memberJobInterestService;
     private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/info")
     public ResponseEntity getMemberByUid(@RequestBody MemberDTO memberDTO) {
         String uid = memberDTO.getUid();
-       return  ResponseEntity.ok(MemberDTO.of(memberService.findById(uid)));
+        Members member = memberService.findById(uid);
+        List<JobInterest> jobInterests
+                = memberJobInterestService.getJobInterestsByUids(Collections.singletonList(uid)).get(uid);
+
+        return  ResponseEntity.ok(MemberWithJobInterestsDTO.of(member, jobInterests));
     }
 
     @GetMapping
