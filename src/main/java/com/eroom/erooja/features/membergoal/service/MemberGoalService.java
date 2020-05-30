@@ -146,7 +146,7 @@ public class MemberGoalService {
         memberGoal.setStartDt(LocalDateTime.now());
 
         if (goal.getIsDateFixed()) {
-            if(goal.isTimeAfterNow())
+            if(goal.isTimeBeforeNow())
                 throw new EroojaException(ErrorEnum.GOAL_TERMINATED);
             memberGoal.setEndDt(goal.getEndDt());
         }else{
