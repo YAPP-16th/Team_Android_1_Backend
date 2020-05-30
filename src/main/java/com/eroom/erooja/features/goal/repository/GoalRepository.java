@@ -16,6 +16,7 @@ public interface GoalRepository extends JpaRepository<Goal, Long>, JpaSpecificat
     @Query("SELECT g FROM Goal g JOIN GoalJobInterest i " +
             "ON g.id = i.goal.id " +
             "AND i.jobInterest.id = :interestId " +
+            "AND g.isEnd = false " +
             "AND g.id not in (SELECT m.goalId FROM MemberGoal m WHERE m.uid = :uid) ")
     Page<Goal> findGoalByInterestId(Long interestId, String uid, Pageable pageable);
 
