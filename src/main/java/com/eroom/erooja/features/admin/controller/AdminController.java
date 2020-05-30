@@ -37,6 +37,7 @@ public class AdminController {
     public ResponseEntity<?> dbReset() {
         logger.warn("[주의] DB 리셋 요청 확인. 어드민 계정을 포함한 모든 데이터를 삭제합니다.");
 
+        em.createNativeQuery("DELETE FROM alarm").executeUpdate();
         em.createNativeQuery("DELETE FROM todo").executeUpdate();
         em.createNativeQuery("DELETE FROM goal_job_interest").executeUpdate();
         em.createNativeQuery("DELETE FROM member_goal").executeUpdate();
