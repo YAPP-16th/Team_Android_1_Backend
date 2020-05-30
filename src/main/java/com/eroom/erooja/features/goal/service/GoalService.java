@@ -19,7 +19,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Slf4j
@@ -86,7 +88,8 @@ public class GoalService {
     }
 
     public void updateFinishedGoalToEnd(){
-        List<Goal> finishGoals = goalRepository.findFinishedGoals(LocalDateTime.now());
+        LocalDateTime updateDt = LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.MAX);
+        List<Goal> finishGoals = goalRepository.findFinishedGoals(updateDt);
 
         finishGoals.forEach((goal)->{
             goal.setIsEnd(true);

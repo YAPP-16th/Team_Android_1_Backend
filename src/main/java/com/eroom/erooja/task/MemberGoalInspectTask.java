@@ -28,8 +28,9 @@ public class MemberGoalInspectTask {
     public void inspectAndAlarm() {
         logger.info("Checking MemberGoals...");
 
-        goalService.updateFinishedGoalToEnd();
         alarmEndedMemberGoal();
+        goalService.updateFinishedGoalToEnd();
+        memberGoalService.updateFinishedMemberGoalToEnd();
 
         logger.info("Done");
     }

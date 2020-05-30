@@ -182,4 +182,15 @@ public class MemberGoalService {
         LocalDateTime toDt = LocalDateTime.of(fromDt.toLocalDate(), LocalTime.MAX);
         return memberGoalRepository.findAllByEndDtBetweenAndIsEndFalse(fromDt,toDt);
     }
+
+    public void updateFinishedMemberGoalToEnd(){
+        LocalDateTime updateDt = LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.MAX);
+        List<MemberGoal> memberGoals = memberGoalRepository.findAllByEndDtBeforeAndIsEndFalse(updateDt);
+
+        memberGoals.forEach((memberGoal -> {
+            memberGoal.setIsEnd(true);
+        }));
+
+        memberGoalRepository.saveAll(memberGoals);
+    }
 }
