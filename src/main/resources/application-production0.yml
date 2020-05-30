@@ -3,7 +3,7 @@ server:
 
   tomcat:
     accesslog:
-      directory: /home/ec2-user/erooja/travis/log
+      directory: /home/ec2-user/erooja/travis/production0/access_log
       enabled: true
       suffix: .log
       prefix: access_log

@@ -1,0 +1,22 @@
+server:
+  port: 20001
+
+  tomcat:
+    accesslog:
+      directory: /home/ec2-user/erooja/travis/production1/access_log
+      enabled: true
+      suffix: .log
+      prefix: access_log
+      file-date-format: .yyyy-MM-dd
+      pattern: common
+      encoding: utf-8
+
+spring:
+  datasource:
+    platform: mysql
+    url: jdbc:mysql://erooja-db-prod.ciqrw9dzdsex.ap-northeast-2.rds.amazonaws.com/erooja_production?autoReconnect=true
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driverClassName: com.mysql.cj.jdbc.Driver
+
+slackWebhook: ${SLACK_ERROR_ALARM_WEB_HOOK}

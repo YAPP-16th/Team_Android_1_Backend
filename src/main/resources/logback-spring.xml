@@ -15,8 +15,8 @@
         </root>
     </springProfile>
 
-    <springProfile name="production">
-        <property resource="application-production.yml"/>
+    <springProfile name="production0">
+        <property resource="application-production0.yml"/>
 
         <appender name="SLACK" class="com.github.maricn.logback.SlackAppender">
             <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
@@ -45,9 +45,42 @@
             </encoder>
         </appender>
 
-
         <root>
+            <appender-ref ref="SLACK"/>
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="FILE-ROLLING"/>
         </root>
+    </springProfile>
+
+    <springProfile name="production1">
+        <property resource="application-production1.yml"/>
+
+        <appender name="SLACK" class="com.github.maricn.logback.SlackAppender">
+            <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+                <level>WARN</level>
+            </filter>
+            <layout class="ch.qos.logback.classic.PatternLayout">
+                <pattern>%d{HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            </layout>
+            <webhookUri>${SLACK_ERROR_ALARM_WEB_HOOK}</webhookUri>
+            <channel>#team_eroom_error_alram</channel>
+            <colorCoding>true</colorCoding>
+        </appender>
+
+        <appender name="FILE-ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>logs/erooja.log</file>
+
+            <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                <fileNamePattern>logs/archived/erooja.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+                <maxFileSize>10MB</maxFileSize>
+                <totalSizeCap>20GB</totalSizeCap>
+                <maxHistory>60</maxHistory>
+            </rollingPolicy>
+
+            <encoder>
+                <pattern>%d %p %c{1.} [%t] %m%n</pattern>
+            </encoder>
+        </appender>
 
         <root>
             <appender-ref ref="SLACK"/>
