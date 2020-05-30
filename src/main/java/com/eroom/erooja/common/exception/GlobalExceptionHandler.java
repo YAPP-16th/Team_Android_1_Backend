@@ -17,19 +17,19 @@ import java.io.IOException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
-    private Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler({ EroojaException.class })
     public void handleEroojaException(HttpServletRequest request, HttpServletResponse response, EroojaException ex) throws IOException {
         ErrorEnum.ErrorResponse errorResponse = ex.getErrorEnum().getErrorResponse();
         response.sendError(ex.getStatus().value(), errorResponse.getMessage());
-        logger.error("Erooja 오류 감지. - Enum : {}, message : {}", ex.getMessage(), errorResponse.getMessage());
+        logger.error("Erooja 오류 감지. - Enum : {}", ex.getErrorEnum(), ex);
     }
 
     /* 외부 라이브러리 예외 처리 정의 */
     @ExceptionHandler({ JwtException.class })
     public void handleJwtException(HttpServletRequest request, HttpServletResponse response, JwtException ex) throws IOException {
-        logger.warn("잘못된 JWT 감지. - message : {}, cause : {}", ex.getMessage(), ex.getCause());
+        logger.warn("잘못된 JWT 감지", ex);
 
         if ((ex instanceof ExpiredJwtException)) {
             handleEroojaException(request, response, new EroojaException(ErrorEnum.JWT_EXPIRED));
@@ -48,6 +48,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ex.printStackTrace();
 
         response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "서버 내부 오류입니다.");
-        logger.error("알 수 없는 오류 감지. - message : {}, cause : {}", ex.getMessage(), ex.getCause());
+        logger.error("알 수 없는 오류 감지.", ex);
     }
 }

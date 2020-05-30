@@ -20,7 +20,7 @@
 
         <appender name="SLACK" class="com.github.maricn.logback.SlackAppender">
             <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-                <level>WARN</level>
+                <level>ERROR</level>
             </filter>
             <layout class="ch.qos.logback.classic.PatternLayout">
                 <pattern>%d{HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
