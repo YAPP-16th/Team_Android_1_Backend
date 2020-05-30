@@ -6,6 +6,8 @@ import com.eroom.erooja.features.auth.kakao.exception.KakaoRESTException;
 import com.eroom.erooja.features.auth.kakao.json.KakaoIdsJSON;
 import com.eroom.erooja.features.auth.kakao.json.KakaoUserJSON;
 import lombok.NoArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,7 @@ import javax.annotation.PostConstruct;
 
 @Service
 public class KakaoUserRESTService {
+    private final static Logger logger = LoggerFactory.getLogger(KakaoUserRESTService.class);
     private RestTemplate restTemplate = new RestTemplate();
 
     @Value("${thirdPartyProperties.kakaoAdminKey}")
@@ -48,6 +51,8 @@ public class KakaoUserRESTService {
 
     private KakaoRESTException buildException(HttpClientErrorException clientException) {
         String message = clientException.getMessage();
+        logger.error("KakaoRESTException", clientException);
+
         if (message == null) message = "";
 
         if (message.contains("NotRegisteredUserException")) return new KakaoNotRegisteredUserException();
