@@ -1,6 +1,7 @@
 package com.eroom.erooja.common.exception;
 
 import com.eroom.erooja.common.constants.ErrorEnum;
+import com.eroom.erooja.features.goal.exception.GoalNotFoundException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -21,9 +22,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({ EroojaException.class })
     public void handleEroojaException(HttpServletRequest request, HttpServletResponse response, EroojaException ex) throws IOException {
-        ErrorEnum.ErrorResponse errorResponse = ex.getErrorEnum().getErrorResponse();
+        ErrorEnum errorEnum = ex.getErrorEnum();
+        ErrorEnum.ErrorResponse errorResponse = errorEnum.getErrorResponse();
         response.sendError(ex.getStatus().value(), errorResponse.getMessage());
-        logger.error("Erooja 오류 감지. - Enum : {}", ex.getErrorEnum(), ex);
+
+        switch (errorEnum) {
+            default:
+                logger.error("Erooja 오류 감지. - Enum : {}", errorEnum, ex);
+            case GOAL_NOT_FOUND:
+            case GOAL_JOIN_NOT_FOUND:
+                response.sendError(ex.getStatus().value(), errorResponse.getMessage());
+        }
     }
 
     /* 외부 라이브러리 예외 처리 정의 */
