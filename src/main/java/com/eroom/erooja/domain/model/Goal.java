@@ -4,7 +4,6 @@ import com.eroom.erooja.domain.common.AuditProperties;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
-import org.apache.tomcat.jni.Local;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -80,10 +79,11 @@ public class Goal extends AuditProperties {
         if(!isDateFixed)
             return false;
 
-        return isTimeAfterNow();
+        return isTimeBeforeNow();
     }
 
-    public Boolean isTimeAfterNow() {
+    public Boolean isTimeBeforeNow() {
         return this.endDt.isBefore(LocalDateTime.now());
     }
+
 }

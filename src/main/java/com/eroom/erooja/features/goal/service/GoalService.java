@@ -11,14 +11,20 @@ import com.eroom.erooja.domain.specification.GoalCriteria;
 import com.eroom.erooja.domain.specification.GoalSpecifications;
 import com.eroom.erooja.features.goal.dto.CreateGoalRequestDTO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.constraints.Size;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class GoalService {
@@ -79,5 +85,16 @@ public class GoalService {
             goal.setDescription(updateGoalRequest.getDescription());
 
         return goalRepository.save(goal);
+    }
+
+    public void updateFinishedGoalToEnd(){
+        LocalDateTime updateDt = LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.MAX);
+        List<Goal> finishGoals = goalRepository.findFinishedGoals(updateDt);
+
+        finishGoals.forEach((goal)->{
+            goal.setIsEnd(true);
+        });
+
+        goalRepository.saveAll(finishGoals);
     }
 }

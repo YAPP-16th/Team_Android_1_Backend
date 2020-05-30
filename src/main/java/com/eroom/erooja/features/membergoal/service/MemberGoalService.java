@@ -57,12 +57,10 @@ public class MemberGoalService {
             todoService.deleteTodoAll(goal.getId(), uid);
 
         MemberGoal memberGoal = null;
-        if (goal.getIsDateFixed()) {
+        if (goal.getIsDateFixed())
             memberGoal = addMemberGoal(uid, goal.getId(), goal.getEndDt(), goalRole);
-        }
-        else {
+        else
             memberGoal = addMemberGoal(uid, goal.getId(), goalJoinRequest.getEndDt(), goalRole);
-        }
 
         em.flush();
         todoService.addTodo(uid, goal.getId(), goalJoinRequest.getTodoList());
@@ -148,7 +146,7 @@ public class MemberGoalService {
         memberGoal.setStartDt(LocalDateTime.now());
 
         if (goal.getIsDateFixed()) {
-            if(goal.isTimeAfterNow())
+            if(goal.isTimeBeforeNow())
                 throw new EroojaException(ErrorEnum.GOAL_TERMINATED);
             memberGoal.setEndDt(goal.getEndDt());
         }else{
@@ -180,7 +178,19 @@ public class MemberGoalService {
     }
 
     public List<MemberGoal> getAllEndedYesterday() {
-        LocalDateTime targetTime = LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.MIN);
-        return memberGoalRepository.findAllByEndDtIsAfter(targetTime);
+        LocalDateTime fromDt = LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.MIN);
+        LocalDateTime toDt = LocalDateTime.of(fromDt.toLocalDate(), LocalTime.MAX);
+        return memberGoalRepository.findAllByEndDtBetweenAndIsEndFalse(fromDt,toDt);
+    }
+
+    public void updateFinishedMemberGoalToEnd(){
+        LocalDateTime updateDt = LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.MAX);
+        List<MemberGoal> memberGoals = memberGoalRepository.findAllByEndDtBeforeAndIsEndFalse(updateDt);
+
+        memberGoals.forEach((memberGoal -> {
+            memberGoal.setIsEnd(true);
+        }));
+
+        memberGoalRepository.saveAll(memberGoals);
     }
 }
