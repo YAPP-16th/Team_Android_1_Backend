@@ -5,6 +5,7 @@ import com.eroom.erooja.domain.model.MemberGoal;
 import com.eroom.erooja.features.alarm.constant.AlarmConstant;
 import com.eroom.erooja.features.alarm.dto.InsertMessageDTO;
 import com.eroom.erooja.features.alarm.service.AlarmService;
+import com.eroom.erooja.features.goal.service.GoalService;
 import com.eroom.erooja.features.membergoal.service.MemberGoalService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +19,7 @@ import java.util.List;
 public class MemberGoalInspectTask {
     private static final Logger logger = LoggerFactory.getLogger(MemberGoalInspectTask.class);
 
+    private final GoalService goalService;
     private final MemberGoalService memberGoalService;
     private final AlarmService alarmService;
 
@@ -27,6 +29,8 @@ public class MemberGoalInspectTask {
         logger.info("Checking MemberGoals...");
 
         alarmEndedMemberGoal();
+        goalService.updateFinishedGoalToEnd();
+        memberGoalService.updateFinishedMemberGoalToEnd();
 
         logger.info("Done");
     }
@@ -45,7 +49,8 @@ public class MemberGoalInspectTask {
         });
     }
 
-    public MemberGoalInspectTask(MemberGoalService memberGoalService, AlarmService alarmService) {
+    public MemberGoalInspectTask(GoalService goalService, MemberGoalService memberGoalService, AlarmService alarmService) {
+        this.goalService = goalService;
         this.memberGoalService = memberGoalService;
         this.alarmService = alarmService;
     }

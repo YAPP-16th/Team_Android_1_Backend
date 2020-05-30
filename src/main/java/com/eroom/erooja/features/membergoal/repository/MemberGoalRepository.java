@@ -31,4 +31,6 @@ public interface MemberGoalRepository extends JpaRepository<MemberGoal, MemberGo
     Page<MemberGoal> findAllByUidAndEndDtIsAfterAndIsEndFalse(String uid, LocalDateTime now, Pageable pageable);
 
     List<MemberGoal> findAllByEndDtBetweenAndIsEndFalse(LocalDateTime fromDt, LocalDateTime toDt);
+
+    List<MemberGoal> findAllByEndDtBeforeAndIsEndFalse(LocalDateTime now);
 }
