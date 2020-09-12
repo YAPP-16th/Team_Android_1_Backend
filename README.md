@@ -69,6 +69,11 @@
 
 <br/>
 
+## 📙 Bug and Issue
+
+[**issues**](https://github.com/YAPP-16th/Team_Android_1_Client/issues)에서 버그 제보할 수 있습니다.
+
+
 ## License
 
 ```xml
@@ -86,5 +91,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ```
+
+
+
 # ER Diagram
 ![image](https://user-images.githubusercontent.com/46397442/79225303-7b2e1300-7e97-11ea-96d7-ad02c2d65997.png)
