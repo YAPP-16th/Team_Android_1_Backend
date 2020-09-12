@@ -1,3 +1,5 @@
+### [Client Repository 이동 👈](https://apps.apple.com/kr/app/%EA%B3%B3%EA%B0%90/id1513562174)
+
 <h1 align="center">
     <img src="https://user-images.githubusercontent.com/20439251/83335010-0a2aa980-a2e5-11ea-9d10-e593a060830b.png" width="20%"></img></h1>
 
@@ -69,10 +71,21 @@
 
 <br/>
 
-## 📙 Bug and Issue
+## :pill: Bug and Issue
 
-[**issues**](https://github.com/YAPP-16th/Team_Android_1_Client/issues)에서 버그 제보할 수 있습니다.
+[**issues**](https://github.com/YAPP-16th/Team_Android_1_Client/issues)에서 이슈 등록할 수 있습니다.
 
+<br/>
+
+## :book: API Document
+https://documenter.getpostman.com/view/5743934/Szmcbyt7?version=latest
+
+<br/>
+
+## :clipboard: ER Diagram
+![image](https://user-images.githubusercontent.com/46397442/79225303-7b2e1300-7e97-11ea-96d7-ad02c2d65997.png)
+
+<br/>
 
 ## License
 
@@ -91,8 +104,3 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ```
-
-
-
-# ER Diagram
-![image](https://user-images.githubusercontent.com/46397442/79225303-7b2e1300-7e97-11ea-96d7-ad02c2d65997.png)
