@@ -89,7 +89,9 @@ https://documenter.getpostman.com/view/5743934/Szmcbyt7?version=latest
 <br/>
 
 ## :clipboard: ER Diagram
-![image](https://user-images.githubusercontent.com/46397442/79225303-7b2e1300-7e97-11ea-96d7-ad02c2d65997.png)
+<p align="center">
+<img src="https://user-images.githubusercontent.com/46397442/79225303-7b2e1300-7e97-11ea-96d7-ad02c2d65997.png" width="70%"></img>
+</p>
 
 <br/>
 
