@@ -79,7 +79,7 @@
 
 ## :pill: Bug and Issue
 
-[**issues**](https://github.com/YAPP-16th/Team_Android_1_Client/issues)에서 이슈 등록할 수 있습니다.
+[**issues**](https://github.com/YAPP-16th/Team_Android_1_Client/issues)에서 이슈 등록 및 확인할 수 있습니다.
 
 <br/>
 
