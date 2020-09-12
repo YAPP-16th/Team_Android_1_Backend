@@ -1,4 +1,8 @@
-### [Client Repository 이동 👈](https://apps.apple.com/kr/app/%EA%B3%B3%EA%B0%90/id1513562174)
+:heavy_exclamation_mark: [Google PlayStore Download 👈](https://play.google.com/store/apps/details?id=com.eroom.erooja)
+</br>
+:heavy_exclamation_mark: [Client Repository 👈](https://apps.apple.com/kr/app/%EA%B3%B3%EA%B0%90/id1513562174)
+
+
 
 <h1 align="center">
     <img src="https://user-images.githubusercontent.com/20439251/83335010-0a2aa980-a2e5-11ea-9d10-e593a060830b.png" width="20%"></img></h1>
