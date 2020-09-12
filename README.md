@@ -1,11 +1,13 @@
 :heavy_exclamation_mark: [Google PlayStore Download 👈](https://play.google.com/store/apps/details?id=com.eroom.erooja)
 </br>
 :heavy_exclamation_mark: [Client Repository 👈](https://apps.apple.com/kr/app/%EA%B3%B3%EA%B0%90/id1513562174)
-
-
+### :hourglass: Dev Preiod : 2020.02 ~ 06
+</br>
 
 <h1 align="center">
     <img src="https://user-images.githubusercontent.com/20439251/83335010-0a2aa980-a2e5-11ea-9d10-e593a060830b.png" width="20%"></img></h1>
+
+
 
 <p align="center">‘이룸’ 은 경쟁이 아닌 함께 나아가는 세상을 만들기 위해 노력합니다.</br> 
 서비스 ‘이루자’ 는 원하는 취업 목표를 위해 나아가는 모두의 과정을 중시합니다.</p></br>
